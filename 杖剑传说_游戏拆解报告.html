@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《杖剑传说》游戏拆解报告</title>
+<style>
+:root{
+  --ink:#1B1F1E; --ink2:#434A48; --ink3:#747C79;
+  --paper:#F9FAF8; --card:#FFFFFF; --line:#DEE5E1;
+  --pri:#2F5D5B; --pri-l:#EAF2F0;
+  --gold:#9C7A3C; --gold-l:#F7F1E3;
+  --jade:#3F7A5E; --jade-l:#EBF3EE;
+  --red:#A83A2C; --red-l:#FAEDEA;
+  --blue:#2E5A82; --blue-l:#EAF0F6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;background:var(--paper);color:var(--ink);line-height:1.75;font-size:15px;letter-spacing:.015em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 28px 90px}
+.cover{padding:50px 0 34px;border-bottom:1px solid var(--line);margin-bottom:38px;position:relative}
+.cover::after{content:"";position:absolute;left:0;bottom:-1.5px;width:88px;height:3px;background:var(--pri)}
+.eyebrow{font-size:12px;letter-spacing:.3em;color:var(--pri);font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:1.5px;background:var(--pri);display:inline-block}
+h1{font-size:41px;line-height:1.24;font-weight:700;letter-spacing:.03em;margin-bottom:11px}
+.sub{font-size:15.5px;color:var(--ink2);margin-bottom:28px;line-height:1.65}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(27,31,30,.06)}
+.metagrid div{background:var(--card);padding:13px 15px}
+.metagrid dt{font-size:11px;color:var(--ink3);margin-bottom:4px;letter-spacing:.1em}
+.metagrid dd{font-size:13.5px;font-weight:600;color:var(--ink)}
+.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 26px;margin-bottom:38px;box-shadow:0 1px 4px rgba(27,31,30,.04)}
+.toc h3{font-size:12px;letter-spacing:.24em;color:var(--pri);font-weight:700;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:5px 24px;counter-reset:t}
+.toc li{counter-increment:t;font-size:13.5px;padding:1px 0}
+.toc li::before{content:counter(t,decimal-leading-zero);color:var(--gold);font-weight:700;margin-right:10px;font-size:12px;font-variant-numeric:tabular-nums}
+.toc a{color:var(--ink2);text-decoration:none}
+.toc a:hover{color:var(--pri)}
+section{margin-bottom:38px;scroll-margin-top:20px}
+h2{font-size:22px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:13px}
+h2 .num{font-size:13px;color:var(--pri);font-weight:700;letter-spacing:.06em;flex-shrink:0;background:var(--pri-l);padding:3px 9px;border-radius:6px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+h2 + .lead{color:var(--ink3);font-size:13px;margin-bottom:18px;font-style:italic}
+h3{font-size:15.5px;font-weight:700;margin:22px 0 10px;padding-left:11px;border-left:4px solid var(--pri);line-height:1.4}
+h4{font-size:14px;font-weight:700;margin:17px 0 7px;color:var(--ink)}
+p{margin-bottom:11px;color:var(--ink2)}
+p strong,li strong{color:var(--ink);font-weight:600}
+ul,ol{margin:0 0 11px 19px;color:var(--ink2)}
+li{margin-bottom:5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 2px rgba(27,31,30,.03)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+@media(max-width:760px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;background:var(--card);font-size:13px;margin-bottom:13px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+th{background:#F1F5F3;text-align:left;padding:9px 12px;font-weight:700;font-size:12px;color:var(--ink);border-bottom:1px solid var(--line);white-space:nowrap;letter-spacing:.05em}
+td{padding:9px 12px;border-bottom:1px solid #EDF1EF;color:var(--ink2);vertical-align:top;line-height:1.68}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:#FBFCFB}
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;margin:0 5px 6px 0;font-weight:500}
+.t-pri{background:var(--pri-l);color:var(--pri)}
+.t-jade{background:var(--jade-l);color:var(--jade)}
+.t-gold{background:var(--gold-l);color:var(--gold)}
+.t-red{background:var(--red-l);color:var(--red)}
+.callout{border-left:4px solid var(--pri);background:var(--pri-l);padding:13px 17px;border-radius:0 10px 10px 0;margin:14px 0;font-size:13.5px;color:#1F4442}
+.callout.g{border-color:var(--jade);background:var(--jade-l);color:#24503B}
+.callout.y{border-color:var(--gold);background:var(--gold-l);color:#6B5223}
+.callout.r{border-color:var(--red);background:var(--red-l);color:#6E2A20}
+.callout b{font-weight:700}
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.pros-cons{grid-template-columns:1fr}}
+.pc{border-radius:12px;padding:17px 19px;border:1px solid var(--line);background:var(--card)}
+.pc.good{border-top:4px solid var(--jade)}
+.pc.bad{border-top:4px solid var(--red)}
+.pc h4{margin:0 0 11px;font-size:14.5px;display:flex;align-items:center;gap:8px}
+.pc.good h4{color:var(--jade)}
+.pc.bad h4{color:var(--red)}
+.pc ol{margin-left:17px}
+.pc li{margin-bottom:9px;font-size:13.5px;line-height:1.7}
+.pc li b{display:block;color:var(--ink);margin-bottom:1px;font-size:13.5px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 12px;text-align:center}
+.stat .v{font-size:25px;font-weight:700;color:var(--pri);line-height:1.2;font-variant-numeric:tabular-nums}
+.stat .l{font-size:11.5px;color:var(--ink3);margin-top:5px}
+.tl{position:relative;padding-left:28px;margin:16px 0}
+.tl::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl-i{position:relative;margin-bottom:17px}
+.tl-i::before{content:"";position:absolute;left:-25px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--pri);border:2px solid var(--paper);box-shadow:0 0 0 2px var(--pri)}
+.tl-d{font-size:11px;color:var(--pri);font-weight:700;letter-spacing:.06em;margin-bottom:5px;display:inline-block;background:var(--pri-l);padding:2px 10px;border-radius:12px}
+.tl-t{font-size:15px;font-weight:700;margin-bottom:5px;color:var(--ink)}
+.mind{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:14px 0}
+.mind-root{text-align:center;font-weight:700;font-size:15px;background:var(--ink);color:#fff;border-radius:8px;padding:9px;margin-bottom:15px;letter-spacing:.1em}
+.mind-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:11px}
+.mind-col{border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.mind-col > .h{padding:7px 11px;font-size:13px;font-weight:700;color:#fff}
+.mind-col ul{list-style:none;margin:0;padding:9px 11px}
+.mind-col li{font-size:12.5px;color:var(--ink2);margin-bottom:5px;line-height:1.5;padding-left:9px;border-left:2px solid var(--line)}
+.mind-col li:last-child{margin-bottom:0}
+.src{font-size:11.5px;color:var(--ink3);margin-top:-6px;margin-bottom:13px}
+footer{border-top:1px solid var(--line);padding-top:18px;font-size:12px;color:var(--ink3)}
+@page{size:A4;margin:13mm 12mm 13mm}
+@media print{
+  body{background:#fff;font-size:10.6pt;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:none;padding:0}
+  .cover{padding-top:0;break-after:page}
+  nav.toc{break-after:page}
+  section{break-before:auto;margin-bottom:22px}
+  h2{break-after:avoid;break-inside:avoid;margin-top:18px}
+  h3,h4{break-after:avoid;break-inside:avoid}
+  h2 + .lead{break-after:avoid}
+  table{break-inside:auto}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  .stat,.tl-i,.mind-col,.grid2,.grid3,.grid4{break-inside:avoid}
+  .mind{break-inside:avoid}
+  .mind-row{grid-template-columns:repeat(3,1fr)}
+  .tl,.pros-cons,.card{break-inside:auto}
+  li{break-inside:avoid}
+  .pros-cons{grid-template-columns:1fr;gap:12px}
+  a{color:inherit;text-decoration:none}
+  footer{break-before:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+  <div class="eyebrow">GAME TEARDOWN · 游戏拆解报告</div>
+  <h1>《杖剑传说》</h1>
+  <div class="sub">放置框架做加法的破局逻辑 · 350 小时实机体验与两次联动入坑的第一手样本 / 2025 年总流水约 24.95 亿元</div>
+  <div class="metagrid">
+    <div><dt>研发</dt><dd>吉比特（自研）</dd></div>
+    <div><dt>发行</dt><dd>雷霆游戏</dd></div>
+    <div><dt>制作人</dt><dd>林笋</dd></div>
+    <div><dt>大陆公测</dt><dd>2025 年 5 月 29 日</dd></div>
+    <div><dt>品类</dt><dd>放置 MMORPG</dd></div>
+    <div><dt>2025 总流水</dt><dd>约 24.95 亿元</dd></div>
+    <div><dt>团队规模</dt><dd>Demo 2.5 人 → 近百人</dd></div>
+    <div><dt>拆解日期</dt><dd>2026-09-16</dd></div>
+  </div>
+</header>
+
+<nav class="toc">
+  <h3>CONTENTS · 目录</h3>
+  <ol>
+    <li><a href="#s1">基础信息与体验样本</a></li>
+    <li><a href="#s2">一句话定位：基于放置做加法</a></li>
+    <li><a href="#s3">题材 · 美术 · 2D 的连锁收益</a></li>
+    <li><a href="#s4">核心玩法：三层可选项</a></li>
+    <li><a href="#s5">系统脑图与四层循环</a></li>
+    <li><a href="#s6">经济系统：交易行的限流阀</a></li>
+    <li><a href="#s7">社交生态：要收益不要义务</a></li>
+    <li><a href="#s8">数值与付费：转职闸门</a></li>
+    <li><a href="#s9">年轻化获客：联动作为节奏</a></li>
+    <li><a href="#s10">出海：一款产品两套语言</a></li>
+    <li><a href="#s11">品类对比：三次卸载</a></li>
+    <li><a href="#s12">核心命题：框架选择</a></li>
+    <li><a href="#s13">优点与缺点</a></li>
+    <li><a href="#s14">设计缺陷的根因分析</a></li>
+    <li><a href="#s15">优化方案建议</a></li>
+    <li><a href="#s16">拆解总结</a></li>
+  </ol>
+</nav>
+
+<div class="card" style="border-left:4px solid var(--pri);margin-bottom:38px">
+  <h3 style="margin:0 0 12px;padding:0;border:none;font-size:15px">写在前面</h3>
+  <p>这是休闲游戏板块的第二份拆解，对象是《杖剑传说》。同板块的另一份是《问剑长生》，两款同属吉比特自研、雷霆发行，上线时间相差不到半年，底层架构也高度接近。这一份换了个角度：<strong>它讲的不是"在既定框架里怎么改"，而是"框架本身是怎么选的"。</strong></p>
+  <p>先交代我的样本，这里有个别处不太容易找到的条件：<strong>我是从内测一路走到现在的用户，前后开过四个号。</strong>内测号和开服号都没能坚持下来，原因是当时游戏内容太少；素晴联动期第一次真正玩下去，充了 200 多元，2025 年 12 月流失；洛天依二次联动时回归，又充了 200 多元，还在每天上线。350 小时是纯游戏内时长，不含挂机，日均大约 1 小时。这条路径让我正好能观察到产品的两端：早期内容不足时的流失，以及联动期的召回。</p>
+  <p>在公会里我是普通成员，这个位置有个好处：<strong>我正好站在"被大佬带本"的那一端。</strong>代价是我看不到顶氪视角，也拿不到公会管理层的经营数据。</p>
+  <p style="margin-bottom:0">另外要说明，我没玩过繁中服、日服和欧美服。这份报告里所有出海相关的内容都来自公开财报、第三方数据和制作人访谈，属于 C 到 D 级信息，不是一手观察，文中会逐处标出。</p>
+</div>
+
+<!-- ============ 01 ============ -->
+<section id="s1">
+  <h2><span class="num">01</span>基础信息与体验样本</h2>
+  <div class="lead">先把可核实的事实摆出来，再说明这份拆解站在哪个位置看问题。</div>
+
+  <table>
+    <thead><tr><th style="width:20%">项目</th><th>内容</th><th style="width:14%">等级</th></tr></thead>
+    <tbody>
+      <tr><td>研发 / 发行</td><td>吉比特自研，雷霆游戏发行。海外主体 LTGAMES GLOBAL</td><td>B</td></tr>
+      <tr><td>制作人</td><td>林笋。2010 年入职吉比特，早期做程序，2021 年以制作人身份主导本项目</td><td>B</td></tr>
+      <tr><td>立项与转向</td><td>2021 年 8 月立项，初始为修仙题材；2022 年 4 月改为日式幻想。玩法方向自始至终是放置 MMO</td><td>B</td></tr>
+      <tr><td>上线节奏</td><td>2025-05-29 大陆 → 2025-07-15 港澳台、日本、新马 → 2026-05-19 欧美版上线</td><td>B</td></tr>
+      <tr><td>美术与操作</td><td>2D 手绘日式幻想风格，三头身 Q 版；竖屏点击，智能施法辅助</td><td>A / B</td></tr>
+      <tr><td>2025 年流水</td><td>大陆版 17.03 亿元，境外版 7.92 亿元，合计约 24.95 亿元</td><td>B 财报</td></tr>
+      <tr><td>团队规模</td><td>Demo 期 2.5 人，公测约 60 人，现近百人</td><td>B</td></tr>
+    </tbody>
+  </table>
+  <p class="src">来源：吉比特 2025 年各期财报；雷霆游戏官网；2025 中国游戏产业年会林笋演讲全文；游戏日报对制作人的专访。</p>
+
+  <h3>流水数据的口径</h3>
+  <table>
+    <thead><tr><th style="width:24%">口径</th><th style="width:30%">数值</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>大陆首月</td><td>4.24 亿元</td><td>截至 2025-06-30，实际约一个月</td></tr>
+      <tr><td>2025 前三季度</td><td>大陆 11.66 亿 + 境外 4.78 亿</td><td>境外自 7 月 15 日起，仅约 2.5 个月</td></tr>
+      <tr><td>2025 全年</td><td>大陆 17.03 亿 + 境外 7.92 亿 = 24.95 亿</td><td>境外占比约 32%</td></tr>
+      <tr><td>2026 年一季度</td><td>大陆 + 海外合计 7.48 亿元</td><td>已从爆发期回落，进入平台期</td></tr>
+    </tbody>
+  </table>
+  <div class="callout y">
+    <b>一处需要纠正的流行算法。</b>不少报道把月均流水写成 4.11 亿元，来源是「(11.66 + 4.78) ÷ 4」。分子是三季报的合计，分母却只算大陆上线后的 4 个月，而境外版本只跑了约 2.5 个月。同口径应为大陆 11.66 ÷ 4 ≈ <b>2.92 亿元/月</b>。
+  </div>
+
+  <h3>我的体验样本</h3>
+  <table>
+    <thead><tr><th style="width:20%">维度</th><th style="width:40%">情况</th><th>可用性</th></tr></thead>
+    <tbody>
+      <tr><td><strong>账号路径</strong></td><td>四个号覆盖产品全周期：内测号 → 开服号（两次均因内容太少放弃）→ 素晴联动期首次玩下去（2025 年 12 月流失）→ 洛天依二次联动回归至今</td><td>可提供早期流失与联动召回两个环节的第一手样本</td></tr>
+      <tr><td>游戏时长</td><td>约 350 小时，纯游戏内时长，不含挂机；日均约 1 小时</td><td>可支撑日常节奏、养成曲线、社交体感的判断</td></tr>
+      <tr><td>付费档位</td><td>每个号约 200 多元。构成为 30 元月卡 + 68 元战令（两周一个循环）+ 开服期 6 元礼包</td><td>典型的中小额档位，无法代表顶氪</td></tr>
+      <tr><td>社群角色</td><td>公会普通成员，非管理、非指挥</td><td>能观察"大佬带本"的接收端</td></tr>
+      <tr><td>参与版本</td><td>仅中国大陆服</td><td>出海章节全部依赖公开资料</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="s2">
+  <h2><span class="num">02</span>一句话定位：基于放置做加法</h2>
+  <div class="lead">制作人给过一个非常清晰的定位表述，本章围绕它做三层追问。</div>
+
+  <div class="callout">
+    "大部分 MMO 手游产品，他们的做法是基于传统 MMO 的框架做减法，减去一些复杂的设计，但是减来减去还是脱离不了传统 MMO 相对比较重度的感受。《杖剑传说》是基于放置游戏的框架做加法，增加了一些 MMO 游戏玩法的核心体验。也就是说我们只是增加了一部分 MMO 的玩法进来，本质上还是休闲放置游戏。"<br><br>
+    "而对于击中市场差异化这一点来说，我觉得一个足够轻度的 MMO 就是目前游戏市场比较空白的区域。"
+    <br><span style="font-size:12.5px;opacity:.75">—— 制作人林笋，游戏日报专访</span>
+  </div>
+
+  <h3>现象层：它到底加了什么</h3>
+  <p>加进来的 MMO 组件是明确的：组队副本、世界聊天、公会（含矿场、能源台、冶炼工坊、公会商店）、交易行与拍卖行、赛季排名、竞技场。而保留下来的放置底座同样明确：离线挂机产出、家园床的经验累积、AI 自动战斗、爬塔挂后台。</p>
+
+  <h3>意图层：为什么是加法</h3>
+  <p>制作人在选题阶段算了三笔账：SLG、MMO、卡牌三个品类用户规模够大、付费习惯好；轻度 MMO 是"并未被良好满足"的需求；放置品类在港台、日韩、欧美都有空间，而公司擅长的修仙题材出海困难，所以选奇幻题材。</p>
+  <p>三个 Demo 的验证顺序也印证了这个思路。第一个 Demo 只做战斗系统加基础养成；第二个把主线关卡换成地图探索；第三个才加入好友、世界聊天、组队探索战斗。<strong>社交是最后一个被加进来的模块。</strong>这个顺序说明，MMO 的部分在设计上是"后来贴上去的面"，而不是地基。</p>
+
+  <h3>结构层：为什么减法减不掉重度感</h3>
+  <p>为什么制作人会说"减来减去还是脱离不了传统 MMO 相对比较重度的感受"？我的判断是：<strong>MMO 的重度感不来自操作量，而来自义务结构。</strong></p>
+  <p>一个传统 MMO 加诸玩家的义务至少有三类：每日需要完成的固定日常、需要组队才能打的内容、需要维护的社交关系。所谓轻量化，通常减的是操作，比如自动寻路、自动战斗、一键完成。<strong>但操作量的减少不改变义务本身，玩家仍然"必须"每天上线、仍然"必须"找到人组队。</strong></p>
+  <p>换个方向看，放置框架的底层是权利结构，它的默认承诺是"你不在也能变强"，所有社交内容都是可选项。在这个底座上做加法，加进去的每一项都带着一个天然属性：玩家可以不用。</p>
+
+  <div class="callout g">
+    <b>由此得到本章的核心判断。</b>加法和减法的差别不在最终形态，而在<b>失败时的下限</b>。加法加错了，玩家还能退回到放置底座上继续玩；减法减错了，剩下的义务一件没少，玩家没有退路。这解释了为什么前者的试错空间大得多，也解释了为什么"小步快跑"能在这类项目上跑通。
+  </div>
+
+  <h3>支撑这套定位的开发方法：小步快跑</h3>
+  <p>制作人把开发方法总结为四条："剥离美术，尽量减轻负担；快速开发核心玩法内容；频繁买量测试，验证玩法内容；反复修改迭代玩法。"几条执行细节值得拎出来：</p>
+  <ul>
+    <li><strong>测试分三步，逐级泛化。</strong>先用 QQ 群招募核心玩家，通过后再上 TapTap，最后做买量测试，考核 7 日留存。制作人特别提到，同一个 Demo 下随着测试用户逐渐泛化，留存会逐步降低，只有最后买量测试也达标才算通过立项标准。</li>
+    <li><strong>玩法线与美术线分离了约两年半。</strong>玩法线长期保持无美术状态。代价是两条线合并时对体验冲击很大，那一次迭代花了约 4 个月。</li>
+    <li><strong>"Demo 可以丑，但是要丑得比较统一。"</strong>制作人还提到，丑画面可能反向筛出更核心的玩家，从而得到更高的留存。</li>
+  </ul>
+  <p>最后一条值得注意，它把美术从"品质指标"重新定义成了"筛选工具"。这个思路在第 09 章讲年轻化获客时会再次出现，只是方向相反。</p>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="s3">
+  <h2><span class="num">03</span>题材 · 美术 · 2D 的连锁收益</h2>
+  <div class="lead">纯 2D 手绘在这款产品上不只省了成本，它改变了后续运营的可能性。</div>
+
+  <h3>世界观：为全球化而设计的多元文明拼盘</h3>
+  <p>坎斯汀世界由四片大陆构成：森之国（西方奇幻森林）、山之国（沙漠）、泽之国（日式和风）、龙之国（中国风），另有一个已毁灭的羽之国。这个设定不是单纯的美术分区，而是全球化策略在内容层的落地。</p>
+  <p>制作人的解释很直接：题材上采用多元文明混合，既满足内容丰富度，也贴合全球化市场。他还举了一个具体例子，游戏中尽量不出现传统节日的名字和定义，而是包装成虚构概念，以此降低翻译成本和其他市场的理解成本。</p>
+  <p>这里能看到一个取舍：<strong>文化辨识度换掉了本地化阻力。</strong>好处是任何市场都不会觉得这是别人的游戏，代价是任何市场都不会觉得这是为自己做的游戏。</p>
+
+  <h3>画面：从 3D 到 2D 的三级跳</h3>
+  <table>
+    <thead><tr><th style="width:22%">产品</th><th style="width:16%">画面</th><th>收益与代价</th></tr></thead>
+    <tbody>
+      <tr><td>《不休的乌拉拉》（2019）</td><td>3D</td><td>表现力强，成本与周期压力大</td></tr>
+      <tr><td>《出发吧麦芬》</td><td>2.5D</td><td>成本下降，但风格化不突出，与同类 2.5D 产品难以拉开差距</td></tr>
+      <tr><td>《杖剑传说》</td><td>纯 2D 手绘</td><td>成本进一步下降，风格化明确。技术积累来自《一念逍遥》的纯 2D 经验</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <b>2D 最被低估的收益在联动端。</b>有行业分析指出，纯 2D 风格让这款产品在二次元 IP 联动上适应性更高，内容能更快生产落地，也更契合二次元的平面审美。<br><br>
+    这条因果链值得写下来：<b>美术风格选择 → 联动内容生产速度与成本 → 可承担的联动频率 → IP 覆盖面 → 用户结构年轻化。</b>换句话说，第 09 章看到的结果，在第 03 章的美术决策时就已经埋下了。
+  </div>
+
+  <h3>玩法线与美术线分离的组织代价</h3>
+  <p>两条线独立推进了约两年半。制作人复盘时承认合并阶段对体验冲击很大，游戏节奏发生了变化，团队也有过摇摆。他还主动提到了一个更根本的矛盾：<strong>MMO 和放置的基础矛盾，团队在寻找肝度和卷度的平衡点上一直在左右摇摆。</strong></p>
+  <p>这句话很重要。它说明这个被外界视为"定位精准"的产品，内部并没有一次就想清楚，而是在两年多里反复调。所谓精准，是测试反馈逼出来的。</p>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="s4">
+  <h2><span class="num">04</span>核心玩法：三层可选项</h2>
+  <div class="lead">给玩家三个入口，任何一个都能玩下去。</div>
+
+  <div class="grid3">
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0;color:var(--pri)">开放探索</h4>
+      <p style="margin:0;font-size:13.5px">大地图迷雾、采集、开宝箱、随机事件。对应想漫游的玩家。开启新地图后经验获取量大幅提升，推图进度是核心成长杠杆。</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0;color:var(--pri)">放置成长</h4>
+      <p style="margin:0;font-size:13.5px">离线挂机、家园床经验累积、离线后旅行商人到访。对应没时间的玩家。"睡觉变强"是官方核心宣传语。</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0;color:var(--pri)">策略搭配</h4>
+      <p style="margin:0;font-size:13.5px">技能 BD、职业进阶路径、站位与技能顺序、装备词条。对应愿意研究的玩家。</p>
+    </div>
+  </div>
+  <p style="margin-top:14px">这套结构的价值在于，它让"肝度"变成一个连续可变的量，而不是开关。想肝的人有东西肝，想挂机的人挂得舒服，两种人在同一个服务器里可以共存，这是交易行能够成立的前提。</p>
+
+  <h3>战斗：自动但不无脑</h3>
+  <p>竖屏点击操作，支持 AI 自动战斗。自动状态下角色会移动、追击、躲避、预判敌人位置并释放终极技能，玩家可以随时手动干预。技能配置维度包括主动技能、释放顺序、元素属性、职业路线、战斗位置、装备配置。</p>
+  <p>副本同时设有战力门槛与等级门槛。这个设计把"打不过"从一个模糊的挫败感，变成了一个可以被交易行和付费解决的具体数字。但它也带来两个副作用：门槛之下的人只能靠别人带，而找人的过程本身要花时间；等级门槛还会让付费玩家先于平民进入新副本，把两拨人的进度错开一到两天。这两点在后面的第 07 章和第 13 章展开。</p>
+
+  <h3>技能 BD：标签型搭配与距离维度</h3>
+  <p>相比《不休的乌拉拉》技能搭配多样性小（玩家差异主要来自职业），也相比《出发吧麦芬》围绕核心技能做 BD 加天赋树，这款产品走的是标签型 BD：技能之间按功能标签关联，玩家可以按元素流派、盾反流派等标签去组合。</p>
+  <p>制作人提到的一个细节是，2D 平面设计能把 AOE、单体和技能距离表现出来，在传统的单攻群攻两个概念之外加入了第三层距离维度。这带来的是搭配空间的实质扩张，而不只是技能数量的堆叠。</p>
+
+  <h3>职业树</h3>
+  <div class="card">
+    <p style="margin-bottom:8px;font-size:13.5px"><strong>初始：</strong>战士（近战）/ 法师（远程）</p>
+    <p style="margin-bottom:8px;font-size:13.5px"><strong>44 级一转：</strong>战士 → 骑士（高防、嘲讽、反伤）/ 斗士（高速、爆发）；法师 → 术士（大范围、高爆发）/ 贤者（召唤、治疗、减益）</p>
+    <p style="margin-bottom:8px;font-size:13.5px"><strong>二转：</strong>术士 → 魔导师，贤者 → 秘术师，斗士 → 狂战士，骑士 → 圣骑士</p>
+    <p style="margin:0;font-size:13.5px"><strong>后续：</strong>三转、四转、五转，高转职业为低转路线的延伸。职业支持自由切换，官方宣传语是"减少练级负担"</p>
+  </div>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="s5">
+  <h2><span class="num">05</span>系统脑图与四层循环</h2>
+  <div class="lead">把系统摊开看结构，再按时间尺度看节奏。</div>
+
+  <div class="mind">
+    <div class="mind-root">《杖剑传说》系统结构</div>
+    <div class="mind-row">
+      <div class="mind-col">
+        <div class="h" style="background:var(--pri)">战斗</div>
+        <ul>
+          <li>技能祈愿（心愿女神像）</li>
+          <li>技能 BD 搭配</li>
+          <li>站位与释放顺序</li>
+          <li>竞技场 / PVP</li>
+          <li>圣兽试炼</li>
+        </ul>
+      </div>
+      <div class="mind-col">
+        <div class="h" style="background:var(--jade)">养成</div>
+        <ul>
+          <li>装备强化与共鸣</li>
+          <li>古遗物（时光扭蛋机）</li>
+          <li>幻兽（输出/守护/辅助）</li>
+          <li>伙伴好感度</li>
+          <li>职业转职与等级</li>
+        </ul>
+      </div>
+      <div class="mind-col">
+        <div class="h" style="background:var(--gold)">探索与产出</div>
+        <ul>
+          <li>大地图迷雾与采集</li>
+          <li>主线关卡 / 支线</li>
+          <li>日常副本</li>
+          <li>幻想阶梯（爬塔）</li>
+          <li>小推车离线产出</li>
+        </ul>
+      </div>
+      <div class="mind-col">
+        <div class="h" style="background:var(--blue)">社交与经济</div>
+        <ul>
+          <li>公会（矿场/能源台/工坊）</li>
+          <li>公会捐献与商店</li>
+          <li>组队副本与带本</li>
+          <li>交易行（晨星）</li>
+          <li>拍卖行（耀星）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>四层循环</h3>
+  <div class="tl">
+    <div class="tl-i">
+      <div class="tl-d">分钟级</div>
+      <div class="tl-t">探索打怪 → 掉落 → 战力提升</div>
+      <p style="font-size:13.5px;margin:0">在大地图上消耗体力采集、打怪、开箱。体力每小时恢复 5 点、上限 300，是这一层的硬约束。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">小时级</div>
+      <div class="tl-t">副本与爬塔 → 装备碎片与材料</div>
+      <p style="font-size:13.5px;margin:0">日常副本有明确的战力门槛与每日次数限制，幻想阶梯可挂后台自动挑战。产出中的可交易部分进入交易行。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">日级</div>
+      <div class="tl-t">日常 / 公会捐献 / 交易行结算 → 晨星</div>
+      <p style="font-size:13.5px;margin:0">把时间和金钱接起来的关键一层，也是玩家时间消耗的主要去处，清完一轮日常约需 1 小时。这 1 小时里混着一层容易被忽略的成本：高难副本的战力门槛偏高，中小额玩家要靠匹配或蹲大佬车队才能推进，等待被一并算进日常。每天 7:55 至 8:05 交易行闭行盘点，重定当日价格区间。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">赛季级</div>
+      <div class="tl-t">转职 / 赛季排名 / 联动活动</div>
+      <p style="font-size:13.5px;margin:0">转职是长周期目标，也是主要的付费节点。赛季排名提供称号与资源，联动活动提供限定外观与伙伴。赛季长度本身出过问题：S1 只有一个月，S2 之后普遍拉到两个月以上，详见第 13 章。</p>
+    </div>
+  </div>
+  <p>这四层里，日级循环是承重墙。它同时连接了产出侧（时间）和消费侧（战力），而连接两者的介质是晨星。但这一层也埋着一个矛盾：一款放置游戏最该被压缩的就是日级循环，而它实际占了每天约 1 小时。这个矛盾留到第 13 章展开。</p>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="s6">
+  <h2><span class="num">06</span>经济系统：交易行的限流阀</h2>
+  <div class="lead">本章处理"全服为大佬打工"这个说法，它成立的机制，以及官方给它装的三道阀门。</div>
+
+  <h3>四种通货</h3>
+  <table>
+    <thead><tr><th style="width:16%">通货</th><th style="width:22%">定位</th><th>来源与用途</th></tr></thead>
+    <tbody>
+      <tr><td><strong>晨星</strong></td><td>可交易硬通货</td><td>来源：月卡、战令、活动、任务、交易行出售。用途：买体力、祈愿抽技能、参与活动、交易行购买材料</td></tr>
+      <tr><td>绑定晨星</td><td>不可交易基础通货</td><td>来源：日常任务、签到。用途：购买耗材与低级道具</td></tr>
+      <tr><td><strong>耀星</strong></td><td>高阶通货</td><td>来源：世界 BOSS、拍卖行分红、充值。用途：拍卖行竞拍橙装、稀有食谱</td></tr>
+      <tr><td><strong>大矿</strong></td><td>准货币（服务兑换券）</td><td>来源：体力采矿概率产出，不消耗体力且资源翻倍，<strong>每周拾取有上限</strong>，改版后分为只能自用与可分享两类。用途：可分享的那部分作为带本门票</td></tr>
+    </tbody>
+  </table>
+  <p>简单说：耀星是充值侧的主入口，晨星是玩家之间流通的主货币，绑定晨星只进不出，而大矿是唯一一种直接兑换"人力"的通货。</p>
+
+  <h3>交易行怎么运转</h3>
+  <ul>
+    <li><strong>价格区间每日浮动。</strong>当日上下限为基准价的 ±10%，基准价取前一日成交均价，每天 7:55 至 8:05 闭行盘点后更新。这导致热门物品涨价快、冷门物品跌价快。</li>
+    <li><strong>成交优先级。</strong>挂售低价优先，求购高价优先，同价时先挂先成交。</li>
+    <li><strong>NPC 兜底收购。</strong>系统会不定时收购最低价物品，给滞销品一个出口。</li>
+    <li><strong>可交易品类被限制过。</strong>早期可交易低级宝石与蓝紫幻兽材料，后来调整为只能交易 5 级宝石和橙色幻兽材料。</li>
+  </ul>
+
+  <h3>三道阀门：阶梯税率</h3>
+  <p>这是整个经济系统最关键的设计。交易行与拍卖行都按当月累计收入分档收税，两者独立计算。下面两张表取自游戏内「手续费详情」界面，属 A 级一手核实。</p>
+
+  <h4>交易行手续费（5 档）</h4>
+  <table>
+    <thead><tr><th style="width:26%">当月累计收入（晨星）</th><th style="width:18%">普通</th><th style="width:18%">优惠</th><th>对应人群</th></tr></thead>
+    <tbody>
+      <tr><td>0 – 5,000</td><td>10%</td><td>5%</td><td>几乎所有普通玩家</td></tr>
+      <tr><td>5,001 – 20,000</td><td>20%</td><td>12%</td><td>认真卖产出的活跃玩家</td></tr>
+      <tr><td>20,001 – 100,000</td><td>30%</td><td>20%</td><td>重度搬砖玩家</td></tr>
+      <tr><td>100,001 – 200,000</td><td>50%</td><td>40%</td><td>职业搬砖 / 多开账号</td></tr>
+      <tr><td>200,001 以上</td><td>70%</td><td>60%</td><td>规模化工作室</td></tr>
+    </tbody>
+  </table>
+
+  <h4>拍卖行手续费（只有 3 档）</h4>
+  <table>
+    <thead><tr><th style="width:26%">当月累计收入</th><th style="width:18%">普通</th><th style="width:18%">优惠</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>0 – 5,000</td><td>10%</td><td>5%</td><td>与交易行一致</td></tr>
+      <tr><td>5,001 – 20,000</td><td>20%</td><td>12%</td><td>与交易行一致</td></tr>
+      <tr><td>20,001 以上</td><td>30%</td><td>20%</td><td><strong>到此封顶。交易行之上还有 50% 与 70% 两档，拍卖行没有</strong></td></tr>
+    </tbody>
+  </table>
+  <p class="src">两张表均取自游戏内「手续费详情」界面截图（A 级一手核实）。据社区记录，官方曾做过两次针对性调整：一是限制可交易品类，二是在原 30%/20% 上限之上增加两档。</p>
+
+  <div class="callout">
+    <b>两张表放在一起，才看得出真正的设计意图。</b>交易行的税率上限是 70%，拍卖行只有 30%，两个市场被区别对待了。差异的根源在货币与商品：交易行走晨星，交易的是材料、宝石、碎片这类靠时间产出的东西；拍卖行走耀星，交易的是橙装、稀有食谱这类稀缺品，而耀星的主要来源是充值。<b>用时间换钱的通道被重税限流，用钱买稀缺品的通道被轻税放行。限流阀只装了一半市场。</b>
+  </div>
+
+  <div class="callout y">
+    <b>一个可以对照的真实数据。</b>本报告作者的账号，交易清淡的月份累计收入 3631 晨星，停在第一档（10%，优惠 5%）；正常月份约 20000 晨星，已经进入第二档（20%，优惠 12%）。<br><br>
+    <b>活跃玩家的常态落点其实是第二档，税率 20%，而不是第一档。</b>第一档更像是给交易清淡的月份准备的保护档。所以更准确的评价是：<b>它不是一道"无感的税"，而是一道随活跃度平滑上升的税。</b>
+  </div>
+
+  <h3>第二、三道阀门：大矿的周上限与可分享比例</h3>
+  <p>玩家消耗体力采矿时有概率挖到"大矿"，这种矿不消耗体力、资源翻倍，每个账号一周能拾取的数量有上限，而它的主要用途是当带本门票。<strong>卡住大矿的周产量，等于卡住了"请人帮忙"的次数。</strong></p>
+  <h4>一次关键改版：从公共资源变成定向支付工具</h4>
+  <p>早期的大矿是谁挖出来谁都能吃，属于典型的公共资源。现在拆成了两类：一类只能自己食用，另一类可以分享给自己指定的人群。这个改动表面上只是多了个分享功能，实际效果要深得多。<strong>把"谁都能抢"改成"可以指定送给谁"，等于给这套经济发了一张合规的支付凭证。</strong>带本之所以能形成稳定的双边市场，前提是报酬可以被精准支付；旧版的大矿做不到这一点。第 07 章那条带本链路能长期运转，地基就在这次改版上。</p>
+
+  <div class="callout">
+    <b>所以这套经济实际装了三道阀门。</b>交易行的阶梯税率管"时间能卖出多少钱"；大矿的周上限管"一周能请人帮几次忙"；自用与可分享的区分管"能被支付的报酬总量有多少"。<br><br>
+    三者指向同一个目的：<b>让交换真实存在，但始终处在官方可以预期的规模内。</b>
+  </div>
+
+  <h3>一个被忽略的价格问题：碎片为什么很快跌到底</h3>
+  <p>平民攒晨星的主要途径是卖副本产出的装备碎片，而这类碎片有个固定规律：<strong>新副本开放当天价格就开始往下走，而且很难回来。</strong></p>
+  <p>成因是供给洪峰。碎片的产出没有门槛差，每个进入副本的玩家都能刷到；新本一开放，全服同时产出同一批碎片，而愿意买的人数量有限。更麻烦的是跌下去就回不来：当日价格区间是"前一日成交均价 ±10%"，<strong>基准价会跟着成交价一起下移</strong>，逐日下探直到触底。</p>
+
+  <div class="callout y">
+    <b>于是免费玩家的变现能力变成了周期性的。</b>每个新副本周期的开头，碎片还能卖出价钱；几天之后跌到底，卖来的晨星就只够零花。这意味着前面那三道阀门之外，还有一层<b>不由规则决定、而由供需决定</b>的限制：<b>你产出最多的东西，恰好是最不值钱的东西。</b>
+  </div>
+
+  <h3>"为大佬打工"到底成立了多少</h3>
+  <p>它成立的部分是：大佬有战力但产出受体力与次数限制，时间上无法压缩；普通玩家有时间，产出可以换成晨星。<strong>于是付费玩家实际上是在用晨星购买其他玩家的时间。</strong>但它被高估的部分同样明显：可交易品类被砍到只剩高阶材料，税率从第二档就升到 20%、10 万以上过半，价格每天只能在 ±10% 内浮动。三点加在一起，意味着<strong>交易行不是自由市场，而是一根被精确控制流量的管子。</strong></p>
+
+  <div class="callout y">
+    <b>元属性识别：晨星。</b>这款游戏里决定进度的隐藏变量不是战力数值，而是晨星。原因很简单，它是唯一同时连接时间和金钱的结算单位：付费玩家用钱换晨星，免费玩家用时间换晨星，两者在同一个交易行里竞价。技能、体力、装备强化、活动参与，几乎所有成长路径最终都收敛到这一个数字上。<br><br>
+    一旦看清这件事，税率阶梯的重要性就显而易见了。<b>它不是一条普通的规则，而是整个经济系统的总闸。</b>
+  </div>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="s7">
+  <h2><span class="num">07</span>社交生态：要收益不要义务</h2>
+  <div class="lead">同类产品用了三代时间，把社交从负担卸载成了选项。</div>
+
+  <h3>三代产品的社交负重变化</h3>
+  <table>
+    <thead><tr><th style="width:20%">产品</th><th style="width:24%">挂机社交要求</th><th>玩家负担</th></tr></thead>
+    <tbody>
+      <tr><td>《不休的乌拉拉》</td><td>4 人固定队</td><td>需要 4 人一起挂机升级，队长要给另外 3 名队员换技能。硬性要求坦克前排、输出后排、治疗辅助</td></tr>
+      <tr><td>《出发吧麦芬》</td><td>2 人组队</td><td>把 4 人降到 2 人，不想社交可以自创小号完成</td></tr>
+      <tr><td>《杖剑传说》</td><td>不与社交挂钩</td><td>挂机产出效率只与玩家自己的资源规划和 PVE 进度相关，与他人无关</td></tr>
+    </tbody>
+  </table>
+  <p>这条线的方向非常清晰：<strong>挂机这个行为，从必须依赖他人，变成了完全私人化的事情。</strong>三代产品走了六年，把放置玩法上的社交负重一路卸到了零。</p>
+
+  <h3>但社交的收益被完整保留</h3>
+  <div class="grid2">
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">大佬带本</h4>
+      <p style="margin:0;font-size:13.5px">副本战力不够时，在世界频道或公会里找高战力玩家组队。对接收方是纯收益，对带队方是社交资本与资源回报。这是中低战力玩家的日常动作，也是新玩家最容易感受到"这个游戏有人情味"的时刻。</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">公会</h4>
+      <p style="margin:0;font-size:13.5px">提供矿场、能源台、冶炼工坊三类挂机加成，公会商店可换宠物抽与技能抽次数。公会成员身份带来的是持续的资源加成，而不是每日必须完成的集体任务。</p>
+    </div>
+  </div>
+
+  <h3>带本其实是一笔有定价的交易</h3>
+  <p>带本不是白带的，它有明确的价格。<strong>这套机制里的门票是大矿。</strong>这里有个容易被忽略的前提：<strong>大矿之所以能当门票，是因为它可以指定送给别人。</strong>早期的大矿是谁挖到谁吃，改版后才拆成只能自用和可以分享两类。正是这个改动让"支付报酬"成为可能，带本市场才有了稳定的结算方式。换句话说，这不是玩家自发形成的地下交易，而是官方给了它一张合法的支付凭证。</p>
+  <p>这个交换对双方都成立。对大佬来说，大矿是稳定的资源补充；对平民来说，用一周本就有限的额度换一次通关，比自己卡在这里划算得多。<strong>于是带本从"人情"变成了"交易"，双方各取所需，这个系统才能长期运转。</strong>这也回过头解释了制作人为什么把社交环境列为成功的重要因素：它不是一个靠热情维持的互助圈，而是一个定价清晰的双边市场。</p>
+
+  <h3>我这一端的观察</h3>
+  <p>作为公会普通成员，我看到的是这条链路的接收方。副本战力门槛卡住时，去世界频道找人带是标准解法。<strong>这个机制给中低战力玩家提供了一条不花钱也能推进的通道，代价是把进度的一部分控制权交给了别人的在线时间。</strong></p>
+  <p>但这个代价比"控制权"三个字更具体。<strong>它把"找人"变成了日常的固定环节。</strong>副本强度对小氪和零氪玩家偏高，能靠自己打通的内容有限，于是标准流程变成：先去匹配池里刷，匹配不到就去位面蹲大佬车队，等到人了才能开打。这段等待被完整计入每日在线时长。第 13 章列出的"日常约 1 小时"里，相当一部分消耗在这里。</p>
+  <p>还有一个更隐蔽的问题：<strong>这个双边市场的供需在时间上是错开的。</strong>副本设有等级门槛，而平民的升级速度天然慢于氪佬，通常要晚一到两天才能进入新副本。新本开放的头两天，大佬已经在里面推进，平民还进不去；等平民够级进来，大佬往往已经打通，或者转向下一个目标了。<strong>本来可以互相满足的两拨人，因为进度不同步而错过了窗口。</strong></p>
+
+  <div class="callout g">
+    <b>但公会真正的功能是缓冲垫，不是内容。</b>被问到为什么还在玩的时候，我给出的两个理由是"喜欢这个类型"和"有公会作为缓冲"。第二个更值得展开：公会提供的不是可玩内容，而是<b>容错</b>。战力不够时有人带，资源紧张时商店能补，路线不清楚时有人给建议。<br><br>
+    这也解释了一个看起来矛盾的现象：这款产品的公会没有强制集体任务，参与度却并不低。玩家留下来不是为了完成公会任务，而是为了那份容错本身。
+  </div>
+</section>
+
+<!-- ============ 08 ============ -->
+<section id="s8">
+  <h2><span class="num">08</span>数值与付费：转职闸门</h2>
+  <div class="lead">战力是多层乘法，付费点被埋在转职这条主线上。</div>
+
+  <h3>战力的乘法结构</h3>
+  <ul>
+    <li><strong>技能品质与职业等级。</strong>通过心愿女神像祈愿获取。传说技能基础概率 1%，综合保底概率 2.41%；史诗 7% / 7.9%；稀有 22% / 24%。开局赠送 30 次传说抽取，之后 70 抽保底出传说。</li>
+    <li><strong>装备强化与共鸣。</strong>4 件装备同时强化到 5、10、15 直至 45 级时触发共鸣，循环提供攻击、防御、速度、生命各 +2%。这个设计强迫玩家平均升级而非单点堆高。</li>
+    <li><strong>古遗物。</strong>光、暗、风、水、火五属性，通过时光扭蛋机获取，每种属性四个共鸣位，提供元素亲和与庇护。</li>
+    <li><strong>幻兽与伙伴。</strong>幻兽分输出、守护、辅助三类，主战提供 100% 属性，助战 50%；伙伴好感度直接提升人物基础属性。</li>
+  </ul>
+  <p>多层乘法的结果是，满配与半配的差距远大于线性和。这也解释了为什么这类产品被称为数值导向型：玩家的成长感受主要来自数字变化，而不是机制理解。</p>
+
+  <h3>转职：既是成长节点，也是付费闸门</h3>
+  <p>转职之后，该职业对应的技能会加入常驻祈愿池，抽取概率提升。这意味着<strong>先转职、再抽卡，比先抽卡、再转职更划算。</strong>由此产生两个后果：转职成为强引导节点，玩家被推着尽快确定方向；转职会改变技能池，看起来像是让此前的投入贬值。</p>
+  <p>但一手体验推翻了后一个推论。<strong>实际玩法里，大部分玩家会在转职前提前囤积技能抽取道具，而这类道具并不会因为转职而贬值，长期都处在高位。</strong>原因不难理解：技能是这个游戏最核心的付费物，抽取需求贯穿始终，转职只是把需求从一个池子挪到另一个池子，道具本身的价值锚点没变。</p>
+  <p>这一点很关键。它说明转职不是一道筛人的闸门，而是一个被玩家提前规划过的常规节点。社群自发形成的应对策略，把设计上可能造成挫败的环节消解掉了。制作人的开发分享里也提到，五转开启了一个降井机制，大约只需要一半抽数就能提升同等的最高转技能等级。</p>
+
+  <div class="callout">
+    <b>这里要修正一处流传较广的描述。</b>外界对这款产品商业化循环的常见说法是"用放置和联动吸引用户，用内容副本和高成本转职筛选用户"。前半句在下一章能得到第一手的验证，后半句却与我的实际体验不符。<br><br>
+    真实的筛选机制要更朴素一些：<b>副本的战力门槛筛短期留存，日常时长筛中长期留存。</b>转职只是成长节点，玩家会提前备好道具，它筛不了人。
+  </div>
+
+  <h3>特殊词条与赛季继承：一个被低估的付费深度</h3>
+  <p>装备上的特殊词条是这套数值里的高价值资产，氪佬会用充值获得的晨星去买。它真正特殊的地方不在数值高低，而在于<strong>可以通过特定方式继承到后续赛季</strong>。赛季制产品的常规做法是赛季结束后重置进度，词条继承等于在这条规则上开了一道口子：<strong>花足够多的晨星，就能把上赛季的资产带到下赛季。</strong></p>
+  <p>这道口子的代价由平民承担。继承的开销很大，平民只有两条路：攒满一整个赛季的资源去继承一件，或者眼看着自己辛苦养出的好词条装备失效。</p>
+
+  <div class="callout r">
+    <b>这里出现了赛季制设计里最不该有的倒挂。</b>赛季制吸引人的地方在于重置带来的公平感，所有人回到同一条起跑线；而付费继承把这条起跑线重新拉开了：氪佬花点钱保住上赛季的积累，平民的资产清零。<br><br>
+    换句话说，<b>重置这件事在两类玩家身上是不对等的。它成了放大差距的工具，而不是抹平差距的工具。</b>这也让第 13 章里"氪佬在 PVP 赛事后转职或退游"的代价显得更重：他们在词条上的投入本来就是沉没成本最高的那一部分。
+  </div>
+
+  <h3>我的 400 元是怎么花的</h3>
+  <p>实际构成是 30 元月卡、68 元战令，以及开服期的几个 6 元礼包，一个号累计 200 多元。其中战令值得单独说一句：<strong>它是两周一个循环的。</strong>68 元单看不算多，放进两周的周期里含义就变了。一年存在二十多轮可付费的窗口，单次金额不大、复购频率高，本质上是把付费从"一次性投入"改造成"持续性订阅"。两周这个长度，又恰好与联动的档期、赛季活动的节奏大致对齐。<strong>付费节奏和运营节奏被绑在了同一条轨道上。</strong></p>
+  <p style="margin-bottom:0">这个档位买到的不是强度，而是"不被卡住"：体力不卡手、抽卡有稳定来源、活动能完整参与。想直接买强度需要上到 648 档的大额礼包。这个结构能成立，前提在第 06 章和第 07 章：<strong>交易行让时间产出可以变现，公会提供带本与资源加成。</strong>付费买顺畅，时间和社交补进度，三条路互不阻塞。</p>
+</section>
+
+<!-- ============ 09 ============ -->
+<section id="s9">
+  <h2><span class="num">09</span>年轻化获客：联动作为节奏</h2>
+  <div class="lead">联动在这款产品上不是营销活动，而是被写进运营日历的固定节奏。</div>
+
+  <h3>先看结果：用户年龄结构</h3>
+  <table>
+    <thead><tr><th style="width:26%">游戏</th><th>18-23 岁</th><th>24-30 岁</th><th>31-40 岁</th><th>41-50 岁</th><th>51 岁+</th></tr></thead>
+    <tbody>
+      <tr><td><strong>《杖剑传说》</strong></td><td><strong>34.54%</strong></td><td><strong>34.80%</strong></td><td>22.92%</td><td>4.17%</td><td>3.57%</td></tr>
+      <tr><td>《剑与远征：启程》</td><td>26.64%</td><td>25.07%</td><td>32.18%</td><td>7.95%</td><td>8.16%</td></tr>
+      <tr><td>《出发吧麦芬》</td><td>27.60%</td><td>20.33%</td><td>33.36%</td><td>8.27%</td><td>10.44%</td></tr>
+    </tbody>
+  </table>
+  <p class="src">来源：巨量算数，抖音渠道人群画像，统计区间为近半年。<b>该数据只代表抖音渠道，不能代表全量用户</b>，跨产品比较时有参考价值，绝对数值不宜外推。</p>
+  <p>18 至 30 岁合计占比 69.34%，比两个同类高出 17 到 21 个百分点。31 岁以上占比，杖剑是 30.66%，另外两款分别是 48.29% 和 52.07%，方向完全相反。</p>
+
+  <h3>联动清单与节奏</h3>
+  <div class="tl">
+    <div class="tl-i">
+      <div class="tl-d">2025.07.24 – 08.06</div>
+      <div class="tl-t">《为美好的世界献上祝福！》</div>
+      <p style="font-size:13.5px;margin:0">首次联动，与出海档期几乎同步。免费获取途径包括 7 日登录、魔力轮盘、小程序签到。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">2025.09</div>
+      <div class="tl-t">洛天依 · 坎斯汀音乐节</div>
+      <p style="font-size:13.5px;margin:0">首个音乐节特别企划。虚拟歌姬以嘉宾身份进入游戏，配套演出、小游戏、应援打 call。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">2025.12.18</div>
+      <div class="tl-t">《罗小黑战记 2》</div>
+      <p style="font-size:13.5px;margin:0">联动角色包括小黑、无限、鹿野、哪吒。从日本二次元 IP 转向国产动画 IP 的一次扩展。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">2026.06 / 2026.07</div>
+      <div class="tl-t">素晴第二次联动、洛天依联动返场</div>
+      <p style="font-size:13.5px;margin:0">两次都是返场。洛天依那次新增"信号员·洛天依"与伙伴言和，联动期间每日 9 点至 24 点共 17 场演出。</p>
+    </div>
+  </div>
+  <p>14 个月内 5 次联动，平均不到 3 个月一次，且出现了明确的返场机制。这个频率本身就是一种策略声明。</p>
+
+  <h3>联动做的不只是卖皮肤</h3>
+  <p>以 2026 年 7 月的洛天依返场为例，这次联动的构成远超"上架几件外观"。游戏内配了 4 个联动主题服、四类小游戏、以及伙伴与自选遗物箱等奖励；游戏外则有 5 位虚拟主播入驻主题服开播、送出 16 张洛天依全国巡回演唱会门票（通过游戏内问卷抽奖）、抖音直播间现场抽取。</p>
+  <p>这套组合拳的关键在于，它把一次联动拆成了三层传播：核心层是游戏内容，中间层是主播与直播，外层是线下演出与社交媒体。<strong>玩家不只是在游戏里看到洛天依，而是在抖音、直播间和演唱会上反复遇到她。</strong></p>
+
+  <h3>一手验证：联动同时在做拉新和召回</h3>
+  <p>关于联动的实际作用，我这里有一份跨度比较长的样本。完整的路径是这样的：</p>
+  <div class="tl">
+    <div class="tl-i">
+      <div class="tl-d">更早</div>
+      <div class="tl-t">内测号</div>
+      <p style="font-size:13.5px;margin:0">参与过内测，没有玩下去。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">2025 年 5 月</div>
+      <div class="tl-t">开服号</div>
+      <p style="font-size:13.5px;margin:0">公测进入，同样没有坚持下来。<strong>直接原因是当时游戏内容太少。</strong></p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">素晴联动期</div>
+      <div class="tl-t">第一次真正玩下去</div>
+      <p style="font-size:13.5px;margin:0">充值 200 多元，玩到 2025 年 12 月流失。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">洛天依二次联动</div>
+      <div class="tl-t">第二次回归，至今在玩</div>
+      <p style="font-size:13.5px;margin:0">再次充值 200 多元，一直玩到现在。</p>
+    </div>
+  </div>
+  <p>这条路径修正了我原先的表述。我一开始把自己归为"被联动拉进来的新用户"，并不准确。<strong>我属于早期流失的老用户，联动对我起的作用是召回。</strong>内测和开服这两次尝试都发生在联动之前，也都以放弃收场。</p>
+  <p>不过"联动在拉新"这一点另有更硬的证据：<strong>每次联动开的新服，人数和氪金玩家数量都比其他服高出一大截。</strong>这些增量不是回流玩家能填满的，说明联动确实在把 IP 受众带进游戏。</p>
+
+  <div class="callout g">
+    <b>所以联动实际同时承担两件事，而且两件都在发生。</b>一是拉新，联动新服的人数与付费玩家数明显高于其他服。二是召回，像我这样早期流失的用户会跟着联动回来，一回来就是真金白银的付费。<br><br>
+    合起来看，联动新服还多出一个作用：<b>给回归用户一个干净的起点</b>。老号停在开服期，进度早已断层，直接回旧服体验会很差。新服让回流玩家和新人站到同一起跑线上，这大概是它必然配套开新服的真正原因。
+  </div>
+
+  <h3>一个容易被忽略的对照：内容太少也会流失</h3>
+  <p>这条路径里最有价值的其实是前两段。内测号和开服号都因为"游戏内容太少"而放弃，这是加法路线的另一面。</p>
+  <p>加法产品要把 MMO 内容一件件加进去，而加法的节奏由测试反馈决定。这意味着上线初期的内容量必然偏薄：核心循环跑通了，可做的事情还不多。对一个玩过同类的用户来说，开服期的内容密度不足以支撑持续投入。</p>
+  <table>
+    <thead><tr><th style="width:24%">阶段</th><th style="width:30%">内容供给状态</th><th>结果</th></tr></thead>
+    <tbody>
+      <tr><td>内测 / 开服期</td><td>偏薄，核心循环刚跑通</td><td>玩过同类的用户容易直接流失</td></tr>
+      <tr><td>联动期至今</td><td>内容够玩，日常稳定在约 1 小时</td><td>召回的用户留住了，但时间负担从这时起就存在</td></tr>
+    </tbody>
+  </table>
+  <p>这张表要说明的不是"内容量先少后多"，而是另一件事：<strong>内容量存在一条下限，低于它留不住人；越过这条线之后，日常就稳定在约 1 小时这个偏重的水平上，中间没有缓冲带。</strong>而且这 1 小时的构成还要再拆一层：<strong>副本强度抬高了中小额玩家的推进门槛，让匹配和蹲大佬车队变成日常的固定环节，等待时间被一并计入。</strong>这部分不属于内容消耗，属于可以被设计掉的摩擦。</p>
+  <p>这和我在同门另一份拆解里得到的结论指向同一件事：<strong>放置品类的用户对内容量的容忍区间很窄。</strong>只是表现方式不同。那款产品是调整幅度过大，日常从 15 到 25 分钟一路跳到 40 分钟；这款产品则是压根没有中间档，要么内容少到留不住人，要么内容多到每天 1 小时。</p>
+
+  <h3>IP 选择标准的演化</h3>
+  <div class="callout">
+    "我们在早期选择联动 IP 会更加注重游戏风格的一致性……在后期可能特别匹配的 IP 也不会那么多，应该会逐渐放宽标准，还是基于玩家喜欢什么样的作为判断，我们也做过类似的调查问卷。"
+    <br><span style="font-size:12.5px;opacity:.75">—— 制作人林笋，游戏日报专访</span>
+  </div>
+  <p>这段话透露的信息量很大。制作人明确承认标准在放宽，从"风格一致性"转向"玩家喜欢什么"。这个转向是可预期的：<strong>风格高度匹配的 IP 是有限资源，高频联动必然消耗殆尽。</strong>但由此推出"联动只能转向存量挖掘"就偏了。<strong>返场的实际作用被低估了，因为它做的不是新的拉新，而是召回。</strong>在用户池仍在持续流入的阶段，同一个 IP 可以服务好几批完全不同的人。被消耗的不是用户的注意力，而是那些从没接触过这个 IP 的潜在人群。</p>
+</section>
+
+<!-- ============ 10 ============ -->
+<section id="s10">
+  <h2><span class="num">10</span>出海：一款产品两套语言</h2>
+  <div class="lead">同一款产品，在繁中市场和日本市场用了几乎不重叠的推广语言。本章全部基于公开资料。</div>
+
+  <div class="callout y">
+    <b>本章所有内容均为 C 至 D 级公开信息</b>，我没有实际游玩过任何海外版本。涉及海外用户体验的判断均为推断。
+  </div>
+
+  <h3>出海节奏与成绩</h3>
+  <div class="tl">
+    <div class="tl-i">
+      <div class="tl-d">2025-07-15</div>
+      <div class="tl-t">亚洲首发：中国港澳台、日本、新马</div>
+      <p style="font-size:13.5px;margin:0">上线一周内拿下中国港澳台 iOS 免费榜与畅销榜双榜第一。日本最高至畅销榜第 17 名。海外首月预估收入接近 2 亿元。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">2025-10</div>
+      <div class="tl-t">欧美前置布局</div>
+      <p style="font-size:13.5px;margin:0">海外社交平台开始曝光，同月底启动安卓端素材投放并开启欧美地区测试。这个前置动作比正式上线早了约 7 个月。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">2026-05-19</div>
+      <div class="tl-t">欧美版上线 150+ 国家地区</div>
+      <p style="font-size:13.5px;margin:0">上线首日登上 6 个区域市场 iOS 游戏免费榜 TOP50，次日冲上 41 个。开测 11 天累计下载约 197 万次，美国贡献流水 72.93%。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">2026-06</div>
+      <div class="tl-t">登顶出海收入增长榜</div>
+      <p style="font-size:13.5px;margin:0">上线 6 周全球累计收入突破 2000 万美元，6 月当月海外收入环比增长超 120%。</p>
+    </div>
+  </div>
+
+  <h3>繁中服与日服的两套素材语言</h3>
+  <table>
+    <thead><tr><th style="width:16%">维度</th><th style="width:40%">繁中服（中国港澳台、新马）</th><th>日服</th></tr></thead>
+    <tbody>
+      <tr><td>整体路线</td><td>"现充"路线，贴近生活场景</td><td>标准 gacha 二游路线</td></tr>
+      <tr><td>素材类型</td><td>真人出镜占比高，生活化短剧为主：女友抓包玩游戏、放置 1 天 vs 放置 N 天战力对比、捏脸太丑遭女神嫌弃、新手攻略</td><td>Vtuber、网红、声优三位一体；游戏角色故事素材；MBTI 梗等流行文化素材</td></tr>
+      <tr><td>代言人</td><td>启用本地代言人，配合直播与互动活动</td><td>邀请模特兼人气创作者担任官方 PR 大使</td></tr>
+      <tr><td>投放素材量</td><td>双端去重素材约 1.1 万条（另有报道称 1.5 万条）</td><td>双端去重素材约 1.2 万条（另有报道称 1.4 万条），视频素材占比约 50%</td></tr>
+      <tr><td>年龄分级</td><td>12+</td><td><strong>17+</strong></td></tr>
+      <tr><td>核心卖点话术</td><td>竖屏、放置、RPG，强调玩法本身</td><td>预约送 500 抽、上线免费 4096 抽、十分钟完成日常</td></tr>
+    </tbody>
+  </table>
+  <p class="src">素材数据来自广大大数据研究院、DataEye 研究院（C 级第三方）。不同来源给出的素材条数存在出入，此处并列列出，不做单一采信。</p>
+
+  <h3>制作人对这套差异的解释</h3>
+  <div class="callout">
+    "首先《杖剑传说》产品在整体包装方面没有特别大不同，最核心的还是围绕游戏内容去做……当然在不同的市场上，基于对玩家的洞察和调研去做一些差异化。比如说繁中版本，因为语言和文化的关系，跟中国大陆地区的素材就会比较相似，但日本地区由于本来二次元文化就比较发达，所以会做一些贴近当地文化包装的设计。"
+    <br><span style="font-size:12.5px;opacity:.75">—— 制作人林笋，游戏日报专访</span>
+  </div>
+  <p>关于日服排名相对滞后的原因，制作人给的解释是：日本市场的特点是老牌强势产品长期占据榜单头部，玩家稳定性高，新游戏要冲到前列需要较长时间积累；中国港澳台地区和大陆类似，变化相对快一些。付费习惯上，日本付费偏后置，首日付费率不高，但进入游戏几天后会持续增长。</p>
+
+  <h3>一个值得单独讨论的现象：素材与实机的落差</h3>
+  <p>第三方观察指出，日服投放的部分素材使用了九头身比例的性感美型角色，与游戏内三头身 Q 版的实际画风差距明显。这类素材在早期投放中占比不低，主要目的是吸引重视视觉刺激的细分玩家。</p>
+  <p>从转化逻辑看，这套做法有它的道理：用高刺激素材把点击成本压下来，再用玩法内容留住人。但它有一个明确的代价，即行业内常说的"货不对版"风险：被性感素材吸引进来的玩家，发现实际是 Q 版三头身后，留存会受到影响。值得注意的是，第三方同时观察到日服也集中投放了大量玩法向、本土梗向的素材，被解读为避免货不对版导致玩家逆反。<strong>这说明团队并非没有意识到这个问题，而是在两套素材之间做比例调配。</strong></p>
+
+  <div class="callout y">
+    <b>一个有意思的反差。</b>制作人在被问到海外用户画像时说："海外玩家的年龄会偏大一些，比如三十岁以上的用户占比会稍大……性别方面的话，女性用户占比会多一些。"<br><br>
+    这和第 09 章国服 18 至 30 岁占比近七成的结构几乎相反。我倾向于认为这不是矛盾，而是两件事：国服的年轻化是<b>联动和抖音渠道买出来的增量</b>，海外（尤其日本）承接的是<b>放置品类本来的存量人群</b>。同一个产品在不同市场活在两个人群里，这恰恰说明本地化做的是"语言"而非"产品"。
+  </div>
+
+  <h3>海外成绩的来源：不为出海做设计</h3>
+  <p>制作人在多次场合重复过同一句话，措辞几乎一字不差："没有什么方法论，我们甚至没有特意针对海外市场做专门的玩法设计，只是在游戏题材上兼顾了海外市场。"他在产业年会演讲里进一步解释，玩法锚定的是大陆市场，小步快跑也一直是在大陆市场进行的。</p>
+  <p>我的解读是，全球化在这款产品上被当成<strong>约束条件</strong>而不是<strong>目标市场</strong>。它被前置到了 2022 年的题材决策里（放弃修仙改奇幻）、被写进了美术风格选择（二次元对应东亚再辐射全球）、被落实在内容设计规则上（不出现真实节日名称）。做完这三件事之后，出海就不再是额外的工作，而只是一个发行动作。</p>
+</section>
+
+<!-- ============ 11 ============ -->
+<section id="s11">
+  <h2><span class="num">11</span>品类对比：三次卸载</h2>
+  <div class="lead">把三款产品并排放，能看清这条赛道到底在优化什么。</div>
+
+  <h3>麦芬 Like 谱系对比</h3>
+  <table>
+    <thead><tr><th style="width:14%">维度</th><th style="width:30%">《不休的乌拉拉》</th><th style="width:28%">《出发吧麦芬》</th><th>《杖剑传说》</th></tr></thead>
+    <tbody>
+      <tr><td>画面</td><td>3D</td><td>2.5D</td><td>纯 2D 手绘</td></tr>
+      <tr><td>挂机社交</td><td>4 人固定队，队长需为队员换技能</td><td>2 人组队，可自创小号</td><td>资源建筑升级，不与社交挂钩</td></tr>
+      <tr><td>技能系统</td><td>搭配多样性小，差异主要来自职业</td><td>围绕核心技能做 BD，配天赋树形成分支</td><td>标签型 BD，加入距离维度</td></tr>
+      <tr><td>副本形态</td><td>硬性战法牧配置要求</td><td>战法牧铁三角，还原副本操作</td><td>不需要操作，偏向刷宝体验</td></tr>
+      <tr><td>主要付费</td><td colspan="3">三者一致：都以售卖技能为前期主要付费模式</td></tr>
+    </tbody>
+  </table>
+  <p class="src">前两款产品信息来自行业分析文章与公开资料（C 级），《杖剑传说》部分含 A 级一手验证。</p>
+  <p>这张表里有三条线索在同时收敛：<strong>画面维度在降、社交负重也在降、玩法深度则在升。</strong>三代产品做的事，本质上是在同一个品类里持续卸载成本项、加深乐趣项。而付费模式从头到尾没变过，说明这条商业路径在品类内已经被验证为稳定解。</p>
+
+  <h3>关于"参考了《出发吧麦芬》"的说法</h3>
+  <p>制作人的回应比较坦诚："要说参考的话，我们参考过很多游戏，不只是《出发吧麦芬》。……其实大多数设计不是我们参考了它，更多是我们不谋而合，我认为是两款游戏的思路比较接近……比如说《杖剑传说》的副本是不需要操作的偏向于刷宝的体验；《出发吧麦芬》的副本设计，则是战法牧铁三角，还原副本操作的方式。"</p>
+  <p>这段话的实际价值在于它揭示了一种真实的设计工作方式：不是从零发明，而是从大量已有产品中提取判断，再做重新组合。</p>
+
+  <h3>与同门《问剑长生》的镜像对比</h3>
+  <p>这是整份报告里最有对照价值的一组关系，因为变量控制得极好：同一家公司、同一年上线、同一套底层架构、同一套发行体系。</p>
+  <table>
+    <thead><tr><th style="width:18%">维度</th><th style="width:38%">《杖剑传说》</th><th>《问剑长生》</th></tr></thead>
+    <tbody>
+      <tr><td>题材与画面</td><td>日式幻想，2D 手绘</td><td>修仙，3D 御剑空战</td></tr>
+      <tr><td>目标市场</td><td>全球化，上线 1.5 个月即出海</td><td>以大陆为主，出海时点晚约 11 个月</td></tr>
+      <tr><td>2025 大陆月均流水</td><td>约 2.92 亿元</td><td>约 0.79 亿元（前三季度同口径）</td></tr>
+      <tr><td>发行期销售费用</td><td>Q2、Q3 同比分别增加约 3 亿元、6.58 亿元</td><td>发行首季度同比仅增 0.66 亿元</td></tr>
+      <tr><td>联动方向</td><td>泛二次元（素晴、洛天依、罗小黑）</td><td>国风仙侠（道诡异仙、哪吒传奇）</td></tr>
+      <tr><td>开发投入</td><td>2.5 人起步，剥离美术快速验证</td><td>大量美术与 3D 空战开发成本</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout r">
+    <b>这组对比说明了什么。</b>两款产品底层架构高度接近，都被归为数值导向型，都被认为缺乏机制性创新。差距不在玩法创意，而在<b>框架与目标市场的选择</b>。《问剑长生》把成本压在了表现层，选择了一个出海困难的题材，结果是需要大量买量却只换来有限的增量。<b>《杖剑传说》把成本压在玩法验证上，选择了一个全球通行的题材，结果是同样的投入撬动了数倍回报。</b>
+  </div>
+</section>
+
+<!-- ============ 12 ============ -->
+<section id="s12">
+  <h2><span class="num">12</span>核心命题：框架选择的破局逻辑</h2>
+  <div class="lead">这一章是全篇的收束，回答"做加法为什么能破局"。</div>
+
+  <h3>把问题重新表述一遍</h3>
+  <p>市面上的轻量化 MMO 都在解决同一个问题：怎么让 MMO 变轻。主流解法是做减法，把日常砍短、把操作自动化、把组队人数降低。制作人指出的问题是，这样减完仍然摆脱不了重度感。</p>
+  <p>为什么减不掉？第 02 章给过一个答案：因为减的是操作，减不掉义务。这里再往前推一层。</p>
+
+  <h3>义务结构的三种来源</h3>
+  <div class="grid3">
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0;color:var(--pri)">时间义务</h4>
+      <p style="margin:0;font-size:13.5px">固定时段活动、每日重置的日常、限时副本。减法通常砍的是单次耗时，但每日必须上线的结构保留了下来。</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0;color:var(--pri)">他人义务</h4>
+      <p style="margin:0;font-size:13.5px">需要组队才能进行的内容、需要维护的固定队关系、公会贡献要求。减法通常把 4 人降到 2 人，但"必须有人"这个前提还在。</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0;color:var(--pri)">沉没义务</h4>
+      <p style="margin:0;font-size:13.5px">已经投入的养成资源、已经选定的职业路线、已经加入的社交关系。这类义务最隐蔽，也最难通过减法消除。</p>
+    </div>
+  </div>
+  <p style="margin-top:14px">减法的困境在于，它只能在第一类上做文章，而且只能减少单次耗时，无法取消"每日"这个周期本身。第二类和第三类几乎无法通过减法处理，因为它们是 MMO 的核心乐趣来源，砍掉就等于换品类。</p>
+
+  <h3>加法为什么能绕开这个困境</h3>
+  <p>因为放置框架的默认状态是"无义务"。在这个底座上，上面三类义务全都是后加的，也就全都是可以被单独移除的。这款产品实际的处理方式是：</p>
+  <ul>
+    <li><strong>时间义务被压缩到可选。</strong>离线挂机与家园床提供成长下限，日常不做也不会被落下太多。体力是唯一硬约束，且可以通过晨星补充。</li>
+    <li><strong>他人义务被彻底剥离。</strong>挂机产出只与自己的资源规划和 PVE 进度相关。组队副本存在，但只是加速器而非必需品。</li>
+    <li><strong>沉没义务被部分缓解。</strong>职业可自由切换，装备强化有共鸣机制引导平均升级。但转职带来的技能池变化仍然存在，这是加法没能完全解决的问题。</li>
+  </ul>
+
+  <div class="callout g">
+    <b>核心结论一：框架选择决定下限，设计优化决定上限。</b><br><br>
+    做减法的产品，下限由 MMO 的义务结构锁死，优化只能在上限上做文章。做加法的产品，下限由放置框架托住，即使 MMO 的内容加得不好，玩家仍然有一个可以退回的地方。这解释了为什么这款产品能在买量成本持续走高的环境下跑出来：<b>它的留存底盘不是 MMO 内容撑起来的，而是放置底盘撑起来的。</b>
+  </div>
+
+  <div class="callout g">
+    <b>核心结论二：减掉的是操作，加上的才是权利。</b><br><br>
+    这是同一个现象的两种表述。减法思维关注的是"玩家要做什么"，于是优化方向是让玩家做得更少更快。加法思维关注的是"玩家可以不要什么"，于是每一项加进来的内容都需要自带退出机制。<b>前者优化的是效率，后者优化的是容错。</b>
+  </div>
+
+  <h3>小步快跑是加法的配套条件</h3>
+  <p>还有一层不能漏掉：加法这条路之所以能走通，离不开"小步快跑"这个开发方法。选择加法意味着核心体验要靠玩法创新支撑，而玩法创新必然需要高频迭代，迭代成本又与美术投入成正比。于是必须剥离美术，让玩法线以无美术状态轻装前进，这条线保持了约两年半。无美术状态下的低成本，换来了平均每两个月一次的买量测试频率。</p>
+  <p>制作人自己也点明了这个关系："也只有玩法创新才能使用小步快跑这种开发模式。"换句话说，<strong>框架选择、开发方法、测试节奏这三件事是互相锁定的，拆开任何一件，另外两件都跑不通。</strong></p>
+
+  <h3>这个命题能不能被复制</h3>
+  <p>如果"做加法"这么好，别人能不能抄？我的判断是，<strong>结论可以被理解，路径很难被复制。</strong>原因有三。第一，加法要求团队先接受一个看起来很低的起点：2.5 人、无美术、Demo 丑，这在多数公司的立项流程里通不过。第二，加法要求把测试前置到立项之前，并接受买量测试这个成本项，多数团队的测试是在开发后期才做的。第三，加法要求制作人对品类有足够深的个人理解，这不是流程能替代的东西。</p>
+  <p>所以这份拆解真正值得带走的，不是"要在放置框架上做加法"这个结论，而是<strong>先选框架、再谈优化</strong>这个思考顺序。</p>
+
+  <h3>一个必须写进来的自我矛盾</h3>
+  <p>前面所有分析都指向同一个结论：加法路线的优势在于不累积义务。但有一组证据不能被绕过。</p>
+  <p>这款产品的日常时长约 1 小时，联动期还设有强制挂时长任务，而玩家退坑的动因里，"游戏时间过长"是明确的一条。需要强调的是，<strong>这不是后期才出现的问题，而是从内容够玩的那天起就一直维持在这个水平。</strong></p>
+  <p>这一点改变了结论的性质。如果日常时长是慢慢膨胀起来的，那它属于运营失控，压缩内容就能修正；但它既然是稳定值，说明<strong>矛盾从一开始就在</strong>。只不过矛盾的来源不是内容太多，而是另一件事：<strong>副本强度偏高，把"找大佬"变成了日常的必要环节，而找人的等待时间被算进了每日时长。</strong></p>
+  <p>这一层归因很关键，因为它决定了这个矛盾能不能解。如果 1 小时是内容量的必然结果，那压缩时长就等于砍内容，两难无解；但既然其中一大块是匹配与等待，<strong>它就是一个可以被设计掉的摩擦</strong>，不必以牺牲内容为代价。</p>
+  <p>所以那套"加法优于减法"的判断需要补一个前提：<strong>加法保住的是"可以不做"的权利，但保不住"不必花很多时间"的结果。</strong>放置框架允许玩家随时退出，这是真的；可只要玩家想留下来往前走，就会撞上难度门槛，也必然进入"找人"的流程。而这款产品没有为中小额玩家在这条路上设计兜底。</p>
+</section>
+
+<!-- ============ 13 ============ -->
+<section id="s13">
+  <h2><span class="num">13</span>优点与缺点</h2>
+  <div class="lead">优缺点的评判标准不是"好不好"，而是"代价换来了什么"。</div>
+
+  <div class="pros-cons">
+    <div class="pc good">
+      <h4>做得好的地方</h4>
+      <ol>
+        <li><b>框架选择的容错率极高</b>放置底座托住了留存下限，MMO 内容加得不好也不会崩盘。这是它能承受激进买量的根本原因。</li>
+        <li><b>社交做到了要收益不要义务，公会是缓冲垫</b>把挂机产出与社交完全解绑，同时保留带本、公会、交易行的回报。公会实际承担的是容错功能，这是低付费玩家能长期留存的直接原因。</li>
+        <li><b>交易行的限流阀设计精准</b>阶梯税率让普通玩家的小额变现几乎无损，同时把规模化搬砖的边际收益压到接近零。品类限制与税率加档两次调整都打在了点上。</li>
+        <li><b>联动一个机制干三件事</b>拉新、召回、开新服同时完成。联动新服的人数与氪金玩家数量明显高于其他服；早期流失的老用户也会跟着联动回来。</li>
+        <li><b>2D 美术与联动产能形成正循环</b>纯 2D 降低了联动内容的生产门槛，使高频联动成为可能，而高频联动又反过来支撑了年轻化用户结构。</li>
+        <li><b>试错成本被压到极低</b>2.5 人起步、玩法与美术分离两年半、平均每两个月一次买量测试。这套方法在立项阶段就筛掉了错误方向。</li>
+        <li><b>全球化作为约束前置</b>题材、画风、内容规则三处在研发期就按全球化标准处理，使出海变成发行动作而非研发任务。</li>
+      </ol>
+    </div>
+    <div class="pc bad">
+      <h4>做得不够好的地方</h4>
+      <ol>
+        <li><b>日常时长被副本强度推高，与"放置"定位背离</b>日均约 1 小时，其中一大块不是内容消耗，而是采矿攒门票、匹配找人和蹲大佬车队的等待。再叠加联动期的强制挂时长任务，"游戏时间过长"成了明确的退坑动因。</li>
+        <li><b>职业不平衡集中在 PVP，后果已经是大佬流失</b>问题主要暴露在每周一次的挑战赛和两周一次的界域挑战赛。PVE 打不过还能找人带，PVP 没有这个空间。<b>部分职业的大佬在赛后转职业甚至退游</b>，而他们正是带本市场的供给方。</li>
+        <li><b>赛季长度与内容量错配，两个方向都出过问题</b>S1 只有一个月，玩家还没摸透机制就结束了；S2 之后拉到两个月以上，但内容没跟上，后半段只能枯燥刷副本。<b>拉长赛季能减轻内容生产压力，代价是玩家的空转。</b></li>
+        <li><b>赛季传承有付费门槛，重置的公平性被打折</b>特殊词条可按特定方式继承到后续赛季，但开销很大。氪佬用充值晨星就能保住资产，平民要么攒一整季，要么眼看着它失效。</li>
+        <li><b>平民的晨星来源会被价格崩塌打穿</b>平民攒晨星主要靠卖副本碎片，而碎片在新副本开放当天就开始贬值，并因基准价机制逐日下探到底。</li>
+        <li><b>日服素材与实机存在落差</b>投放的九头身性感素材与三头身 Q 版实机画风差距明显，17+ 分级与繁中服 12+ 形成对照。</li>
+        <li><b>数值导向型产品的寿命问题</b>强数值、弱内容的结构决定了游戏体验主要来自数字增长。这是品类固有问题。</li>
+        <li><b>进度分层让带本供需在时间上错开</b>副本设有等级门槛，平民通常晚一到两天才能进入新副本。这几天里大佬已在打新内容，带本的供需窗口对不上。程度不算高，但会让等待再长一截。</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 14 ============ -->
+<section id="s14">
+  <h2><span class="num">14</span>设计缺陷的根因分析</h2>
+  <div class="lead">用失误与取舍的二分法处理上一章的缺点清单。</div>
+
+  <p>先说判断标准。真正的失误只有一类：<strong>本可解决却没解决的执行问题。</strong>其余都是结构性代价，也就是为了得到某样东西而必须付出的东西。评判取舍的标准不是"能不能解决"，而是"这个代价换来的东西是否值得"。</p>
+
+  <h3>属于取舍的部分</h3>
+  <table>
+    <thead><tr><th style="width:26%">现象</th><th style="width:28%">换来的是什么</th><th>为什么难以两全</th></tr></thead>
+    <tbody>
+      <tr><td>数值导向导致产品寿命有限</td><td>更深的付费空间与更清晰的成长反馈</td><td>内容型产品寿命长但付费浅，数值型产品付费深但消耗快，同一套养成系统很难兼顾</td></tr>
+      <tr><td>联动标准放宽稀释调性</td><td>维持高频联动所需的 IP 供给量</td><td>风格高度匹配的 IP 数量有限，频率与纯度不可兼得</td></tr>
+      <tr><td>题材去本土化换取全球化</td><td>出海不需要重做内容，境外贡献约 32% 流水</td><td>任何市场都不会觉得这是为自己做的游戏，本地化深度必然打折</td></tr>
+      <tr><td>低美术 Demo 与高刺激素材并存</td><td>研发期筛核心用户，运营期拉泛用户</td><td>两个阶段的目标人群本就不同，统一的美术策略无法同时服务</td></tr>
+      <tr><td>日常时长稳定在约 1 小时</td><td>内容量足以留住玩家；高难度副本提供付费动机与长线目标</td><td>内容要够多、难度要够低，两条线方向相反，匹配等待又把这层矛盾放大</td></tr>
+      <tr><td>赛季被拉长到两个月以上</td><td>缓解内容生产压力，为团队争取开发时间</td><td>内容产能不足是硬约束，拉长赛季是最省力的对冲手段，代价落在玩家的空转上</td></tr>
+      <tr><td>付费换来一到两天的进度领先</td><td>清晰的付费动机，也确实拉开了体验差异</td><td>付费买领先是数值型产品的核心机制，抹平就削弱付费意愿；代价是社交供给窗口被切碎</td></tr>
+      <tr><td>赛季资产需要付费继承</td><td>新增一条高价值付费线，给顶氪持续投入的理由</td><td>赛季制的吸引力来自重置，付费继承把这条优势削掉一半，属于用长期口碑换短期收入</td></tr>
+    </tbody>
+  </table>
+
+  <h3>属于失误的部分</h3>
+  <p>清单里能明确归入失误的有四项，其中两项与产品自身的定位直接冲突。</p>
+
+  <div class="callout r">
+    <b>一、联动期的强制挂时长任务，与放置定位自相矛盾。</b>放置品类的底层承诺是"你不在也能变强"，而强制挂时长的做法要求玩家守着屏幕。这不是难度问题，是逻辑问题。<b>愿意为联动内容付费的玩家，很可能恰好是时间最少的那批人</b>；用在线时长去卡联动奖励，等于把最核心的付费人群挡在门外。
+  </div>
+
+  <div class="callout r">
+    <b>二、日服素材与实机的落差，可控性被低估了。</b>这不完全是取舍，因为团队已经在同步投放玩法向素材来对冲，说明意识到了问题。真正的问题在于，这类高刺激素材的投放比例和退出时机缺少明确的红线。<b>用与自己画风完全不符的素材拉进来一批注定会失望的用户，换来的短期下载并不划算。</b>这不是方向错误，是执行上缺少一条可以量化的边界。
+  </div>
+
+  <div class="callout r">
+    <b>三、副本门槛之下的等待成本没有被处理。</b>高难度副本本身属于取舍，但"找不到人就只能干等"这个后果是可以管理的，而产品没有给出任何兜底：没有单人挑战通道，没有排队时长提示，连续匹配失败也没有定向撮合。<b>结果是这段成本完整地落在中小额玩家身上，而且它不产出任何体验。</b>
+  </div>
+
+  <div class="callout r">
+    <b>四、职业平衡长期未解决，并且已经造成顶氪流失。</b>问题集中暴露在 PVP 上。判断它是失误而非取舍，依据是它属于可管理范围：同类产品通过周期性数值调整与机制轮换缓解过，不存在"做不到"的障碍。<br><br>
+    这一条比表面看起来严重，因为它会往下传导。<b>大佬同时是带本市场的供给方，他们的离开会让第 07 章那条链路整体变紧：能带的人少了，平民的匹配与等待成本上升，而等待正是日常时长的主要构成。</b>一个看似只影响高端竞技场的平衡问题，最终的代价会落回最普通的玩家身上。
+  </div>
+
+  <h3>两个介于两者之间的案例</h3>
+  <h4>案例一：交易行税率对正常场景的误伤</h4>
+  <p>转职置换材料导致月交易额破 10 万、税率跳到 50% 这件事，既不是纯取舍也不是纯失误。从设计意图看，阶梯税率要打的是规模化搬砖，目标明确、效果达成。但转职置换是一个<strong>正常使用场景下的大额交易</strong>，它和搬砖的区别在于：搬砖是持续性的、可重复的，转职置换是一次性的、不可重复的。税率机制没法区分这两者，因为它只看累计金额，不看交易性质。这是规则设计的粒度问题，更接近可以改进的执行细节。</p>
+
+  <h4>案例二：赛季长度的两次判断偏差</h4>
+  <p>S1 只给一个月，是<strong>节奏判断上的失误</strong>。一个月不足以让玩家摸清职业、技能与副本之间的配合关系，赛季结束时多数人还停在摸索期。这不是产能限制，是排期设定本身脱离了实际的理解成本。</p>
+  <p>S2 之后把赛季拉到两个月以上，则更接近<strong>产能约束下的取舍</strong>。制作人把"持续补充游戏玩法内容"列为长线第一要务，说明内容生产本身就是瓶颈；在这种约束下，拉长赛季是最省力的对冲手段，但代价直接落在玩家的空转上。<strong>两次调整都没有以"内容量"为基准来定赛季长度，一次定得太短，一次定得太长。</strong></p>
+
+  <div class="callout">
+    <b>本章结论。</b>把这些缺点过一遍会发现，真正能算作失误的只有四项，而且都不是致命的。绝大多数问题是"做加法"这条路线本身的过路费：你选择了放置框架，就要接受数值型付费的深度与消耗速度的绑定；你选择了全球化题材，就要接受本地化深度的损失。<br><br>
+    这与同门另一份拆解里得到的结论一致：<b>大多数缺点不是失误，而是那条路的过路费。</b>
+  </div>
+</section>
+
+<!-- ============ 15 ============ -->
+<section id="s15">
+  <h2><span class="num">15</span>优化方案建议</h2>
+  <div class="lead">每条方案都写明预期收益、代价和验证指标，避免只提方向不给抓手。</div>
+
+  <div class="callout">
+    <b>先说优先级。</b>五条方案里如果只能做两件事，建议按这个顺序：<b>方案一</b>（为中小额玩家设计不依赖大佬的推进路径）直接针对日常时长这个最大的退坑动因，改动成本也最低；<b>方案二</b>（职业平衡）守住带本市场的供给端，防止问题向普通玩家传导。其余三条属于长期优化项。
+  </div>
+
+  <h3>方案一：为中小额玩家设计不依赖大佬的推进路径</h3>
+  <table>
+    <thead><tr><th style="width:16%">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>问题</td><td>副本强度偏高，小氪与零氪玩家能靠自己打通的内容有限，日常里相当一部分时间花在匹配和蹲大佬车队的等待上，而这段等待没有任何产出</td></tr>
+      <tr><td>做法</td><td>三件事组合。一是为高难副本增加单人挑战通道，战力门槛保留，但允许用更长时间或更多体力通关，把不确定的等待换成可控的投入；二是在匹配界面显示排队人数与预计等待时长；三是对连续匹配失败设阈值，超过后转为定向推荐同公会或同服务器的高战力玩家。<strong>大矿门票机制应当保留</strong>，它是这个双边市场的定价基础，要改的是等待过程</td></tr>
+      <tr><td>预期收益</td><td>压缩日常里的低质量时间，直接削弱"时间太长"这个退坑动因，同时不削减副本难度本身，付费动机不受影响</td></tr>
+      <tr><td>代价</td><td>单人通道若给得过于宽松，会削弱"找人带"的社交价值与付费动机，需要把单人收益明确压在组队之下</td></tr>
+      <tr><td>验证指标</td><td>高难副本的平均匹配等待时长、日常总时长的构成拆解（内容时间与等待时间之比）、中小额付费玩家的 30 日留存</td></tr>
+    </tbody>
+  </table>
+
+  <h3>方案二：为职业平衡建立周期性调整机制</h3>
+  <table>
+    <thead><tr><th style="width:16%">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>问题</td><td>职业不平衡集中暴露在 PVP，已经导致部分职业的大佬赛后转职或退游。而大佬是带本市场的供给方，这一环出问题会牵动整条链路</td></tr>
+      <tr><td>做法</td><td>分两步。第一步建立可见度：每个赛季公布一次各职业在两个赛事中的出场率、胜率与排名分布，把问题从体感争论变成公开数据。第二步改调整方式：优先改机制联动的收益曲线，而不是直接加数值。此外可考虑在界域挑战赛中引入职业禁用或轮换机制，让阵容选择重新成为策略的一部分</td></tr>
+      <tr><td>预期收益</td><td>把平衡从"事后救火"变成可预期的常规动作，降低顶氪流失，同时保住带本市场的供给端</td></tr>
+      <tr><td>代价</td><td>频繁调整会带来养成预期的不稳定；引入轮换机制也可能被理解为回避问题本身，需要配合数据公开才具备说服力</td></tr>
+      <tr><td>验证指标</td><td>两个赛事中职业出场率与胜率的离散度、赛事结束后 7 日内的转职率、顶氪玩家的 30 日留存、带本匹配的平均等待时长</td></tr>
+    </tbody>
+  </table>
+
+  <h3>方案三：把赛季长度与内容量绑定为一条动态规则</h3>
+  <table>
+    <thead><tr><th style="width:16%">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>问题</td><td>赛季长度与内容量长期错配。S1 只有一个月，玩家还没摸透机制就结束了；S2 之后拉到两个月以上，但内容没有同步增加，后半段只能重复刷副本</td></tr>
+      <tr><td>做法</td><td>把赛季长度从固定值改成与内容量挂钩的变量：先确定本赛季有多少新材料与新玩法，再据此定长度，而不是先定长度再往里填内容。同时公开赛季路线图，让玩家知道后半段还有什么</td></tr>
+      <tr><td>预期收益</td><td>缩短赛季后半段的空转期，降低因枯燥产生的流失；路线图也能减轻玩家对"赛季还长"的焦虑</td></tr>
+      <tr><td>代价</td><td>赛季变短意味着内容生产频率提高，对内容团队的压力更大，需要先评估产能是否支撑得住</td></tr>
+      <tr><td>验证指标</td><td>赛季内各周的活跃度曲线（重点看后半段）、赛季末流失率、内容完成度与赛季进度的比值</td></tr>
+    </tbody>
+  </table>
+
+  <h3>方案四：联动奖励改挂机进度结算，取消在线时长门槛</h3>
+  <table>
+    <thead><tr><th style="width:16%">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>问题</td><td>联动期设置强制挂时长任务，与放置品类的底层承诺冲突，也把时间最少、付费意愿最高的那批玩家挡在门外</td></tr>
+      <tr><td>做法</td><td>把"累计在线时长"改为"累计挂机时长"，离线产出同样计入进度；或改为按体力消耗结算，让奖励与实际推进挂钩，而不是与在线挂钩</td></tr>
+      <tr><td>预期收益</td><td>提升联动奖励的实际触达率，不再排除有付费意愿但时间有限的玩家</td></tr>
+      <tr><td>代价</td><td>在线时长指标会下降，可能影响以在线数据为导向的运营考核口径</td></tr>
+      <tr><td>验证指标</td><td>联动任务完成率、联动期付费转化率、玩家反馈中涉及"时间负担"的负面提及率</td></tr>
+    </tbody>
+  </table>
+
+  <h3>方案五：建立素材与实机的一致性红线</h3>
+  <table>
+    <thead><tr><th style="width:16%">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>问题</td><td>日服投放的九头身性感素材与三头身 Q 版实机画风差距明显，短期转化与长期留存存在冲突</td></tr>
+      <tr><td>做法</td><td>设定两类素材的投放比例上限，例如高刺激类不超过总投放量的 30%；同时要求该类素材必须在前 15 秒内出现一次真实实机画面，为预期做校准</td></tr>
+      <tr><td>预期收益</td><td>降低货不对版带来的次留损失，同时保留这类素材的点击成本优势</td></tr>
+      <tr><td>代价</td><td>短期内点击成本会上升，CPI 指标承压</td></tr>
+      <tr><td>验证指标</td><td>分素材来源的次日留存与 7 日留存对比、单用户获取成本与 LTV 的比值</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 16 ============ -->
+<section id="s16">
+  <h2><span class="num">16</span>拆解总结</h2>
+  <div class="lead">把全篇收束成四条可以带走的结论，附方法与局限。</div>
+
+  <h3>结论一：框架选择决定下限，设计优化决定上限</h3>
+  <p>做减法的产品，下限被 MMO 的义务结构锁死，优化只能在天花板附近做文章；做加法的产品，下限由放置底盘托住，即使 MMO 内容加得不好，玩家仍有退路。在买量成本持续走高的环境下，这个差别被放大成了数倍的流水差距。</p>
+
+  <h3>结论二：减掉的是操作，加上的才是权利</h3>
+  <p>MMO 的重度感来自义务结构而非操作量。轻量化做减法通常只能压缩单次耗时，无法取消"每日必须上线"这个周期本身。加法之所以有效，是因为放置框架的无义务状态让每一项加进来的内容都自带退出机制。前者优化效率，后者优化容错。</p>
+
+  <h3>结论三：经济系统的关键是限流阀，不是交易行本身</h3>
+  <p>"全服为大佬打工"这个说法描述了现象，但没说清机制。让这条链路成立的不是交易行的存在，而是三道阀门对流量的精确控制。元属性是晨星，它是时间与金钱唯一的共同结算单位，所有成长路径最终都收敛到这个数字上。</p>
+
+  <h3>结论四：加法保住的是权利，不是时间</h3>
+  <p>一个靠"不累积义务"建立优势的产品，日常时长稳定在约 1 小时。<strong>而这不是后期走样，是内容够玩之后一直如此。</strong>但这一小时的构成必须拆开看：其中相当一部分不是内容消耗，而是副本强度偏高导致的匹配与等待。</p>
+  <p><strong>加法保住的只是"可以不做"的权利，保不住"不必花很多时间"的结果</strong>；而这款产品又额外用高难度副本制造了一层摩擦，且没有为中小额玩家准备兜底。所以"做加法"不能一劳永逸地解决重度感，它需要同时管住两条方向相反的线：<strong>内容量要够多才留得住人，难度要够低才不至于把人推进等待里。</strong></p>
+
+  <h3>方法与局限</h3>
+  <p>这份报告用到的主要分析工具包括：<strong>三层追问法</strong>（现象 → 意图 → 结构，拉开差距的是结构层）、<strong>元属性识别</strong>（找出决定进度的隐藏变量，本作是晨星）、<strong>失误与取舍二分法</strong>（真正的失误只有"本可解决却没解决"一类）、<strong>信息可信度分级</strong>（A 一手实测 / B 官方 / C 第三方 / D 社区 / E 推断）。</p>
+  <p>本次拆解有一条教训值得单独记下来：<strong>一手信息不等于一次到位的信息，推断也不等于事实。</strong>这份报告的样本描述与若干判断先后修正了三轮，其中有两处是我自己的推断被一手体验推翻的：我原本认为"转职会让抽卡资源贬值"，而实际是玩家提前囤积道具、道具长期处在高位；我原本判断"联动返场是在挖存量"，而我自己就是被返场拉回来的。两处错误的成因相同：<strong>从机制出发做逻辑推演，没有回到真实的玩家行为。凡是推断出"玩家会因此受损"的结论，都应该先用一手体验验一遍。</strong></p>
+  <p style="margin-bottom:0">局限有三层。一是<strong>视角局限</strong>：我是公会普通成员、中小额付费，看到的永远是链路的一端。二是<strong>数据局限</strong>：出海章节全部依赖公开资料，没有一手验证；本报告不含游戏内部埋点数据。三是<strong>时效局限</strong>：所有判断截止到 2026 年 8 月，产品仍在运营中。</p>
+</section>
+
+<footer>
+  <p>《杖剑传说》游戏拆解报告 · 精简版 · 2026-09-17</p>
+  <p>本版在完整版基础上做了篇幅压缩（保留全部核心论点与数据），完整版见同目录下的「杖剑传说_游戏拆解报告_完整版」文件。</p>
+  <p>体验样本：四个号覆盖产品全周期（内测 → 开服 → 素晴联动期 → 洛天依二次联动回归至今），累计约 350 小时纯游戏内时长（不含挂机），日均约 1 小时，付费约 400 元，公会普通成员，仅中国大陆服。</p>
+  <p>数据来源：吉比特财报（2025 半年报、三季报、年报）；雷霆游戏官网与官方公告；2025 中国游戏产业年会制作人林笋演讲全文；游戏日报、GameLook 等媒体专访；Sensor Tower、点点数据、广大大、巨量算数、DataEye 第三方数据；TapTap 与玩家社区的攻略整理。</p>
+  <p>本文中的推断性判断已标注为 E 级信息。所有引用数据均标注口径，未核实的社区数据已注明来源等级。</p>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《问剑长生》数据运营分析</title>
+<style>
+:root{
+  --ink:#1B1F1E; --ink2:#434A48; --ink3:#747C79;
+  --paper:#F9FAF8; --card:#FFFFFF; --line:#DEE5E1;
+  --pri:#2F5D5B; --pri-l:#EAF2F0;
+  --gold:#9C7A3C; --gold-l:#F7F1E3;
+  --jade:#3F7A5E; --jade-l:#EBF3EE;
+  --red:#A83A2C; --red-l:#FAEDEA;
+  --blue:#2E5A82; --blue-l:#EAF0F6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  background:var(--paper); color:var(--ink);
+  line-height:1.8; font-size:15.5px; letter-spacing:.015em;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:0 28px 100px}
+.cover{padding:60px 0 40px;border-bottom:1px solid var(--line);margin-bottom:44px;position:relative}
+.cover::after{content:"";position:absolute;left:0;bottom:-1.5px;width:88px;height:3px;background:var(--pri)}
+.eyebrow{font-size:12px;letter-spacing:.3em;color:var(--pri);font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:1.5px;background:var(--pri);display:inline-block}
+h1{font-size:42px;line-height:1.25;font-weight:700;letter-spacing:.03em;margin-bottom:12px}
+.sub{font-size:16px;color:var(--ink2);margin-bottom:32px;line-height:1.7}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(27,31,30,.06)}
+.metagrid div{background:var(--card);padding:15px 17px}
+.metagrid dt{font-size:11px;color:var(--ink3);margin-bottom:5px;letter-spacing:.1em}
+.metagrid dd{font-size:14px;font-weight:600;color:var(--ink)}
+.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 30px;margin-bottom:48px;box-shadow:0 1px 4px rgba(27,31,30,.04)}
+.toc h3{font-size:12px;letter-spacing:.24em;color:var(--pri);font-weight:700;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:7px 26px;counter-reset:t}
+.toc li{counter-increment:t;font-size:14px;padding:2px 0}
+.toc li::before{content:counter(t,decimal-leading-zero);color:var(--gold);font-weight:700;margin-right:11px;font-size:12px;font-variant-numeric:tabular-nums}
+.toc a{color:var(--ink2);text-decoration:none}
+.toc a:hover{color:var(--pri)}
+section{margin-bottom:50px;scroll-margin-top:20px}
+h2{font-size:24px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+h2 .num{font-size:13px;color:var(--pri);font-weight:700;letter-spacing:.06em;flex-shrink:0;background:var(--pri-l);padding:4px 10px;border-radius:6px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+h2 + .lead{color:var(--ink3);font-size:13.5px;margin-bottom:24px;font-style:italic}
+h3{font-size:16px;font-weight:700;margin:30px 0 13px;padding-left:12px;border-left:4px solid var(--pri);line-height:1.4}
+h4{font-size:14.5px;font-weight:700;margin:22px 0 9px;color:var(--ink)}
+p{margin-bottom:14px;color:var(--ink2)}
+p strong,li strong{color:var(--ink);font-weight:600}
+ul,ol{margin:0 0 14px 20px;color:var(--ink2)}
+li{margin-bottom:7px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:18px;box-shadow:0 1px 2px rgba(27,31,30,.03)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:760px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;background:var(--card);font-size:13.5px;margin-bottom:16px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+th{background:#F1F5F3;text-align:left;padding:12px 14px;font-weight:700;font-size:12.5px;color:var(--ink);border-bottom:1px solid var(--line);white-space:nowrap;letter-spacing:.05em}
+td{padding:12px 14px;border-bottom:1px solid #EDF1EF;color:var(--ink2);vertical-align:top;line-height:1.75}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:#FBFCFB}
+.tag{display:inline-block;padding:3px 11px;border-radius:20px;font-size:12.5px;margin:0 6px 7px 0;font-weight:500}
+.t-pri{background:var(--pri-l);color:var(--pri)}
+.t-jade{background:var(--jade-l);color:var(--jade)}
+.t-gold{background:var(--gold-l);color:var(--gold)}
+.t-red{background:var(--red-l);color:var(--red)}
+.t-blue{background:var(--blue-l);color:var(--blue)}
+.callout{border-left:4px solid var(--pri);background:var(--pri-l);padding:15px 19px;border-radius:0 10px 10px 0;margin:18px 0;font-size:14px;color:#1F4442}
+.callout.g{border-color:var(--jade);background:var(--jade-l);color:#24503B}
+.callout.y{border-color:var(--gold);background:var(--gold-l);color:#6B5223}
+.callout.r{border-color:var(--red);background:var(--red-l);color:#6E2A20}
+.callout b{font-weight:700}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 14px;text-align:center}
+.stat .v{font-size:26px;font-weight:700;color:var(--pri);line-height:1.2;font-variant-numeric:tabular-nums}
+.stat .l{font-size:11.5px;color:var(--ink3);margin-top:6px}
+.stat.dn .v{color:var(--red)}
+/* 柱状对比图 */
+.chart{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;margin:18px 0}
+.chart-t{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:18px}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.bar-lb{width:68px;font-size:12.5px;color:var(--ink3);text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
+.bar-tr{flex:1;background:#F1F5F3;border-radius:4px;height:22px;position:relative;overflow:hidden}
+.bar-fl{height:100%;border-radius:4px;background:var(--pri)}
+.bar-fl.b2{background:#5B8A87}
+.bar-fl.b3{background:#8FB3B0}
+.bar-fl.b4{background:#B9CFCD}
+.bar-fl.rd{background:var(--red)}
+.bar-vl{width:96px;font-size:12.5px;font-weight:700;color:var(--ink);flex-shrink:0;font-variant-numeric:tabular-nums}
+.chart-note{font-size:12px;color:var(--ink3);margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.src{font-size:12px;color:var(--ink3);margin-top:-8px;margin-bottom:16px}
+footer{border-top:1px solid var(--line);padding-top:22px;font-size:12.5px;color:var(--ink3)}
+@page{size:A4;margin:14mm 12mm 14mm}
+@media print{
+  body{background:#fff;font-size:11.5pt;line-height:1.72;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:none;padding:0}
+  .cover{padding-top:0;break-after:page}
+  nav.toc{break-after:page}
+  section{break-before:auto;margin-bottom:30px}
+  h2{break-after:avoid;break-inside:avoid;margin-top:26px}
+  h3,h4{break-after:avoid;break-inside:avoid}
+  h2 + .lead{break-after:avoid}
+  table{break-inside:auto}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  .stat,.grid2,.grid3,.grid4,.chart,.bar-row{break-inside:avoid}
+  .card{break-inside:auto}
+  li{break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+  footer{break-before:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+  <div class="eyebrow">DATA OPS ANALYSIS · 数据运营分析</div>
+  <h1>《问剑长生》数据运营分析</h1>
+  <div class="sub">从峰值起连续三个季度下滑 · 一条被买量不足放大的收敛型衰减曲线 / 数据截至 2026 年 8 月</div>
+  <div class="metagrid">
+    <div><dt>分析对象</dt><dd>问剑长生（吉比特自研）</dd></div>
+    <div><dt>上线</dt><dd>2025-01-02（大陆）</dd></div>
+    <div><dt>2025 全年流水</dt><dd>8.24 亿元</dd></div>
+    <div><dt>单季趋势</dt><dd>连续四季递减</dd></div>
+    <div><dt>2026 表现</dt><dd>营收与利润同比减少</dd></div>
+    <div><dt>数据来源</dt><dd>财报 + 第三方</dd></div>
+    <div><dt>配套文件</dt><dd>Excel 数据表 / 数据看板</dd></div>
+    <div><dt>分析日期</dt><dd>2026-09-17</dd></div>
+  </div>
+</header>
+
+<nav class="toc">
+  <h3>CONTENTS · 目录</h3>
+  <ol>
+    <li><a href="#s1">分析目标与数据说明</a></li>
+    <li><a href="#s2">流水轨迹：一条收敛型衰减曲线</a></li>
+    <li><a href="#s3">衰减归因</a></li>
+    <li><a href="#s4">同门对照：两条生命周期曲线</a></li>
+    <li><a href="#s5">出海能否接棒</a></li>
+    <li><a href="#s6">结论与运营建议</a></li>
+    <li><a href="#s7">本次分析的局限</a></li>
+  </ol>
+</nav>
+
+<div class="card" style="border-left:4px solid var(--pri);margin-bottom:48px">
+  <h3 style="margin:0 0 14px;padding:0;border:none;font-size:15px">写在前面</h3>
+  <p>这份文件是《问剑长生》的第二份材料。第一份是同一文件夹里的拆解报告，它回答的是"这款产品设计上哪里做对了、哪里付出了代价"。这一份换一个问法：<strong>把它的流水逐季拆开，看这条曲线到底长什么样，以及为什么会是这条形状。</strong></p>
+  <p>拆解报告和数据分析报告的分工不同。拆解报告看的是机制与决策，数据报告看的是结果与趋势。同一款产品，前者能说清"为什么这么做"，后者能说清"做了什么之后数字怎么动了"。两份放在一起，才算把一个案例看完整。</p>
+  <p style="margin-bottom:0">需要提醒的是，这份分析的绝大部分数字来自公开财报与第三方监测，<strong>没有游戏内部埋点数据</strong>。这意味着它能验证到季度粒度，但看不到日活、留存、漏斗这些运营最常用的指标。第 07 章会把这层局限写清楚。</p>
+</div>
+
+<!-- 01 -->
+<section id="s1">
+  <h2><span class="num">01</span>分析目标与数据说明</h2>
+  <div class="lead">先把要回答的问题和数据边界定清楚。</div>
+
+  <h3>要回答的三个问题</h3>
+  <ol>
+    <li><strong>《问剑长生》上线的第一年，流水轨迹是什么形状？</strong>是稳定平台型，还是持续衰减型。</li>
+    <li><strong>这条曲线的形状由什么决定？</strong>区分内容供给、用户池、买量投入、同门分流四个变量的权重。</li>
+    <li><strong>出海能不能接住这条曲线？</strong>给出可用于判断的观测指标。</li>
+  </ol>
+
+  <h3>数据来源与口径</h3>
+  <table>
+    <thead><tr><th style="width:26%">数据</th><th style="width:22%">来源</th><th>口径说明</th></tr></thead>
+    <tbody>
+      <tr><td>分季度流水</td><td>吉比特定期报告</td><td>公司按季披露"主要产品流水"，含大陆版与境外版分列。本报告中的<strong>单季数值由累计值还原</strong>，非公司直接披露的单季数据</td></tr>
+      <tr><td>全年流水</td><td>吉比特年报</td><td>8.24 亿元，为《问剑长生（大陆版）》2025 年全年</td></tr>
+      <tr><td>2026 年趋势</td><td>吉比特一季报及调研纪要</td><td>公司表述为"营业收入及利润同比均减少"，<strong>未披露具体数值</strong></td></tr>
+      <tr><td>2026 上半年预估</td><td>第三方券商推演</td><td>口径为"九牧之野 + 问剑长生 + 其他"合计，非单产品数据，仅作趋势参考</td></tr>
+      <tr><td>榜单排名</td><td>第三方监测（按地区）</td><td>不同机构统计区间与市场范围不一致，本报告统一使用同一来源以保证可比性</td></tr>
+      <tr><td>销售费用</td><td>吉比特定期报告</td><td>为公司整体口径，<strong>无法拆分到单一产品</strong>，因此相关分析只能做方向性判断</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout y">
+    <b>口径必须先说清楚，因为这里有一个容易踩的坑。</b>公司披露的是"累计流水"，不是"单季流水"。用累计值直接当季度业绩来对比，会得出"每个季度都在增长"的错误结论。<br><br>
+    <b>本报告所有单季数据都是先还原再加总校验的</b>：2025 年四个季度还原值相加等于 8.24 亿元，与年报全年数据吻合，说明还原方法成立。
+  </div>
+</section>
+
+<!-- 02 -->
+<section id="s2">
+  <h2><span class="num">02</span>流水轨迹：一条收敛型衰减曲线</h2>
+  <div class="lead">这是本次分析最重要的一张图，后面所有判断都建立在它之上。</div>
+
+  <h3>单季还原过程</h3>
+  <table>
+    <thead><tr><th style="width:20%">期间</th><th style="width:24%">公司累计口径</th><th style="width:24%">还原后单季</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>2025 Q1</td><td>3.63 亿元</td><td><strong>3.63 亿元</strong></td><td>首发季度，含公测首月冲高</td></tr>
+      <tr><td>2025 Q2</td><td>5.66 亿元</td><td><strong>2.03 亿元</strong></td><td>5.66 − 3.63</td></tr>
+      <tr><td>2025 Q3</td><td>7.13 亿元</td><td><strong>1.47 亿元</strong></td><td>7.13 − 5.66</td></tr>
+      <tr><td>2025 Q4</td><td>8.24 亿元（全年）</td><td><strong>1.11 亿元</strong></td><td>8.24 − 7.13</td></tr>
+      <tr><td colspan="2"><b>2025 全年合计</b></td><td colspan="2"><b>8.24 亿元</b>（四季度还原值加总，与年报数据吻合）</td></tr>
+    </tbody>
+  </table>
+  <p class="src">数据来源：吉比特 2025 年三季度报告、年度报告。单季数值为累计值相减还原，属本报告计算。</p>
+
+  <h3>衰减曲线</h3>
+  <div class="chart">
+    <div class="chart-t">《问剑长生》2025 年单季流水（亿元）</div>
+    <div class="bar-row">
+      <div class="bar-lb">Q1</div>
+      <div class="bar-tr"><div class="bar-fl" style="width:100%"></div></div>
+      <div class="bar-vl">3.63</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lb">Q2</div>
+      <div class="bar-tr"><div class="bar-fl b2" style="width:55.9%"></div></div>
+      <div class="bar-vl">2.03</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lb">Q3</div>
+      <div class="bar-tr"><div class="bar-fl b3" style="width:40.5%"></div></div>
+      <div class="bar-vl">1.47</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lb">Q4</div>
+      <div class="bar-tr"><div class="bar-fl b4" style="width:30.6%"></div></div>
+      <div class="bar-vl">1.11</div>
+    </div>
+    <div class="chart-note">
+      环比变化：Q2 <b style="color:var(--red)">−44.1%</b> · Q3 <b style="color:var(--red)">−27.6%</b> · Q4 <b style="color:var(--red)">−24.5%</b>。
+      从 Q2 起连续三个季度环比为负，全程无反弹，全年衰减幅度达 <b style="color:var(--red)">−69.4%</b>（Q1 到 Q4）。
+    </div>
+  </div>
+
+  <h3>三个可以直接读出的结论</h3>
+  <div class="grid3">
+    <div class="stat dn"><div class="v">−44%</div><div class="l">首发季度后的首个环比跌幅</div></div>
+    <div class="stat dn"><div class="v">3</div><div class="l">峰值后连续下滑季度数</div></div>
+    <div class="stat dn"><div class="v">−69%</div><div class="l">Q1 到 Q4 的累计衰减</div></div>
+  </div>
+
+  <p style="margin-top:18px"><strong>第一，这不是平台型曲线，是衰减型曲线。</strong>如果产品的自然状态是"稳定在一个规模上运营"，那么单季流水应该在某个数值附近波动。而《问剑长生》从 Q1 峰值起连续三个季度单向下行，没有出现过任何一个反弹季度。</p>
+  <p><strong>第二，衰减速度是递减的，说明它在向某个底部收敛。</strong>跌幅从 −44% 收窄到 −24%，这是典型的收敛形态，意味着用户池的流失速度在放缓，产品正在接近它真正的长期规模。</p>
+  <p><strong>第三，首发季度占了全年的 44%。</strong>这个比例说明这款产品的收入高度依赖上线初期的自然流量与新鲜感，长线运营贡献的部分不到六成。</p>
+
+  <div class="callout r">
+    <b>把这三条合起来看，产品在上线第一年内就进入了衰退期。</b>这不是"表现不佳"的程度问题，而是阶段问题：多数产品的曲线会先经历平台期再衰减，而这一款从第二个季度就开始单向下滑。<br><br>
+    这个判断也解释了第 03 章要分析的四个变量里，为什么<b>买量投入不足会被单独提出来讨论</b>：如果衰减的起点是 Q2，那 Q2 正好是该追加投入、把曲线托平的窗口期，而实际的投入是收缩的。
+  </div>
+</section>
+
+<!-- 03 -->
+<section id="s3">
+  <h2><span class="num">03</span>衰减归因</h2>
+  <div class="lead">四个变量里，哪一个能解释 −69% 这个幅度。</div>
+
+  <h3>变量一：买量投入的收缩（权重最高）</h3>
+  <table>
+    <thead><tr><th style="width:26%">指标</th><th style="width:30%">问剑长生</th><th>杖剑传说（同期对照）</th></tr></thead>
+    <tbody>
+      <tr><td>发行首季度销售费用同比增量</td><td><strong>约 0.66 亿元</strong></td><td>—</td></tr>
+      <tr><td>发行后两个季度同比增量</td><td>—</td><td><strong>约 3 亿元 / 6.58 亿元</strong></td></tr>
+      <tr><td>投入强度对比</td><td>试水级</td><td>数倍于前者</td></tr>
+    </tbody>
+  </table>
+  <p class="src">数据来源：吉比特定期报告及券商分析。销售费用为公司整体口径，此处用于方向性对比，不能直接等同于单产品投放额。</p>
+  <p>0.66 亿元的首季增量，对冲一款需要抢占放置修仙用户心智的新品来说，属于保守投入。同门产品在发行后两个季度分别追加约 3 亿与 6.58 亿元，两者相差数倍。</p>
+  <p><strong>这个差异的直接后果体现在曲线形状上：</strong>《问剑长生》从 Q2 开始就失去托底力量，而《杖剑传说》在同一阶段还在往上冲（第 04 章会做曲线对比）。</p>
+
+  <h3>变量二：用户来源为存量迁移</h3>
+  <div class="callout">
+    <b>上线初期约一半玩家来自同门的《一念逍遥》。</b>这带来两个后果。<br><br>
+    一是<b>天花板前置</b>。用户池主要来自前作分流，意味着产品的潜在规模在开服时就大致确定了，后续增长只能靠新用户获取，而这恰恰是投入最不足的一块。<br><br>
+    二是<b>双重衰减</b>。前作自身也在下滑（2025 年一季度流水 1.3 亿元，同比 −22.94%），当存量池本身在缩小时，来自该池的迁移用户会同步减少。
+  </div>
+
+  <h3>变量三：内容节奏的两次偏差</h3>
+  <p>拆解报告里已经分析过这条链条，这里只看它对数据的传导：早期日常 15 到 25 分钟，被反馈为"内容不足"；随后推出星墟古地、孽业天魔等长线活动，日常拉到约 40 分钟，又造成负担流失；大境界间隔过长导致顶氪流失；为留住顶氪而赶工出新境界，新版本上线一周内数据问题频发。</p>
+  <p><strong>这条链条的每一环都在往外推用户，而且推的是不同的人群</strong>：前段推走要轻度的，中段推走要深度的，后段推走要稳定的。三个方向同时流失，与连续四季递减的数据形态是吻合的。</p>
+
+  <h3>变量四：同门产品的分流</h3>
+  <p>《杖剑传说》于 2025 年 5 月 29 日上线，正好落在《问剑长生》开始下滑的 Q2 末尾。两款产品同属一家公司，用户画像存在重叠（都含放置品类爱好者）。<strong>在同一家公司内部，资源与用户都会向表现更好的产品集中</strong>，这在第 04 章的销售费用对比里已经能看到。</p>
+
+  <div class="callout r">
+    <b>归因的排序与权重。</b>四个变量里，<b>买量投入收缩的权重最高</b>，因为它是唯一能解释"为什么从 Q2 就开始下滑"的变量。用户来源决定了天花板高度，内容节奏决定了流失速度，同门分流加速了资源转移，但三者都属于"在既定投入下的结果"。<br><br>
+    换句话说，<b>如果 Q2 追加了足够投入，曲线的形状会是另一样子</b>（坡度更缓、平台期更长），但仍会受到用户池天花板的限制。这两件事一个是速度问题，一个是高度问题，不能混在一起谈。
+  </div>
+</section>
+
+<!-- 04 -->
+<section id="s4">
+  <h2><span class="num">04</span>同门对照：两条生命周期曲线</h2>
+  <div class="lead">同一家公司、同一年上线、同一个底层方向，两条曲线差在哪。</div>
+
+  <h3>季度曲线并排</h3>
+  <table>
+    <thead><tr><th style="width:16%">期间</th><th style="width:26%">《问剑长生》（大陆）</th><th style="width:30%">《杖剑传说》（大陆）</th><th>差异说明</th></tr></thead>
+    <tbody>
+      <tr><td>2025 Q1</td><td>3.63 亿元</td><td>—</td><td>杖剑尚未上线</td></tr>
+      <tr><td>2025 Q2</td><td>2.03 亿元</td><td>4.24 亿元</td><td>杖剑 5 月 29 日上线，仅计入约一个月</td></tr>
+      <tr><td>2025 Q3</td><td>1.47 亿元</td><td><strong>7.42 亿元</strong></td><td>杖剑首个完整季度，达到峰值</td></tr>
+      <tr><td>2025 Q4</td><td>1.11 亿元</td><td>约 6.13 亿元</td><td>由半年数据与全年数据还原</td></tr>
+      <tr><td>2025 全年</td><td>8.24 亿元</td><td>17.03 亿元</td><td>销量差约 2.1 倍</td></tr>
+      <tr><td>2026 Q1</td><td>同比减少</td><td>大陆 + 境外合计 7.48 亿元</td><td>杖剑仍处高位，问剑继续下行</td></tr>
+      <tr><td>2026 Q2 畅销榜</td><td>未见单列</td><td>大陆平均第 69 名，最高第 54 名</td><td>杖剑也进入衰减期</td></tr>
+    </tbody>
+  </table>
+  <p class="src">《杖剑传说》2025 Q3 峰值与 Q4 数值来自第三方券商对财报数据的还原推演，非公司直接披露。2026 年数据来自吉比特 2026 年一季报与投资者调研纪要。</p>
+
+  <h3>两条曲线形状的差别</h3>
+  <div class="chart">
+    <div class="chart-t">两条曲线在 2025 下半年分道扬镳</div>
+    <div class="bar-row">
+      <div class="bar-lb">问剑 Q1</div>
+      <div class="bar-tr"><div class="bar-fl b4" style="width:49%"></div></div>
+      <div class="bar-vl">3.63</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lb">问剑 Q3</div>
+      <div class="bar-tr"><div class="bar-fl b4" style="width:19.8%"></div></div>
+      <div class="bar-vl">1.47</div>
+    </div>
+    <div class="bar-row" style="margin-top:16px">
+      <div class="bar-lb">杖剑 Q3</div>
+      <div class="bar-tr"><div class="bar-fl" style="width:100%"></div></div>
+      <div class="bar-vl">7.42</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lb">杖剑 Q4</div>
+      <div class="bar-tr"><div class="bar-fl b2" style="width:82.6%"></div></div>
+      <div class="bar-vl">6.13</div>
+    </div>
+    <div class="chart-note">
+      同样是上线后的第二个完整季度，《问剑长生》已跌至 1.47 亿元，而《杖剑传说》冲到 7.42 亿元峰值。
+      <b>一个在第二个季度见顶后下滑，另一个在第二个季度才刚见顶。</b>
+    </div>
+  </div>
+
+  <h3>差别不在品类，在三个可操作项</h3>
+  <table>
+    <thead><tr><th style="width:22%">维度</th><th style="width:30%">问剑长生</th><th>杖剑传说</th></tr></thead>
+    <tbody>
+      <tr><td>投入强度</td><td>首季同比 +0.66 亿，后续收缩</td><td>Q2、Q3 分别 +3 亿、+6.58 亿，持续加码</td></tr>
+      <tr><td>用户来源</td><td>约一半为同门前作迁移，增量有限</td><td>联动持续拉新与召回，联动新服人数与付费玩家数明显更高</td></tr>
+      <tr><td>出海时点</td><td>2025-11-27 才上线港澳台与韩国</td><td>2025-07-15 即上线港澳台、日本、新马，落后不足两个月</td></tr>
+    </tbody>
+  </table>
+  <p>三项都是"什么时候做、投入多少"的问题，而不是能力问题。同一家公司做这两款产品，开发能力与发行体系是同一套，差别出现在决策节奏上。</p>
+
+  <div class="callout g">
+    <b>这张对照表最有价值的地方在于它排除了归因的干扰项。</b>同一个公司、同一年上线、同一个底层品类方向，两条曲线却完全不同。这意味着差距不是"能不能做到"的问题，而是<b>在多早的时间点、用多大的力度去做</b>的问题。<br><br>
+    对运营岗位的直接含义是：<b>产品上线后的前两个季度，是可干预的窗口期。</b>《问剑长生》的曲线从 Q2 开始下行，而 Q2 恰好是应该追加投入的位置。
+  </div>
+</section>
+
+<!-- 05 -->
+<section id="s5">
+  <h2><span class="num">05</span>出海能否接棒</h2>
+  <div class="lead">2025 年底出海，2026 年底上欧美。时间点上已经落后，效果需要看两个指标。</div>
+
+  <h3>出海的时点与现状</h3>
+  <table>
+    <thead><tr><th style="width:24%">节点</th><th style="width:34%">问剑长生</th><th>杖剑传说</th></tr></thead>
+    <tbody>
+      <tr><td>首次出海</td><td>2025-11-27（中国港澳台、韩国）</td><td>2025-07-15（中国港澳台、日本、新马）</td></tr>
+      <tr><td>距大陆上线</td><td>约 11 个月</td><td>约 1.5 个月</td></tr>
+      <tr><td>2025 境外流水</td><td>规模极小，年报未单列</td><td><strong>7.92 亿元</strong>，占总流水约 32%</td></tr>
+      <tr><td>后续计划</td><td>2026 年下半年上线欧美版</td><td>2026-05-19 欧美版已上线</td></tr>
+    </tbody>
+  </table>
+
+  <h3>港澳台市场的实测表现</h3>
+  <div class="chart">
+    <div class="chart-t">《问剑长生》亚洲服在中国台湾 iOS 畅销榜月度表现</div>
+    <div class="bar-row">
+      <div class="bar-lb">2026-04</div>
+      <div class="bar-tr"><div class="bar-fl b3" style="width:66%"></div></div>
+      <div class="bar-vl">均 66 名</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lb">2026-05</div>
+      <div class="bar-tr"><div class="bar-fl b3" style="width:76%"></div></div>
+      <div class="bar-vl">均 76 名</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lb">2026-06</div>
+      <div class="bar-tr"><div class="bar-fl b3" style="width:71%"></div></div>
+      <div class="bar-vl">均 71 名</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lb">2026-07</div>
+      <div class="bar-tr"><div class="bar-fl b4" style="width:75%"></div></div>
+      <div class="bar-vl">均 75 名</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-lb">2026-08</div>
+      <div class="bar-tr"><div class="bar-fl b4" style="width:77%"></div></div>
+      <div class="bar-vl">均 77 名</div>
+    </div>
+    <div class="chart-note">
+      条形长度代表平均排名（越短越好，此处为便于阅读按排名数值等比呈现）。
+      月度估计营收区间为 <b>5 万至 22 万美元</b>，量级远低于大陆市场。
+      <b>排名长期停留在 66 至 77 名区间，未出现向上突破的迹象。</b>
+    </div>
+  </div>
+  <p class="src">数据来源：第三方应用商店监测（中国市场台湾地区，iOS 畅销榜）。估计营收为第三方推算，非官方数据，仅作量级参考。亚洲服包含港澳台与韩国等地区，单地区数据不代表整体。</p>
+
+  <h3>两个需要盯的观测点</h3>
+  <div class="grid2">
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">观测点一：港澳台与韩国能否止住排名下滑</h4>
+      <p style="margin:0;font-size:14px">目前的排名区间在 66 至 77 名，属于长尾位置。如果后续版本更新能让排名稳定进入前 50，说明内容对海外用户仍有吸引力；如果继续下行，则说明现有内容与当地用户偏好存在错配。</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">观测点二：欧美版首月排名</h4>
+      <p style="margin:0;font-size:14px">可对照同门产品的欧美首月表现：美国地区平均第 44 名、最高第 26 名。<strong>如果明显低于这个水平，说明修仙题材在欧美市场的接受度确实是硬约束</strong>，而不是投放力度问题。</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <b>出海对这款产品的意义，和它对同门产品的意义不一样。</b>《杖剑传说》在立项期就按全球化标准处理题材与美术，出海是顺势而为；《问剑长生》的修仙题材本身在海外接受度有限，出海更像是在找增量而非释放既有优势。<br><br>
+    所以判断它能否接棒，<b>关键不在投入多少，而在题材的适配程度</b>。这也是同一个公司做出两种结果的原因之一。
+  </div>
+</section>
+
+<!-- 06 -->
+<section id="s6">
+  <h2><span class="num">06</span>结论与运营建议</h2>
+  <div class="lead">数据能支撑到哪一步，就把建议提到哪一步。</div>
+
+  <h3>三条结论</h3>
+  <div class="card">
+    <h4 style="margin-top:0">结论一：产品在上线第一年就进入衰退期</h4>
+    <p style="margin-bottom:0">2025 年从 Q1 峰值起连续三个季度下滑，从 3.63 亿元降至 1.11 亿元，全年衰减 69.4%。首发季度贡献全年 44% 的收入，长线运营贡献不足六成。<strong>这不是"表现不够好"的程度问题，是生命周期阶段问题。</strong></p>
+  </div>
+  <div class="card">
+    <h4 style="margin-top:0">结论二：投入强度是可控变量里权重最高的一个</h4>
+    <p style="margin-bottom:0">四个归因变量里，买量投入是唯一能解释"为什么从 Q2 就开始下行"的。用户来源决定了天花板高度，内容节奏决定了流失速度，但这些都在既定投入之下发挥作用。<strong>投入决定了曲线有没有机会先走平台期再衰减。</strong></p>
+  </div>
+  <div class="card">
+    <h4 style="margin-top:0">结论三：出海是补救而非优势释放</h4>
+    <p style="margin-bottom:0">出海时点比同门晚约 9 个月，港澳台实测排名停留在 66 至 77 名，月度估计营收在数万至二十余万美元量级。题材在海外市场的接受度是硬约束，这一点无法靠投放力度解决。<strong>欧美版可以作为验证，但不宜承担扭转曲线的预期。</strong></p>
+  </div>
+
+  <h3>对应的运营建议</h3>
+  <table>
+    <thead><tr><th style="width:24%">建议</th><th style="width:30%">具体做法</th><th>判断依据与验证指标</th></tr></thead>
+    <tbody>
+      <tr><td><b>把资源从拉新转向保核心</b></td><td>既然曲线已进入收敛段，继续追新增的边际效率很低。把预算转向核心玩家的内容供给与付费深度挖掘</td><td>依据：Q4 环比跌幅已收窄至 −24.5%，说明留存下来的用户相对稳定。验证：核心用户的付费率与留存率变化</td></tr>
+      <tr><td><b>用巅峰期活跃度对冲体验断档</b></td><td>针对拆解报告里识别出的"大境界间隔过长"问题，把境界间的等待期用可预期的活动节奏填满，而不是靠临时赶工</td><td>依据：顶氪流失与境界间隔过长直接相关。验证：境界更新前后的活跃度曲线与付费率变化</td></tr>
+      <tr><td><b>出海按题材适配度分层投入</b></td><td>对港澳台与韩国做维持性投入，把欧美版作为题材验证的样本，根据首月数据决定是否加码，而不是预设一个高目标</td><td>依据：现有出海数据未显示第 3 章所述的题材红利。验证：欧美首月排名与同门数据的对比</td></tr>
+      <tr><td><b>建立可复用的口径规范</b></td><td>把"累计流水"与"单季流水"的换算方法固化下来，避免对外沟通中使用累计值造成误读</td><td>依据：本次分析中，累计口径是最大的理解障碍。验证：后续报告或对外材料中是否统一口径</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout g">
+    <b>这四条建议有一个共同的前提：放弃"重回首发水平"这个目标。</b>曲线的收敛形态已经说明，这款产品的长期规模会显著低于首发季度。在这个前提下，把资源投向核心用户与内容深度，比继续追新增更符合数据的指向。<br><br>
+    <b>承认天花板，是长线运营里最难但最有价值的一步。</b>内部把它评价为"稳健迭代"，其实正好对应这个阶段该做的事：不追求增长，守住在手的东西。
+  </div>
+</section>
+
+<!-- 07 -->
+<section id="s7">
+  <h2><span class="num">07</span>本次分析的局限</h2>
+  <div class="lead">把做不到的部分写在明面上，比含糊过去更有用。</div>
+
+  <h3>四层局限</h3>
+  <table>
+    <thead><tr><th style="width:24%">局限</th><th style="width:32%">影响</th><th>如果突破会怎样</th></tr></thead>
+    <tbody>
+      <tr><td><b>没有内部埋点数据</b></td><td>看不到日活、留存、漏斗、ARPU 等运营核心指标，只能验证到季度颗粒度</td><td>能定位到具体环节，例如"流失发生在第 7 天还是第 30 天"，建议可以精确到功能层</td></tr>
+      <tr><td><b>销售费用无法拆分到单产品</b></td><td>买量效率只能做方向性对比，无法算出单产品 ROI</td><td>能直接回答"每一元投入带回多少流水"，这是买量决策最需要的数字</td></tr>
+      <tr><td><b>2026 年数据披露不完整</b></td><td>公司仅表述"营业收入及利润同比均减少"，未给数值，趋势判断依赖第三方推演</td><td>能把 2026 的上半年曲线也画出来，判断衰减是否已经触底</td></tr>
+      <tr><td><b>第三方榜单为分地区数据</b></td><td>单地区排名不能直接换算为整体流水，只能反映量级与趋势</td><td>能得到更准确的境外收入结构，判断出海到底贡献了多少</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout y">
+    <b>这些局限不影响前面结论的方向，但影响精度。</b>"产品进入衰退期"是财报数据直接支持的，没有问题；"买量投入是权重最高的变量"则是通过排除法与对照得出的推断，属于可能性最高的解释，不是已被证明的结论。<br><br>
+    <b>把这两类判断区分开，是数据报告的基本要求。</b>把推断当结论写，短期好看，被追问时会站不住。
+  </div>
+
+  <h3>数据可信度分级</h3>
+  <table>
+    <thead><tr><th style="width:12%">等级</th><th style="width:34%">来源</th><th>在本分析中的使用</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A</strong></td><td>上市公司定期报告</td><td>2025 各季累计流水、全年流水、销售费用、2026 一季报表述。本报告的核心数据全部为 A 级</td></tr>
+      <tr><td><strong>B</strong></td><td>公司投资者调研纪要</td><td>版本更新节点、联动安排、出海计划、产品定位表述</td></tr>
+      <tr><td><strong>C</strong></td><td>券商与第三方监测</td><td>2026 上半年推演、单季还原参考、分地区榜单排名与营收估计</td></tr>
+      <tr><td><strong>D</strong></td><td>本文计算与推断</td><td>单季还原、环比与衰减率、归因权重排序、出海判断</td></tr>
+    </tbody>
+  </table>
+  <p>本分析的所有结论尽量建立在 A、B 级数据上。C 级数据只用于补充趋势，D 级内容已明确标注为计算或推断。</p>
+</section>
+
+<footer>
+  <p>《问剑长生》数据运营分析 · 2026-09-17</p>
+  <p>分析对象：问剑长生（吉比特自研，雷霆游戏发行，2025-01-02 中国大陆上线）。配套文件：同目录下的 Excel 数据表与数据看板。</p>
+  <p>数据来源：吉比特 2025 年三季度报告与年度报告、2026 年一季度报告及投资者调研纪要、第三方应用商店监测数据。单季流水为累计值还原，属本报告计算，还原结果与年报全年数据吻合。</p>
+  <p>本分析不含游戏内部埋点数据，全部基于公开信息，结论精度限于季度颗粒度。推断性内容已在正文中标注。</p>
+</footer>
+
+</div>
+</body>
+</html>

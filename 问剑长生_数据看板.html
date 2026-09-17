@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>《问剑长生》数据看板</title>
+<style>
+:root{
+  --ink:#1B1F1E; --ink2:#434A48; --ink3:#747C79;
+  --paper:#F4F7F5; --card:#FFFFFF; --line:#DEE5E1;
+  --pri:#2F5D5B; --pri-l:#EAF2F0;
+  --gold:#9C7A3C; --gold-l:#F7F1E3;
+  --jade:#3F7A5E; --jade-l:#EBF3EE;
+  --red:#A83A2C; --red-l:#FAEDEA;
+  --blue:#2E5A82; --blue-l:#EAF0F6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;background:var(--paper);color:var(--ink);padding:28px;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+.board{width:1180px;margin:0 auto}
+
+.top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--pri);padding-bottom:14px;margin-bottom:20px}
+.top h1{font-size:26px;font-weight:700;letter-spacing:.02em}
+.top h1 span{font-size:15px;font-weight:400;color:var(--ink3);margin-left:12px}
+.top .tag{font-size:12px;color:var(--pri);background:var(--pri-l);padding:4px 12px;border-radius:14px;font-weight:600}
+
+.grid{display:grid;gap:14px}
+.kpi{grid-template-columns:repeat(4,1fr)}
+.kpi .k{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi .k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pri)}
+.kpi .k.dn::before{background:var(--red)}
+.kpi .lb{font-size:11.5px;color:var(--ink3);margin-bottom:8px;letter-spacing:.06em}
+.kpi .vl{font-size:32px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--pri)}
+.kpi .k.dn .vl{color:var(--red)}
+.kpi .vl em{font-size:15px;font-style:normal;font-weight:600;margin-left:3px}
+.kpi .nt{font-size:11.5px;color:var(--ink3);margin-top:7px}
+
+.row2{grid-template-columns:1.35fr 1fr;margin-top:14px}
+.row3{grid-template-columns:1fr 1fr 1fr;margin-top:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.panel h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.panel .sub{font-size:11.5px;color:var(--ink3);margin-bottom:16px}
+
+/* 柱状 */
+.bars{display:flex;align-items:flex-end;gap:26px;height:190px;padding:0 6px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.bcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bval{font-size:13px;font-weight:700;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.bbar{width:100%;border-radius:5px 5px 0 0;background:var(--pri)}
+.bbl{font-size:12px;color:var(--ink3);margin-top:8px;font-variant-numeric:tabular-nums}
+.bd{font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:9px;background:var(--red-l);color:var(--red);margin-top:5px}
+
+/* 横向条 */
+.hbar{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.hbar .n{width:76px;font-size:12px;color:var(--ink3);text-align:right;flex-shrink:0}
+.hbar .t{flex:1;height:20px;background:#F1F5F3;border-radius:4px;overflow:hidden}
+.hbar .f{height:100%;border-radius:4px;background:var(--pri)}
+.hbar .f.rd{background:var(--red)}
+.hbar .f.gd{background:#8FB3B0}
+.hbar .v{width:104px;font-size:12px;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums}
+
+/* 时间轴 */
+.tl{position:relative;padding-left:20px;margin-top:6px}
+.tl::before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tli{position:relative;margin-bottom:13px}
+.tli:last-child{margin-bottom:0}
+.tli::before{content:"";position:absolute;left:-20px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--pri);border:2px solid #fff;box-shadow:0 0 0 1.5px var(--pri)}
+.tli .d{font-size:11px;color:var(--pri);font-weight:700;letter-spacing:.04em}
+.tli .c{font-size:12.5px;color:var(--ink2);line-height:1.5}
+
+/* 对比小表 */
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px}
+.cmp th{text-align:left;padding:8px 10px;background:#F1F5F3;font-size:11.5px;color:var(--ink);border-bottom:1px solid var(--line);font-weight:700}
+.cmp td{padding:9px 10px;border-bottom:1px solid #EDF1EF;color:var(--ink2);vertical-align:top}
+.cmp tr:last-child td{border-bottom:none}
+.cmp td b{color:var(--ink)}
+.warn{color:var(--red);font-weight:700}
+.ok{color:var(--jade);font-weight:700}
+
+.note{margin-top:14px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:14px 18px;font-size:12.5px;color:var(--ink2);line-height:1.7}
+.note b{color:var(--ink)}
+.foot{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;color:var(--ink3);display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="top">
+    <h1>《问剑长生》数据看板<span>2025.01 上线 — 2026.08 数据</span></h1>
+    <div class="tag">吉比特自研 · 雷霆发行 · 轻社交放置修仙</div>
+  </div>
+
+  <!-- 核心指标 -->
+  <div class="grid kpi">
+    <div class="k">
+      <div class="lb">2025 全年流水</div>
+      <div class="vl">8.24<em>亿元</em></div>
+      <div class="nt">大陆版，财报口径</div>
+    </div>
+    <div class="k dn">
+      <div class="lb">全年衰减幅度</div>
+      <div class="vl">−69.4<em>%</em></div>
+      <div class="nt">Q1 至 Q4，单季还原后</div>
+    </div>
+    <div class="k dn">
+      <div class="lb">首发季度收入占比</div>
+      <div class="vl">44<em>%</em></div>
+      <div class="nt">3.63 / 8.24 亿元</div>
+    </div>
+    <div class="k dn">
+      <div class="lb">峰值后连续下滑季度数</div>
+      <div class="vl">3<em>个</em></div>
+      <div class="nt">Q2 起环比连续为负，无反弹</div>
+    </div>
+  </div>
+
+  <!-- 单季曲线 + 同门对照 -->
+  <div class="grid row2">
+    <div class="panel">
+      <h3>2025 年单季流水（亿元）</h3>
+      <div class="sub">由累计口径还原，四季度加总与年报吻合</div>
+      <div class="bars">
+        <div class="bcol">
+          <div class="bval">3.63</div>
+          <div class="bbar" style="height:100%"></div>
+          <div class="bbl">Q1</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">2.03</div>
+          <div class="bbar" style="height:55.9%;background:#5B8A87"></div>
+          <div class="bbl">Q2</div>
+          <div class="bd">−44.1%</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">1.47</div>
+          <div class="bbar" style="height:40.5%;background:#8FB3B0"></div>
+          <div class="bbl">Q3</div>
+          <div class="bd">−27.6%</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">1.11</div>
+          <div class="bbar" style="height:30.6%;background:#B9CFCD"></div>
+          <div class="bbl">Q4</div>
+          <div class="bd">−24.5%</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.65">
+        跌幅逐季收窄（−44.1% → −27.6% → −24.5%），属<b style="color:var(--ink)">收敛型衰减</b>，说明产品正在趋近其真实长期规模，而非加速崩盘。
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>同门对照：2025 全年流水</h3>
+      <div class="sub">同一家公司、同一年上线、同一底层品类方向</div>
+      <div class="hbar">
+        <div class="n">问剑长生</div>
+        <div class="t"><div class="f rd" style="width:33%"></div></div>
+        <div class="v">8.24 亿</div>
+      </div>
+      <div class="hbar">
+        <div class="n">杖剑传说</div>
+        <div class="t"><div class="f" style="width:68.3%"></div></div>
+        <div class="v">17.03 亿</div>
+      </div>
+      <div class="hbar">
+        <div class="n">杖剑（境外）</div>
+        <div class="t"><div class="f gd" style="width:31.7%"></div></div>
+        <div class="v">7.92 亿</div>
+      </div>
+      <div class="cmp" style="margin-top:14px">
+        <table class="cmp">
+          <tr><th style="width:34%">投入节奏</th><th>问剑</th><th>杖剑</th></tr>
+          <tr><td>发行期销售费用同比增量</td><td class="warn">+0.66 亿</td><td class="ok">+3 亿 / +6.58 亿</td></tr>
+          <tr><td>出海时点（距上线）</td><td class="warn">约 11 个月</td><td class="ok">约 1.5 个月</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 出海 + 时间轴 -->
+  <div class="grid row2" style="grid-template-columns:1fr 1.35fr">
+    <div class="panel">
+      <h3>出海实测：中国台湾 iOS 畅销榜</h3>
+      <div class="sub">亚洲服，月度平均排名</div>
+      <div class="hbar"><div class="n">2026-04</div><div class="t"><div class="f gd" style="width:66%"></div></div><div class="v">均 66 名</div></div>
+      <div class="hbar"><div class="n">2026-05</div><div class="t"><div class="f gd" style="width:76%"></div></div><div class="v">均 76 名</div></div>
+      <div class="hbar"><div class="n">2026-06</div><div class="t"><div class="f gd" style="width:71%"></div></div><div class="v">均 71 名</div></div>
+      <div class="hbar"><div class="n">2026-08</div><div class="t"><div class="f rd" style="width:77%"></div></div><div class="v">均 77 名</div></div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.65;margin-top:10px">
+        长期停留在 <b style="color:var(--ink)">66 至 77 名</b>区间，未出现向上突破。月度估计营收 <b style="color:var(--ink)">5 万至 22 万美元</b>，量级远低于大陆市场。
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>关键节点</h3>
+      <div class="sub">产品动作与数据的对应关系</div>
+      <div class="tl">
+        <div class="tli"><div class="d">2025.01.02</div><div class="c">中国大陆上线 · Q1 单季 3.63 亿元，全年峰值</div></div>
+        <div class="tli"><div class="d">2025.04</div><div class="c">《道诡异仙》联动</div></div>
+        <div class="tli"><div class="d">2025.05 末</div><div class="c">同门《杖剑传说》上线，Q2 问剑降至 2.03 亿元（−44.1%）</div></div>
+        <div class="tli"><div class="d">2025.07</div><div class="c">央视版《哪吒传奇》联动 · Q3 降至 1.47 亿元</div></div>
+        <div class="tli"><div class="d">2025.11.27</div><div class="c">出海中国港澳台、韩国 · Q4 降至 1.11 亿元</div></div>
+        <div class="tli"><div class="d">2026 上半年</div><div class="c">一周年庆版本《问剑长生·轻遇》，三大主轴迭代</div></div>
+        <div class="tli"><div class="d">2026 Q2</div><div class="c">「破劫登仙」版本、宗门联赛 S3、夏日主题活动</div></div>
+        <div class="tli"><div class="d">2026 下半年</div><div class="c">欧美版计划上线（待验证）</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>一句话读板：</b>首发季度贡献全年 44% 的收入，随后连续四个季度递减，跌幅逐季收窄至约 −24%。跌幅收敛说明产品正在接近它的长期规模；而对照同门产品可以看到，<b>发行期的投入强度与出海时点，是这条曲线的形状里最可控的两个变量</b>。
+  </div>
+
+  <div class="foot">
+    <span>数据来源：吉比特定期报告（A 级）、投资者调研纪要（B 级）、第三方应用商店监测（C 级）</span>
+    <span>单季流水为累计值还原，属本看板计算 · 2026-09-17</span>
+  </div>
+
+</div>
+</body>
+</html>

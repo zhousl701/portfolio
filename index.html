@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>周士量的作品集 · 游戏拆解与数据运营分析</title>
+<style>
+:root{
+  --ink:#1B1F1E; --ink2:#434A48; --ink3:#747C79;
+  --paper:#F9FAF8; --card:#FFFFFF; --line:#DEE5E1;
+  --pri:#2F5D5B; --pri-l:#EAF2F0;
+  --gold:#9C7A3C; --gold-l:#F7F1E3;
+  --jade:#3F7A5E; --jade-l:#EBF3EE;
+  --red:#A83A2C; --red-l:#FAEDEA;
+  --blue:#2E5A82; --blue-l:#EAF0F6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15.5px;letter-spacing:.015em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 26px 80px}
+header.cover{padding:56px 0 36px;border-bottom:1px solid var(--line);margin-bottom:38px;position:relative}
+header.cover::after{content:"";position:absolute;left:0;bottom:-1.5px;width:88px;height:3px;background:var(--pri)}
+.eyebrow{font-size:12px;letter-spacing:.3em;color:var(--pri);font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:1.5px;background:var(--pri);display:inline-block}
+h1{font-size:42px;line-height:1.24;font-weight:700;letter-spacing:.02em;margin-bottom:12px}
+.sub{font-size:16px;color:var(--ink2)}
+.intro{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--pri);border-radius:0 12px 12px 0;padding:20px 24px;margin-bottom:42px}
+.intro p{margin-bottom:10px;color:var(--ink2);font-size:15px}
+.intro p:last-child{margin-bottom:0}
+.intro b{color:var(--ink)}
+h2{font-size:23px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:13px}
+h2 .num{font-size:12.5px;color:var(--pri);font-weight:700;letter-spacing:.06em;flex-shrink:0;background:var(--pri-l);padding:3px 9px;border-radius:6px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.sec-lead{color:var(--ink3);font-size:13.5px;margin-bottom:20px;font-style:italic}
+section{margin-bottom:46px}
+.prod{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(27,31,30,.04);transition:box-shadow .15s}
+.prod:hover{box-shadow:0 3px 12px rgba(27,31,30,.08)}
+.prod-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.prod h3{font-size:19px;font-weight:700;margin:0}
+.prod .meta{font-size:12.5px;color:var(--ink3);margin-bottom:10px}
+.prod .finding{font-size:14px;color:var(--ink2);background:#FAFBFA;border:1px solid var(--line);border-radius:9px;padding:12px 15px;margin:12px 0 16px}
+.prod .finding b{color:var(--ink)}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.lk{display:block;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:11px 14px;transition:all .15s;background:#FDFEFD}
+.lk:hover{border-color:var(--pri);background:var(--pri-l)}
+.lk .t{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.lk .d{font-size:11.5px;color:var(--ink3)}
+.lk.pdf{background:#FCFBFA}
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500;background:var(--pri-l);color:var(--pri)}
+.tag.g{background:var(--jade-l);color:var(--jade)}
+.tag.y{background:var(--gold-l);color:var(--gold)}
+.summary{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:16px;border-top:4px solid var(--gold)}
+footer{border-top:1px solid var(--line);padding-top:22px;font-size:12.5px;color:var(--ink3);line-height:1.9}
+footer b{color:var(--ink2)}
+@media(max-width:640px){
+  h1{font-size:32px}
+  .prod-top{flex-direction:column}
+  .links{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+  <div class="eyebrow">GAME TEARDOWN · PORTFOLIO</div>
+  <h1>周士量的作品集</h1>
+  <div class="sub">游戏运营 / 策划方向 · 三款产品的系统拆解与数据运营分析</div>
+</header>
+
+<div class="intro">
+  <p>这份作品集包含三款游戏的完整拆解。每款产品下有三份材料：<b>游戏拆解报告</b>（从机制拆到结构层）、<b>数据运营分析</b>（用公开数据验证问题）、<b>数据看板</b>（核心指标的可视化）。</p>
+  <p>拆解报告回答"这个设计为什么是这样"，数据分析回答"这样做之后数字怎么动了"。两份材料互相印证，数据看板是分析结论的浓缩视图。每份材料都提供在线版本，PDF 版本在页面底部可下载。</p>
+  <p style="color:var(--ink3);font-size:14px">所有分析均基于公开财报、第三方监测数据与本人长期实机体验。无法核实的内容已明确标注来源与口径。</p>
+</div>
+
+<!-- 休闲游戏板块 -->
+<section>
+  <h2><span class="num">板块一</span>休闲游戏</h2>
+  <div class="sec-lead">《问剑长生》与《杖剑传说》同属吉比特自研、雷霆游戏发行，同年上线，底层架构高度接近。六项关键变量可控，构成一组近乎完美的对照实验。</div>
+
+  <div class="prod">
+    <div class="prod-top">
+      <div>
+        <h3>问剑长生</h3>
+        <div class="meta">吉比特自研 · 雷霆发行 · 2025-01-02 上线 · 放置修仙</div>
+      </div>
+      <span class="tag">命题：稳健迭代型产品的运营天花板</span>
+    </div>
+    <div class="finding">
+      <b>核心发现：</b>2025 年单季流水 3.63 → 2.03 → 1.47 → 1.11 亿元，首发季度见顶后连续三季下滑，全年衰减 69.4%。首发季贡献全年 44% 的收入，长线运营贡献不足六成。
+    </div>
+    <div class="links">
+      <a class="lk" href="问剑长生_游戏拆解报告.html"><div class="t">游戏拆解报告</div><div class="d">34 页 · 在线查看</div></a>
+      <a class="lk" href="问剑长生_数据运营分析.html"><div class="t">数据运营分析</div><div class="d">13 页 · 在线查看</div></a>
+      <a class="lk" href="问剑长生_数据看板.html"><div class="t">数据看板</div><div class="d">单页仪表盘</div></a>
+      <a class="lk pdf" href="pdf/问剑长生_游戏拆解报告.pdf" target="_blank"><div class="t">拆解报告 PDF</div><div class="d">下载</div></a>
+      <a class="lk pdf" href="pdf/问剑长生_数据运营分析.pdf" target="_blank"><div class="t">数据分析 PDF</div><div class="d">下载</div></a>
+    </div>
+  </div>
+
+  <div class="prod">
+    <div class="prod-top">
+      <div>
+        <h3>杖剑传说</h3>
+        <div class="meta">吉比特自研 · 雷霆发行 · 2025-05-29 上线 · 放置 MMORPG</div>
+      </div>
+      <span class="tag">命题：框架选择——为什么是放置做加法</span>
+    </div>
+    <div class="finding">
+      <b>核心发现：</b>合计单季流水 4.24 → 12.20 → 8.51 亿元，<b>峰值出现在上线后第二个季度</b>，首发季仅占全年约 25%。境外版本贡献 32% 流水，多市场错开上线构成接力结构。
+    </div>
+    <div class="links">
+      <a class="lk" href="杖剑传说_游戏拆解报告.html"><div class="t">游戏拆解报告</div><div class="d">28 页 · 在线查看</div></a>
+      <a class="lk" href="杖剑传说_数据运营分析.html"><div class="t">数据运营分析</div><div class="d">12 页 · 在线查看</div></a>
+      <a class="lk" href="杖剑传说_数据看板.html"><div class="t">数据看板</div><div class="d">单页仪表盘</div></a>
+      <a class="lk pdf" href="pdf/杖剑传说_游戏拆解报告.pdf" target="_blank"><div class="t">拆解报告 PDF</div><div class="d">下载</div></a>
+      <a class="lk pdf" href="pdf/杖剑传说_数据运营分析.pdf" target="_blank"><div class="t">数据分析 PDF</div><div class="d">下载</div></a>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="prod-top">
+      <div>
+        <h3 style="font-size:17px">休闲游戏板块总结</h3>
+        <div class="meta">板块入口与横向对照</div>
+      </div>
+      <span class="tag y">对照分析</span>
+    </div>
+    <div class="finding" style="margin-bottom:14px">
+      为什么同样的公司、同样的发行体系、同样的底层玩法，两款产品的流水差了三倍多？这份文件把两款产品并排对照，拆出四条分水岭：题材决定能否出海、框架决定容错下限、成本投在表现层还是验证层、用户来源是分流还是开源。
+    </div>
+    <div class="links">
+      <a class="lk" href="休闲游戏板块总结.html"><div class="t">板块总结</div><div class="d">13 页 · 在线查看</div></a>
+      <a class="lk pdf" href="pdf/休闲游戏板块总结.pdf" target="_blank"><div class="t">板块总结 PDF</div><div class="d">下载</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- SLG 板块 -->
+<section>
+  <h2><span class="num">板块二</span>SLG</h2>
+  <div class="sec-lead">另一家公司、另一个品类，变量不可控，因此单独成篇。</div>
+
+  <div class="prod">
+    <div class="prod-top">
+      <div>
+        <h3>三国：谋定天下</h3>
+        <div class="meta">华娱游戏研发 · 哔哩哔哩游戏发行 · 2024-06-13 公测 · 赛季制 SLG</div>
+      </div>
+      <span class="tag g">命题：赛季制竞争单位从内容量转向机制创新</span>
+    </div>
+    <div class="finding">
+      <b>核心发现：</b>平台侧八个季度游戏收入累计下滑 23.6%，但赛季脉冲端仍在创新高（单日流水 +509%、畅销榜第 2）。<b>脉冲依然强劲，基线在缓慢下移</b>——问题不是"赛季更新不管用了"，而是"每次拉起来之后，留下来的比上一次少"。
+    </div>
+    <div class="links">
+      <a class="lk" href="三国谋定天下_游戏拆解报告.html"><div class="t">游戏拆解报告</div><div class="d">38 页 · 在线查看</div></a>
+      <a class="lk" href="三国谋定天下_数据运营分析.html"><div class="t">数据运营分析</div><div class="d">12 页 · 在线查看</div></a>
+      <a class="lk" href="三国谋定天下_数据看板.html"><div class="t">数据看板</div><div class="d">单页仪表盘</div></a>
+      <a class="lk pdf" href="pdf/三国谋定天下_游戏拆解报告.pdf" target="_blank"><div class="t">拆解报告 PDF</div><div class="d">下载</div></a>
+      <a class="lk pdf" href="pdf/三国谋定天下_数据运营分析.pdf" target="_blank"><div class="t">数据分析 PDF</div><div class="d">下载</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- 方法说明 -->
+<section>
+  <h2><span class="num">说明</span>分析方法</h2>
+  <div class="sec-lead">三份拆解使用同一套方法，但拆出的病灶完全不同。</div>
+  <div class="intro" style="margin-bottom:0">
+    <p><b>三层追问法</b>——现象层（它是什么）、意图层（为什么这么做）、结构层（为什么只能这么做）。大部分拆解停在意图层，拉开差距的是结构层。</p>
+    <p><b>元属性识别</b>——找出决定进度的隐藏变量。《问剑长生》是时间闸门，《杖剑传说》是晨星，《三国：谋定天下》是先攻。</p>
+    <p><b>失误与取舍二分法</b>——真正的失误只有一类：本可解决却没解决的执行问题。其余都是结构性代价。评判标准不是"能不能解决"，而是"代价换来的东西是否值得"。</p>
+    <p><b>信息可信度分级</b>——A 一手实测 / B 官方公告财报 / C 权威媒体与第三方 / D 社区攻略 / E 本文推断。结论尽量建立在 A、B 级之上。</p>
+    <p style="color:var(--ink3);font-size:14px">三份报告出自同一套框架，但分别落在三个不同层次的问题上：机制迭代的可持续性、产品策略自带的上限、以及框架本身的选择。同一套工具能拆出不同病灶，说明它本身是可迁移的。</p>
+  </div>
+</section>
+
+<footer>
+  <b>数据来源</b>　吉比特历期财报与业绩说明会、哔哩哔哩历期财报、雷霆游戏与哔哩哔哩游戏官方公告、2025 中国游戏产业年会制作人演讲、Sensor Tower / 点点数据 / 广大大 / 巨量算数 / DataEye 第三方数据、TapTap 与玩家社区资料。<br>
+  <b>口径说明</b>　所有引用数据均标注来源与统计口径；单季流水为累计值还原，还原结果与年报数据交叉校验一致。<br>
+  <b>体验样本</b>　《三国：谋定天下》约 700 小时、7 个赛季；《问剑长生》一年以上、宗门管理视角；《杖剑传说》四个账号覆盖产品全周期、约 350 小时纯游戏内时长。<br>
+  <span style="display:inline-block;margin-top:12px">周士量 · 2026 年 9 月</span>
+</footer>
+
+</div>
+</body>
+</html>

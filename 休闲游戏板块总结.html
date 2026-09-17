@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>休闲游戏板块 · 同门双子拆解总结</title>
+<style>
+:root{
+  --ink:#1B1F1E; --ink2:#434A48; --ink3:#747C79;
+  --paper:#F9FAF8; --card:#FFFFFF; --line:#DEE5E1;
+  --pri:#2F5D5B; --pri-l:#EAF2F0;
+  --gold:#9C7A3C; --gold-l:#F7F1E3;
+  --jade:#3F7A5E; --jade-l:#EBF3EE;
+  --red:#A83A2C; --red-l:#FAEDEA;
+  --blue:#2E5A82; --blue-l:#EAF0F6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  background:var(--paper); color:var(--ink);
+  line-height:1.8; font-size:15.5px; letter-spacing:.015em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:0 28px 100px}
+
+/* ---------- 封面 ---------- */
+.cover{padding:60px 0 40px;border-bottom:1px solid var(--line);margin-bottom:44px;position:relative}
+.cover::after{content:"";position:absolute;left:0;bottom:-1.5px;width:88px;height:3px;background:var(--pri)}
+.eyebrow{font-size:12px;letter-spacing:.3em;color:var(--pri);font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:1.5px;background:var(--pri);display:inline-block}
+h1{font-size:42px;line-height:1.25;font-weight:700;letter-spacing:.03em;margin-bottom:12px}
+.sub{font-size:16px;color:var(--ink2);margin-bottom:32px;line-height:1.7}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(27,31,30,.06)}
+.metagrid div{background:var(--card);padding:15px 17px}
+.metagrid dt{font-size:11px;color:var(--ink3);margin-bottom:5px;letter-spacing:.1em}
+.metagrid dd{font-size:14px;font-weight:600;color:var(--ink)}
+
+/* ---------- 目录 ---------- */
+.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 30px;margin-bottom:48px;box-shadow:0 1px 4px rgba(27,31,30,.04)}
+.toc h3{font-size:12px;letter-spacing:.24em;color:var(--pri);font-weight:700;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:7px 26px;counter-reset:t}
+.toc li{counter-increment:t;font-size:14px;padding:2px 0}
+.toc li::before{content:counter(t,decimal-leading-zero);color:var(--gold);font-weight:700;margin-right:11px;font-size:12px;font-variant-numeric:tabular-nums}
+.toc a{color:var(--ink2);text-decoration:none;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+.toc a:hover{color:var(--pri);border-bottom-color:var(--pri)}
+
+/* ---------- 章节 ---------- */
+section{margin-bottom:50px;scroll-margin-top:20px}
+h2{font-size:24px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+h2 .num{font-size:13px;color:var(--pri);font-weight:700;letter-spacing:.06em;flex-shrink:0;background:var(--pri-l);padding:4px 10px;border-radius:6px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+h2 + .lead{color:var(--ink3);font-size:13.5px;margin-bottom:24px;font-style:italic}
+h3{font-size:16px;font-weight:700;margin:30px 0 13px;padding-left:12px;border-left:4px solid var(--pri);line-height:1.4}
+h4{font-size:14.5px;font-weight:700;margin:22px 0 9px;color:var(--ink)}
+p{margin-bottom:14px;color:var(--ink2)}
+p strong,li strong{color:var(--ink);font-weight:600}
+ul,ol{margin:0 0 14px 20px;color:var(--ink2)}
+li{margin-bottom:7px}
+
+/* ---------- 组件 ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:18px;box-shadow:0 1px 2px rgba(27,31,30,.03)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:760px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+
+table{width:100%;border-collapse:collapse;background:var(--card);font-size:13.5px;margin-bottom:16px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+th{background:#F1F5F3;text-align:left;padding:12px 14px;font-weight:700;font-size:12.5px;color:var(--ink);border-bottom:1px solid var(--line);white-space:nowrap;letter-spacing:.05em}
+td{padding:12px 14px;border-bottom:1px solid #EDF1EF;color:var(--ink2);vertical-align:top;line-height:1.75}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:#FBFCFB}
+tbody tr:hover{background:#F5F8F6}
+
+.tag{display:inline-block;padding:3px 11px;border-radius:20px;font-size:12.5px;margin:0 6px 7px 0;font-weight:500}
+.t-pri{background:var(--pri-l);color:var(--pri)}
+.t-jade{background:var(--jade-l);color:var(--jade)}
+.t-gold{background:var(--gold-l);color:var(--gold)}
+.t-red{background:var(--red-l);color:var(--red)}
+.t-blue{background:var(--blue-l);color:var(--blue)}
+
+.callout{border-left:4px solid var(--pri);background:var(--pri-l);padding:15px 19px;border-radius:0 10px 10px 0;margin:18px 0;font-size:14px;color:#1F4442}
+.callout.g{border-color:var(--jade);background:var(--jade-l);color:#24503B}
+.callout.y{border-color:var(--gold);background:var(--gold-l);color:#6B5223}
+.callout.r{border-color:var(--red);background:var(--red-l);color:#6E2A20}
+.callout b{font-weight:700}
+
+.todo{background:#FFFDF6;border:1.5px dashed var(--gold);border-radius:8px;padding:12px 16px;font-size:13.5px;color:#8A6D2F;margin:14px 0}
+.todo::before{content:"待补充 · ";font-weight:700}
+
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.pros-cons{grid-template-columns:1fr}}
+.pc{border-radius:12px;padding:20px 22px;border:1px solid var(--line);background:var(--card)}
+.pc.good{border-top:4px solid var(--jade)}
+.pc.bad{border-top:4px solid var(--red)}
+.pc h4{margin:0 0 14px;font-size:15px;display:flex;align-items:center;gap:8px}
+.pc.good h4{color:var(--jade)}
+.pc.bad h4{color:var(--red)}
+.pc ol{margin-left:18px}
+.pc li{margin-bottom:14px;font-size:14px;line-height:1.75}
+.pc li b{display:block;color:var(--ink);margin-bottom:2px;font-size:14px}
+
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 14px;text-align:center}
+.stat .v{font-size:28px;font-weight:700;color:var(--pri);line-height:1.2;font-variant-numeric:tabular-nums}
+.stat .l{font-size:11.5px;color:var(--ink3);margin-top:6px}
+
+.tl{position:relative;padding-left:30px;margin:20px 0}
+.tl::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl-i{position:relative;margin-bottom:24px}
+.tl-i::before{content:"";position:absolute;left:-27px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--pri);border:2px solid var(--paper);box-shadow:0 0 0 2px var(--pri)}
+.tl-d{font-size:11px;color:var(--pri);font-weight:700;letter-spacing:.06em;margin-bottom:7px;display:inline-block;background:var(--pri-l);padding:3px 11px;border-radius:12px}
+.tl-t{font-size:15.5px;font-weight:700;margin-bottom:7px;color:var(--ink)}
+
+.mind{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;margin:18px 0}
+.mind-root{text-align:center;font-weight:700;font-size:16px;background:var(--ink);color:#fff;border-radius:8px;padding:10px;margin-bottom:18px;letter-spacing:.1em}
+.mind-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.mind-col{border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.mind-col > .h{padding:8px 12px;font-size:13.5px;font-weight:700;color:#fff}
+.mind-col ul{list-style:none;margin:0;padding:10px 12px}
+.mind-col li{font-size:12.5px;color:var(--ink2);margin-bottom:6px;line-height:1.55;padding-left:10px;border-left:2px solid var(--line)}
+.mind-col li:last-child{margin-bottom:0}
+
+.src{font-size:12px;color:var(--ink3);font-style:normal;margin-top:-8px;margin-bottom:16px}
+footer{border-top:1px solid var(--line);padding-top:22px;font-size:12.5px;color:var(--ink3)}
+@page{size:A4;margin:14mm 12mm 14mm}
+@media print{
+  body{background:#fff;font-size:11.5pt;line-height:1.72;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:none;padding:0}
+  .cover{padding-top:0;break-after:page}
+  nav.toc{break-after:page}
+  section{break-before:auto;margin-bottom:30px}
+  h2{break-after:avoid;break-inside:avoid;margin-top:26px}
+  h3,h4{break-after:avoid;break-inside:avoid}
+  h2 + .lead{break-after:avoid}
+  table{break-inside:auto}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  .stat,.tl-i,.mind-col,.grid2,.grid3,.grid4{break-inside:avoid}
+  .mind{break-inside:avoid}
+  .mind-row{grid-template-columns:repeat(3,1fr)}
+  .tl,.pros-cons,.card{break-inside:auto}
+  li{break-inside:avoid}
+  .pros-cons{grid-template-columns:1fr;gap:14px}
+  a{color:inherit;text-decoration:none}
+  footer{break-before:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ 封面 ============ -->
+<header class="cover">
+  <div class="eyebrow">SECTOR SUMMARY · 板块总结</div>
+  <h1>休闲游戏板块</h1>
+  <div class="sub">《问剑长生》×《杖剑传说》· 一对同门产品的对照拆解 / 为什么同样的底层架构，流水差了三倍多</div>
+  <div class="metagrid">
+    <div><dt>对照对象</dt><dd>问剑长生 / 杖剑传说</dd></div>
+    <div><dt>共同归属</dt><dd>吉比特自研 · 雷霆发行</dd></div>
+    <div><dt>上线时间</dt><dd>2025 年 1 月 / 5 月</dd></div>
+    <div><dt>共同方向</dt><dd>轻量化放置 MMO</dd></div>
+    <div><dt>大陆月均流水</dt><dd>0.79 亿 / 2.92 亿</dd></div>
+    <div><dt>差距</dt><dd>约 3.7 倍</dd></div>
+    <div><dt>本文件性质</dt><dd>前置导览，非第三份拆解</dd></div>
+    <div><dt>整理日期</dt><dd>2026-09-17</dd></div>
+  </div>
+</header>
+
+<!-- ============ 目录 ============ -->
+<nav class="toc">
+  <h3>CONTENTS · 目录</h3>
+  <ol>
+    <li><a href="#s1">为什么这两份放在一起</a></li>
+    <li><a href="#s2">核心数据对照</a></li>
+    <li><a href="#s3">四条分水岭</a></li>
+    <li><a href="#s4">四条共同结论</a></li>
+    <li><a href="#s5">休闲品类的设计规律</a></li>
+    <li><a href="#s6">同一套工具，两种病灶</a></li>
+    <li><a href="#s7">这份总结的位置</a></li>
+  </ol>
+</nav>
+
+<div class="card" style="border-left:4px solid var(--pri);margin-bottom:48px">
+  <h3 style="margin:0 0 14px;padding:0;border:none;font-size:15px">写在前面</h3>
+  <p>这个板块里有两份拆解，《问剑长生》和《杖剑传说》。它们各自独立成篇，页数、结构、方法论都完整，可以单独阅读。这份文件不放新的拆解，只做一件事：<strong>把两份放在一起看。</strong></p>
+  <p>放在一起的理由很实际。两款产品同属吉比特自研、雷霆游戏发行，都在 2025 年上线，底层架构高度接近，连核心循环都是同一套（挂机获取资源、提升战力、挑战更高难度副本、冲击排名）。业内给它们的标签也一样：轻量化放置 MMO，数值导向型产品，缺乏机制性创新。</p>
+  <p>但 2025 年大陆月均流水，一款约 0.79 亿元，一款约 2.92 亿元。底层玩法几乎相同，结果差了三倍多。</p>
+  <p style="margin-bottom:0">这个差距不适合用"运气"来解释，更值得当成一次天然的对照实验看。<strong>当公司、发行体系、底层玩法这些变量都被控制住之后，剩下的差异才真正指向原因。</strong>第 01 章和第 03 章处理的就是这件事。</p>
+</div>
+
+<!-- ============ 01 ============ -->
+<section id="s1">
+  <h2><span class="num">01</span>为什么这两份放在一起</h2>
+  <div class="lead">先说清楚对照成立的条件，再说清楚它不覆盖什么。</div>
+
+  <h3>被控制住的变量</h3>
+  <table>
+    <thead><tr><th style="width:22%">变量</th><th>情况</th></tr></thead>
+    <tbody>
+      <tr><td>研发方</td><td>同为吉比特自研</td></tr>
+      <tr><td>发行方</td><td>同为雷霆游戏（海外主体 LTGAMES GLOBAL）</td></tr>
+      <tr><td>上线年份</td><td>同为 2025 年（1 月 2 日与 5 月 29 日）</td></tr>
+      <tr><td>底层玩法</td><td>同为轻量化放置 MMO，核心循环结构一致</td></tr>
+      <tr><td>品类评价</td><td>同被归为数值导向型产品，同被认为缺乏机制性创新</td></tr>
+      <tr><td>买量依赖</td><td>两款都高度依赖买量，且都出现在同一轮销售费用大幅增长的周期里</td></tr>
+    </tbody>
+  </table>
+  <p>六项关键变量一致，这在真实的商业案例里很少见。绝大多数产品对比都会掺进公司能力、发行资源、品类差异这些干扰项，导致归因说不干净。</p>
+
+  <h3>没有被控制的变量</h3>
+  <p>剩下能造成差异的，只有几件事：题材选择、玩法框架的选择、开发成本的投向、以及用户从哪里来。这四项恰好都落在<strong>立项与研发阶段</strong>，而不是运营阶段。</p>
+
+  <div class="callout g">
+    <b>这个结构本身就给出了一个结论。</b>两款产品在同样的公司、同样的发行体系、同样的底层玩法下跑出三倍多的差距，而差异集中在立项期的那几个选择上。<br><br>
+    这意味着它们的成败在很大程度上<b>在上线之前就已经决定了大半</b>。运营可以放大或衰减结果，但很难改写方向。第 03 章会逐条拆开这四项。
+  </div>
+
+  <h3>这份对照不覆盖什么</h3>
+  <p>两点必须说清楚。第一，两款产品的上线时间差了近五个月，所处的买量成本环境并不完全相同，2025 年二季度之后的成本上行对后来的产品更不利。第二，两款都还在运营中，长期表现没有定论，本总结里的所有判断都以 2025 全年和 2026 年上半年数据为限。</p>
+  <p>另外，作品集里另一份《三国：谋定天下》不放进这个对照。它来自另一家公司（华娱游戏研发、哔哩哔哩游戏发行），属于另一个品类（赛季制 SLG），上述六项变量一项都没控住，硬拉进来对比只会让归因变模糊。它单独成篇。</p>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="s2">
+  <h2><span class="num">02</span>核心数据对照</h2>
+  <div class="lead">先把两张表并排放，后面所有分析都从这张表出发。</div>
+
+  <h3>产品与市场</h3>
+  <table>
+    <thead><tr><th style="width:20%">维度</th><th style="width:40%">《问剑长生》</th><th>《杖剑传说》</th></tr></thead>
+    <tbody>
+      <tr><td>上线时间</td><td>2025-01-02</td><td>2025-05-29（大陆）；2025-07-15 出海</td></tr>
+      <tr><td>题材</td><td>修仙</td><td>日式幻想（多元文明混合）</td></tr>
+      <tr><td>画面</td><td>3D 御剑空战</td><td>纯 2D 手绘，三头身 Q 版</td></tr>
+      <tr><td>玩法框架</td><td>放置修仙，在成熟框架上稳健迭代</td><td>放置框架做加法，MMO 作为后加的"面"</td></tr>
+      <tr><td>目标市场</td><td>以大陆为主</td><td>立项即定位全球化</td></tr>
+      <tr><td>联动方向</td><td>国风仙侠（《道诡异仙》、央视版《哪吒传奇》）</td><td>泛二次元（素晴、洛天依、《罗小黑战记 2》）</td></tr>
+      <tr><td>品牌调整</td><td>后期更名为《问剑长生·轻遇》</td><td>无</td></tr>
+    </tbody>
+  </table>
+
+  <h3>流水与投入</h3>
+  <table>
+    <thead><tr><th style="width:26%">指标</th><th style="width:30%">《问剑长生》</th><th>《杖剑传说》</th></tr></thead>
+    <tbody>
+      <tr><td>2025 大陆月均流水</td><td>约 0.79 亿元</td><td>约 2.92 亿元</td></tr>
+      <tr><td>2025 全年流水</td><td>大陆约 8.24 亿元</td><td>大陆 17.03 亿 + 境外 7.92 亿 ≈ 24.95 亿元</td></tr>
+      <tr><td>发行期销售费用变化</td><td>发行首季度同比仅增 0.66 亿元</td><td>Q2、Q3 同比分别增加约 3 亿元、6.58 亿元</td></tr>
+      <tr><td>境外流水占比</td><td>极低</td><td>约 32%</td></tr>
+      <tr><td>榜单最高位</td><td>大陆 iOS 游戏畅销榜最高第 14 名</td><td>大陆最高第 10 名；中国港澳台第 1；日本第 17</td></tr>
+    </tbody>
+  </table>
+  <p class="src">数据来源为吉比特 2025 年各期财报及券商分析（B/C 级）。两款产品的月均流水均按前三季度同口径折算（问剑 7.13 亿 ÷ 9 个月，杖剑大陆 11.66 亿 ÷ 4 个月），避免不同分母造成的口径错位。</p>
+
+  <h3>用户来源</h3>
+  <div class="grid2">
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">《问剑长生》：存量迁移</h4>
+      <p style="margin:0;font-size:14px">上线初期约一半玩家来自同门的《一念逍遥》。用户池的主要来源是前作的分流，天花板在开服时就基本确定。</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">《杖剑传说》：开源与召回</h4>
+      <p style="margin:0;font-size:14px">靠联动持续拉新，同时召回早期流失用户。联动新服的人数与付费玩家数明显高于其他服，用户池是持续补充的。</p>
+    </div>
+  </div>
+  <p style="margin-top:16px">这一项的差别决定了另一件事：<strong>一款产品的增长空间来自存量分配，另一款来自增量获取。</strong>前者的天花板在上线前就写好了，后者还能往外扩。第 03 章把它列为第四条分水岭。</p>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="s3">
+  <h2><span class="num">03</span>四条分水岭</h2>
+  <div class="lead">四项变量都没有被控制住，它们就是这 3.7 倍的来源。</div>
+
+  <h3>分水岭一：题材决定能否出海，出海决定天花板</h3>
+  <p>《问剑长生》选的是修仙题材。这个题材在公司的积累最深，团队也最熟悉，但它有一个明确的问题：海外市场的接受度有限。结果是这款产品至今主要在国内运营，境外几乎没有贡献。</p>
+  <p>《杖剑传说》在 2022 年 4 月做了一次关键转向，从最初设想的修仙题材改成日式幻想，采用多元文明混合的世界观。制作人对这次转向的解释是指向全球化。<strong>2025 年，境外版贡献了 7.92 亿元，占总流水约 32%。</strong></p>
+
+  <div class="callout">
+    <b>这里要强调时间点。</b>题材转向发生在立项后不久，距离产品上线还有三年。它不是上线后根据市场反馈做的调整，而是<b>在研发早期就把全球化当成约束条件写进去</b>。同样地，美术选二次元、内容不出现真实节日名称，也都是同一决策的延伸。<br><br>
+    换句话说，这一条的分水岭不是"要不要出海"，而是"什么时候决定出海"。<b>在上线三年后补做出海，和在立项时就把出海当约束，成本差得非常远。</b>
+  </div>
+
+  <h3>分水岭二：框架选择决定容错下限</h3>
+  <p>两款产品的玩法都叫"轻量化放置 MMO"，但框架不是同一个。</p>
+  <table>
+    <thead><tr><th style="width:24%">维度</th><th style="width:38%">《问剑长生》</th><th>《杖剑传说》</th></tr></thead>
+    <tbody>
+      <tr><td>起点框架</td><td>成熟的重度框架（接棒《一念逍遥》）</td><td>休闲放置框架</td></tr>
+      <tr><td>调整方向</td><td>在成熟框架上做减法，降低负担</td><td>在放置框架上做加法，增加 MMO 核心体验</td></tr>
+      <tr><td>社交负担</td><td>把人与人的对抗降级为人与系统的交互</td><td>挂机产出与社交完全解绑，只保留收益</td></tr>
+      <tr><td>失败时的退路</td><td>减完仍保留 MMO 的义务结构，玩家没有退路</td><td>可以退回放置底座，玩家有退路</td></tr>
+    </tbody>
+  </table>
+  <p>这一条是两份拆解里分析最深的部分。核心判断是：<strong>MMO 的重度感来自义务结构，不来自操作量。</strong>减法能压缩单次耗时，但取消不了"每日必须上线"这个周期，也处理不掉他人义务与沉没义务。而加法让每一项加进来的内容都自带退出机制，因为它建立在"你不在也能变强"这个前提上。</p>
+
+  <h3>分水岭三：成本投在表现层还是验证层</h3>
+  <table>
+    <thead><tr><th style="width:24%">维度</th><th style="width:38%">《问剑长生》</th><th>《杖剑传说》</th></tr></thead>
+    <tbody>
+      <tr><td>主要投入</td><td>大量美术与 3D 御剑空战开发成本</td><td>剥离美术，玩法线两年半无美术推进</td></tr>
+      <tr><td>起步团队</td><td>完整建制</td><td>Demo 期 2.5 人（制作人兼策划与程序 + 1 程序 + 半个美术）</td></tr>
+      <tr><td>验证节奏</td><td>开发后期测试</td><td>平均每两个月一次买量测试，最短间隔约一周</td></tr>
+      <tr><td>追求的目标</td><td>观感提升</td><td>方向正确</td></tr>
+    </tbody>
+  </table>
+  <p>《问剑长生》的 3D 化确实提升了画面表现与沉浸感，但这属于表现级升级。放置品类的胜负手在数值节奏与时间消耗上，画面再好在这一点上也帮不上忙。<strong>观感的改善是一种收益，只是它不在决定成败的那条线上。</strong></p>
+  <p>《杖剑传说》走的是相反的路：把美术剥离到几乎没有，用 2.5 人的团队做三个 Demo 反复验证核心玩法，通过后再扩团队。<strong>这条路的代价是前期看起来很简陋，收益是方向不容易跑偏。</strong></p>
+
+  <h3>分水岭四：用户来源是分流还是开源</h3>
+  <p>《问剑长生》上线初期的用户里，约一半来自《一念逍遥》。这个数字有两层含义：好消息是用户基础扎实，坏消息是这基本是同一批人被重新分配了一次，产品本身没有打开新的人群。</p>
+  <p>《杖剑传说》的用户池则是往外扩的。它的联动机制同时承担两件事：靠 IP 认知度吸引泛二次元新用户，靠返场把早期流失的老用户召回。而联动配套新服又给回归用户提供了干净的起点。<strong>联动新服的人数与付费玩家数明显高于其他服，说明增量是真实存在的。</strong></p>
+
+  <div class="callout y">
+    <b>四条分水岭放在一起看，会得到一个有点残酷的排序。</b>题材（能否出海）影响的是天花板高度，用户来源（分流还是开源）影响的是增长空间，框架选择（加法还是减法）影响的是容错下限，成本投向影响的是试错效率。<br><br>
+    <b>四项都在立项与研发期决定，没有一项是运营能事后补上的。</b>这也是这份对照最想说明的事：两款产品的差距不是执行差距，而是选择差距。
+  </div>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="s4">
+  <h2><span class="num">04</span>四条共同结论</h2>
+  <div class="lead">抛开出海的差异，两份拆解在同一批问题上给出了相同的答案。</div>
+
+  <h3>结论一：放置品类的用户，对内容量的容忍区间极窄</h3>
+  <p>两款产品都在这条线上失守，但方向相反。</p>
+  <table>
+    <thead><tr><th style="width:20%">产品</th><th style="width:36%">内容量的变化</th><th>结果</th></tr></thead>
+    <tbody>
+      <tr><td>《问剑长生》</td><td>早期日常 15 到 25 分钟，后推出星墟古地等长线活动，涨到约 40 分钟</td><td><strong>负担流失</strong>，推走了那批冲着"轻松"来的用户</td></tr>
+      <tr><td>《杖剑传说》</td><td>开服期内容偏薄，内测与开服两次因内容不足没能留住玩家；内容够玩之后日常稳定在约 1 小时</td><td>前期<strong>留不住人</strong>，后期因时间过长产生退坑反馈</td></tr>
+    </tbody>
+  </table>
+  <p>两款都说明同一件事：<strong>少了留不住人，多了变成负担，而中间那条线很窄。</strong>更麻烦的是团队调节内容量时幅度往往偏大，从 15 分钟跳到 40 分钟，从一个月赛季拉到两个月以上，很难停在那条窄线上。</p>
+
+  <h3>结论二：时间承诺是放置品类的硬约束</h3>
+  <p>放置这个词给玩家的承诺只有一个，就是"不用花很多时间"。两份拆解里，这个承诺都没有兑现。</p>
+  <div class="grid4">
+    <div class="stat"><div class="v">40<span style="font-size:14px">分钟</span></div><div class="l">问剑长生日常</div></div>
+    <div class="stat"><div class="v">1<span style="font-size:14px">小时</span></div><div class="l">杖剑传说日常</div></div>
+    <div class="stat"><div class="v">300</div><div class="l">杖剑体力上限（每小时恢复 5 点）</div></div>
+    <div class="stat"><div class="v">1<span style="font-size:14px">个月</span></div><div class="l">杖剑 S1 赛季长度</div></div>
+  </div>
+  <p style="margin-top:16px">更值得注意的是时间的构成。《杖剑传说》那 1 小时里，有相当一部分不是内容消耗，而是副本强度偏高导致的匹配与等待。这部分时间没有任何产出，也不能算作体验。<strong>它是一层可以被设计掉的摩擦，而产品没有为它准备兜底。</strong></p>
+
+  <h3>结论三：免费玩家的变现能力必须被设计，不能放任</h3>
+  <p>两份拆解在这一项上的差距最大，也是《杖剑传说》教科书级的地方。</p>
+  <div class="pros-cons">
+    <div class="pc bad">
+      <h4>问剑长生：减负减过了头</h4>
+      <ol>
+        <li><b>对抗被降级为人机交互</b>四类减负设计（不设游戏内战力榜、隐藏超境界战力、灵界取消领地争夺、隐藏抢矿者名字）的共同逻辑是把人对人的对抗转成人对系统的交互。</li>
+        <li><b>社交不再是负担，也不再是留下来的理由</b>减负与粘性互相抵消，结果是玩家找不到必须留下的锚点。</li>
+      </ol>
+    </div>
+    <div class="pc good">
+      <h4>杖剑传说：给交换装了三道阀门</h4>
+      <ol>
+        <li><b>交易行阶梯税率</b>0 至 5 千收 10%，20 万以上收 70%（拍卖行封顶仅 30%），让时间换钱真实存在但无法规模化。</li>
+        <li><b>大矿的周拾取上限</b>大矿是带本门票，卡住周产量等于卡住"请人帮忙"的次数。</li>
+        <li><b>自用与可分享的区分</b>把大矿改造成定向支付工具，等于给带本市场发了合规的支付凭证。</li>
+      </ol>
+    </div>
+  </div>
+  <p style="margin-top:16px">这一组对照最能说明两份产品在运营精细度上的差别。前者用减法把摩擦抹平，顺手也抹掉了粘性；后者用加法堆内容，同时用规则把交换控制在可预期的规模内。<strong>差别不在谁更慷慨，而在谁更清楚自己要控制什么。</strong></p>
+
+  <h3>结论四：稳健路线守成，不负责增长</h3>
+  <p>《问剑长生》被内部评价为"稳健迭代""太过求稳"，全年流水 8.24 亿元，在公司的产品序列里是合格的表现。《杖剑传说》是激进的那一个，从题材、框架到出海路径全部重选，全年流水接近 25 亿元。</p>
+  <p>这个对比不是要说稳健是错的。稳健迭代有它的价值：风险可控、用户不流失、成本可预测。但如果目标是增长而不是守成，稳健就不是那条路。<strong>两款产品实际上回答了同一个问题的两个答案，而问题本身是"你这一款是要守还是要攻"。</strong></p>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="s5">
+  <h2><span class="num">05</span>休闲品类的设计规律</h2>
+  <div class="lead">从两份拆解里能提炼出来、可以迁移到同类产品的判断。</div>
+
+  <h3>规律一：时间承诺优先于内容供给</h3>
+  <p>放置品类的用户是冲着"不用花很多时间"来的。这意味着减少时间消耗的收益，通常高于增加内容供给。两份拆解里，团队的努力方向恰好相反：遇到留存问题就加内容、拉长赛季、开新活动，而这恰恰是在消耗用户最在意的那样东西。</p>
+  <div class="callout g">
+    <b>一个可以直接拿去用的判断标准。</b>当放置品类出现留存问题时，先看用户的时间都花在哪儿了，而不是先看内容够不够。<br><br>
+    如果时间花在内容上，那说明内容量合适，问题在内容质量；如果时间花在等待、匹配、重复刷取上，那加内容只会让情况更糟。<b>《杖剑传说》的 1 小时里混着匹配等待，《问剑长生》的 40 分钟里混着重复日常，两份都属于后者。</b>
+  </div>
+
+  <h3>规律二：内容量的调整幅度要小</h3>
+  <p>两份产品的调整都出现了幅度过大的问题。《问剑长生》从 15 到 25 分钟直接跳到 40 分钟，《杖剑传说》从一个月赛季直接拉到两个月以上。<strong>放置品类的容错区间窄，大幅度调整几乎必然越过边界。</strong>小步试错在这个品类里不是风格偏好，是必要的操作方式。</p>
+
+  <h3>规律三：免费通道要留，但必须带阀门</h3>
+  <p>免费玩家需要有一条不付费也能推进的路，否则留存撑不住；但这条路又不能宽到可以替代付费，否则付费意愿崩掉。这个平衡点很难找，而《杖剑传说》给出了一组可参考的做法：让交换真实发生，同时用规则限制规模。</p>
+  <ul>
+    <li>用<strong>递进税率</strong>区分轻度交易与规模化搬砖，而不是一刀切禁止</li>
+    <li>用<strong>周上限</strong>控制稀缺资源的产出节奏，从而控制它能换取的服务量</li>
+    <li>用<strong>可否分享</strong>来区分自用与流通，把一部分资源锁定在个体内部</li>
+  </ul>
+  <p>三条的共同点是：不去堵交换，而是给交换装阀门。这个思路比"禁止交易"或"完全放开"都更可持续。</p>
+
+  <h3>规律四：社交要卸义务、留收益</h3>
+  <p>《杖剑传说》在这件事上做得比《问剑长生》彻底：挂机产出与社交完全解绑，但保留了带本、公会商店、交易行这些有明确回报的社交内容。玩家不需要为了变强去维护关系，愿意维护则能拿到额外回报。</p>
+  <p>更关键的是，它把带本做成了一个<strong>定价清晰的双边市场</strong>。平民拿大矿换战力服务，大佬拿到稳定资源，双方各取所需。有定价，这个系统才能长期运转，而不是依赖玩家的热情。<strong>能靠机制运转的社交，比靠人情运转的社交更耐久。</strong></p>
+
+  <h3>规律五：赛季制的公平性来自重置，付费继承会摧毁它</h3>
+  <p>《杖剑传说》做赛季制，装备的特殊词条可以付费继承到后续赛季。这看起来只是多了一条付费线，实际上动摇了赛季制的根基：<strong>赛季制吸引人的地方是重置带来的公平感，而付费继承把这条起跑线重新拉开了。</strong>氪佬花钱保住积累，平民资产清零，重置在两类玩家身上并不对等。</p>
+  <p>这不是《问剑长生》的问题（它不做赛季制），放在这里是因为它属于品类的通用参照：<strong>任何用赛季制做长线的产品，在给重置加付费豁免之前，都应该先算清这层公平感值多少钱。</strong></p>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="s6">
+  <h2><span class="num">06</span>同一套工具，两种病灶</h2>
+  <div class="lead">两份拆解用的是同一套分析方法，但拆出来的问题完全不同。</div>
+
+  <table>
+    <thead><tr><th style="width:22%">分析工具</th><th style="width:36%">用在《问剑长生》上</th><th>用在《杖剑传说》上</th></tr></thead>
+    <tbody>
+      <tr><td><strong>元属性识别</strong></td><td>时间闸门（丹毒与闭关聚灵石的递增机制决定成长节奏）</td><td>晨星（唯一同时连接时间与金钱的结算单位，所有成长路径都收敛到它）</td></tr>
+      <tr><td><strong>三层追问法</strong></td><td>结构层结论：接棒策略自带上限，天花板来自用户池而非体验</td><td>结构层结论：减法减不掉义务结构，只有加法能让内容自带退出机制</td></tr>
+      <tr><td><strong>失误与取舍二分法</strong></td><td>真正算失误的 3 项，其余为结构性代价</td><td>真正算失误的 4 项，另有 2 个混合案例（交易行税率、赛季长度）</td></tr>
+      <tr><td><strong>信息可信度分级</strong></td><td>A 级来自长期在线的实机体验与宗门管理视角</td><td>A 级来自四个账号覆盖全周期的经历与游戏内界面截图</td></tr>
+      <tr><td><strong>内部人原话优先</strong></td><td>董事长"设计比较平庸的一个原因就是它以买量为主"；运营负责人"玩家的需求可能不是想要一个更好玩的 3D 御剑空战"</td><td>制作人"没有什么方法论，我们甚至没有特意针对海外市场做专门的玩法设计"、"Demo 可以丑，但是要丑得比较统一"</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <b>同一套工具在两款产品上跑出了不同的结论，这件事本身比结论更有说服力。</b>如果两份拆解最后都得出"要注重用户需求"这类通用判断，说明工具没有真正起作用。而这两份最后落到的是完全不同的病灶：一款的问题是<b>用户池在开服时就定了</b>，另一款的问题是<b>框架选对了但内容节奏没管住</b>。<br><br>
+    <b>工具的价值不在于给出答案，而在于保证不同产品被拆到同一深度。</b>
+  </div>
+
+  <h3>两份拆解各自的落点</h3>
+  <div class="grid2">
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">《问剑长生》</h4>
+      <p style="margin:0;font-size:14px">核心命题是<b>稳健迭代型产品的运营天花板</b>。四条结论：稳健迭代在守成不在增长；表现级升级换不来结构级收益；低压力与高粘性互相抵消；买量规模是产品吸引力的反向指标。</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h4 style="margin-top:0">《杖剑传说》</h4>
+      <p style="margin:0;font-size:14px">核心命题是<b>框架选择</b>。五条结论：框架选择决定下限；减掉的是操作、加上的才是权利；经济系统的关键是限流阀；能被复制的是思考顺序；加法保住的是权利，不是时间。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="s7">
+  <h2><span class="num">07</span>这份总结的位置</h2>
+  <div class="lead">它不是第三份拆解，是两份拆解的前置导览。</div>
+
+  <p>作品集按品类分成两个板块。<strong>休闲游戏板块</strong>放进《问剑长生》和《杖剑传说》，因为这两款产品构成一组变量可控的对照，放在一起能说明单份拆解说明不了的事：同样的底层架构、同样的公司、同样的发行体系，为什么结果差三倍多。<strong>SLG 板块</strong>放进《三国：谋定天下》，它来自另一家公司、另一个品类，独立成篇。</p>
+
+  <p>三份拆解各自独立，都可以单独阅读和投递。这份总结的作用是给休闲游戏板块提供入口和横向结论，读完它，再进两份拆解，能看清每一处分析的落点在哪里。</p>
+
+  <div class="callout g">
+    <b>为什么值得做这层横向对照。</b>单份拆解能证明"我看懂了一款产品"，横向对照才能证明"我有一套可以迁移的分析框架"。<br><br>
+    把两款产品的同类设计放在一起比出差异，需要的不是更多信息，而是更清楚哪些变量被控制住了、哪些没有。<b>这件事比结论本身更能反映分析能力。</b>
+  </div>
+
+  <h3>阅读顺序建议</h3>
+  <div class="tl">
+    <div class="tl-i">
+      <div class="tl-d">第一步</div>
+      <div class="tl-t">本文件（第 01 至 04 章）</div>
+      <p style="font-size:14px;margin:0">建立对照框架，知道两份的差异出在哪四项变量上。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">第二步</div>
+      <div class="tl-t">《杖剑传说》拆解</div>
+      <p style="font-size:14px;margin:0">先读这一份，因为它的框架选择、经济系统、联动机制是四条分水岭里信息最完整的一端。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">第三步</div>
+      <div class="tl-t">《问剑长生》拆解</div>
+      <p style="font-size:14px;margin:0">再读这一份，作为对照的另一端。它的价值在于展示一条稳健路线能走到哪里，以及走到头是什么样子。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>休闲游戏板块总结 · 2026-09-17</p>
+  <p>对照对象：《问剑长生》（吉比特自研，雷霆游戏发行，2025-01-02 上线）、《杖剑传说》（吉比特自研，雷霆游戏发行，2025-05-29 上线）。</p>
+  <p>两份拆解均为第一人称实机体验基础上的拆解，体验样本与视角局限分别写在各自报告的开头。本总结只做横向对照，不重复两份报告的分析过程。</p>
+  <p>数据来源：吉比特 2025 年各期财报与业绩说明会、雷霆游戏官方公告、Sensor Tower / 点点数据 / 广大大 / 巨量算数第三方数据、制作人公开访谈与产业年会演讲。推断性判断已在正文中标明。</p>
+</footer>
+
+</div>
+</body>
+</html>

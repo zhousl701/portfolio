@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>《杖剑传说》数据看板</title>
+<style>
+:root{
+  --ink:#1B1F1E; --ink2:#434A48; --ink3:#747C79;
+  --paper:#F4F7F5; --card:#FFFFFF; --line:#DEE5E1;
+  --pri:#2F5D5B; --pri-l:#EAF2F0;
+  --gold:#9C7A3C; --gold-l:#F7F1E3;
+  --jade:#3F7A5E; --jade-l:#EBF3EE;
+  --red:#A83A2C; --red-l:#FAEDEA;
+  --blue:#2E5A82; --blue-l:#EAF0F6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;background:var(--paper);color:var(--ink);padding:28px;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+.board{width:1180px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--pri);padding-bottom:14px;margin-bottom:20px}
+.top h1{font-size:26px;font-weight:700}
+.top h1 span{font-size:15px;font-weight:400;color:var(--ink3);margin-left:12px}
+.top .tag{font-size:12px;color:var(--pri);background:var(--pri-l);padding:4px 12px;border-radius:14px;font-weight:600}
+.grid{display:grid;gap:14px}
+.kpi{grid-template-columns:repeat(4,1fr)}
+.kpi .k{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi .k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pri)}
+.kpi .k.up::before{background:var(--jade)}
+.kpi .lb{font-size:11.5px;color:var(--ink3);margin-bottom:8px;letter-spacing:.06em}
+.kpi .vl{font-size:32px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--pri)}
+.kpi .k.up .vl{color:var(--jade)}
+.kpi .vl em{font-size:15px;font-style:normal;font-weight:600;margin-left:3px}
+.kpi .nt{font-size:11.5px;color:var(--ink3);margin-top:7px}
+.row2{grid-template-columns:1.35fr 1fr;margin-top:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.panel h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.panel .sub{font-size:11.5px;color:var(--ink3);margin-bottom:16px}
+.bars{display:flex;align-items:flex-end;gap:26px;height:190px;padding:0 6px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.bcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bval{font-size:13px;font-weight:700;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.bbar{width:100%;border-radius:5px 5px 0 0;display:flex;flex-direction:column-reverse;overflow:hidden}
+.bbar .seg{width:100%}
+.bbl{font-size:12px;color:var(--ink3);margin-top:8px;font-variant-numeric:tabular-nums}
+.pk{font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:9px;background:var(--jade-l);color:var(--jade);margin-top:5px}
+.hbar{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.hbar .n{width:84px;font-size:12px;color:var(--ink3);text-align:right;flex-shrink:0}
+.hbar .t{flex:1;height:20px;background:#F1F5F3;border-radius:4px;overflow:hidden}
+.hbar .f{height:100%;border-radius:4px;background:var(--pri)}
+.hbar .f.gd{background:#8FB3B0}
+.hbar .f.rd{background:var(--red)}
+.hbar .v{width:104px;font-size:12px;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums}
+.tl{position:relative;padding-left:20px;margin-top:6px}
+.tl::before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tli{position:relative;margin-bottom:13px}
+.tli:last-child{margin-bottom:0}
+.tli::before{content:"";position:absolute;left:-20px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--pri);border:2px solid #fff;box-shadow:0 0 0 1.5px var(--pri)}
+.tli .d{font-size:11px;color:var(--pri);font-weight:700;letter-spacing:.04em}
+.tli .c{font-size:12.5px;color:var(--ink2);line-height:1.5}
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px}
+.cmp th{text-align:left;padding:8px 10px;background:#F1F5F3;font-size:11.5px;color:var(--ink);border-bottom:1px solid var(--line);font-weight:700}
+.cmp td{padding:9px 10px;border-bottom:1px solid #EDF1EF;color:var(--ink2);vertical-align:top}
+.cmp tr:last-child td{border-bottom:none}
+.cmp td b{color:var(--ink)}
+.warn{color:var(--red);font-weight:700}
+.ok{color:var(--jade);font-weight:700}
+.note{margin-top:14px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:14px 18px;font-size:12.5px;color:var(--ink2);line-height:1.7}
+.note b{color:var(--ink)}
+.legend{display:flex;gap:16px;font-size:11.5px;color:var(--ink3);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.foot{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;color:var(--ink3);display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="top">
+    <h1>《杖剑传说》数据看板<span>2025.05 上线 — 2026.08 数据</span></h1>
+    <div class="tag">吉比特自研 · 雷霆发行 · 放置 MMORPG</div>
+  </div>
+
+  <div class="grid kpi">
+    <div class="k up">
+      <div class="lb">2025 总流水</div>
+      <div class="vl">24.95<em>亿元</em></div>
+      <div class="nt">大陆 17.03 + 境外 7.92</div>
+    </div>
+    <div class="k up">
+      <div class="lb">境外流水占比</div>
+      <div class="vl">32<em>%</em></div>
+      <div class="nt">同门前作该比例极低</div>
+    </div>
+    <div class="k up">
+      <div class="lb">峰值季度单季流水</div>
+      <div class="vl">12.20<em>亿元</em></div>
+      <div class="nt">2025 Q3，上线后第二个季度</div>
+    </div>
+    <div class="k">
+      <div class="lb">首发季占全年比</div>
+      <div class="vl">25<em>%</em></div>
+      <div class="nt">对比同门产品为 44%</div>
+    </div>
+  </div>
+
+  <div class="grid row2">
+    <div class="panel">
+      <h3>单季流水结构（亿元）</h3>
+      <div class="sub">由累计口径还原，大陆与境外分列</div>
+      <div class="bars">
+        <div class="bcol">
+          <div class="bval">4.24</div>
+          <div class="bbar" style="height:34.8%">
+            <div class="seg" style="height:100%;background:#2F5D5B"></div>
+          </div>
+          <div class="bbl">2025 Q2</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">12.20</div>
+          <div class="bbar" style="height:100%">
+            <div class="seg" style="height:60.8%;background:#2F5D5B"></div>
+            <div class="seg" style="height:39.2%;background:#8FB3B0"></div>
+          </div>
+          <div class="bbl">2025 Q3</div>
+          <div class="pk">峰值</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">8.51</div>
+          <div class="bbar" style="height:69.8%">
+            <div class="seg" style="height:63.1%;background:#2F5D5B"></div>
+            <div class="seg" style="height:36.9%;background:#8FB3B0"></div>
+          </div>
+          <div class="bbl">2025 Q4</div>
+        </div>
+      </div>
+      <div class="legend">
+        <span><i style="background:#2F5D5B"></i>大陆</span>
+        <span><i style="background:#8FB3B0"></i>境外</span>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.65;margin-top:10px">
+        峰值出现在上线后第二个季度而非首发季。2026 Q1 大陆与境外合计 <b style="color:var(--ink)">7.48 亿元</b>（官方口径）。
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>同门对照</h3>
+      <div class="sub">同一家公司、同一年上线</div>
+      <div class="hbar">
+        <div class="n">问剑长生</div>
+        <div class="t"><div class="f rd" style="width:33%"></div></div>
+        <div class="v">8.24 亿</div>
+      </div>
+      <div class="hbar">
+        <div class="n">杖剑传说</div>
+        <div class="t"><div class="f" style="width:100%"></div></div>
+        <div class="v">24.95 亿</div>
+      </div>
+      <table class="cmp" style="margin-top:14px">
+        <tr><th style="width:38%">关键指标</th><th>问剑</th><th>杖剑</th></tr>
+        <tr><td>峰值出现时点</td><td class="warn">首发季度</td><td class="ok">第二个季度</td></tr>
+        <tr><td>首次出海（距上线）</td><td class="warn">约 11 个月</td><td class="ok">约 1.5 个月</td></tr>
+        <tr><td>境外流水占比</td><td class="warn">极低</td><td class="ok">约 32%</td></tr>
+        <tr><td>发行期销售费用增量</td><td class="warn">+0.66 亿</td><td class="ok">+3 亿 / +6.58 亿</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid row2" style="grid-template-columns:1fr 1.35fr">
+    <div class="panel">
+      <h3>大陆畅销榜排名变化</h3>
+      <div class="sub">中国大陆 iOS 游戏畅销榜</div>
+      <div class="hbar"><div class="n">上线首月</div><div class="t"><div class="f gd" style="width:10%"></div></div><div class="v">最高第 10</div></div>
+      <div class="hbar"><div class="n">2025 全年</div><div class="t"><div class="f gd" style="width:34%"></div></div><div class="v">平均第 34</div></div>
+      <div class="hbar"><div class="n">2026 Q2</div><div class="t"><div class="f rd" style="width:69%"></div></div><div class="v">平均第 69</div></div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.65;margin-top:10px">
+        一年内平均排名下滑 <b style="color:var(--ink)">35 位</b>，方向与 Q4 单季流水回落一致。
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.65;margin-top:10px">
+        境外分化明显：2026 Q2 中国澳门最高第 3、中国香港第 9、中国台湾第 15，<b style="color:var(--ink)">日本仅第 74</b>。
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>关键节点</h3>
+      <div class="sub">产品动作与数据的对应关系</div>
+      <div class="tl">
+        <div class="tli"><div class="d">2025.05.29</div><div class="c">中国大陆首发 · Q2 单季 4.24 亿元（约一个月）</div></div>
+        <div class="tli"><div class="d">2025.07.15</div><div class="c">上线中国港澳台、日本、新马 · 一周内登顶中国港澳台双榜</div></div>
+        <div class="tli"><div class="d">2025.09</div><div class="c">洛天依联动 · Q3 单季 12.20 亿元，达到峰值</div></div>
+        <div class="tli"><div class="d">2025.10</div><div class="c">欧美市场前置布局：社交平台曝光、安卓素材投放、CBT 测试</div></div>
+        <div class="tli"><div class="d">2026.05.19</div><div class="c">欧美版上线 150+ 国家地区 · Q1 合计 7.48 亿元</div></div>
+        <div class="tli"><div class="d">2026.06</div><div class="c">上线 6 周全球收入破 2000 万美元，美国贡献约 70%</div></div>
+        <div class="tli"><div class="d">2026 Q2</div><div class="c">S5 赛季「霜焰之歌」、一周年庆、洛天依返场 · 大陆平均第 69 名</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>一句话读板：</b>峰值出现在上线后第二个季度，首发季只占全年约四分之一，说明运营接住了上线流量。真正把曲线撑住的是<b>多市场错开上线形成的接力结构</b>——大陆回落到 5.37 亿元时境外补上 3.14 亿元，2026 年欧美版又开了一轮。大陆市场已进入成熟期，方向明确但不算失控。
+  </div>
+
+  <div class="foot">
+    <span>数据来源：吉比特定期报告（A 级）、投资者调研纪要（B 级）、Sensor Tower 等第三方（C 级）</span>
+    <span>单季流水为累计值还原，属本看板计算 · 2026-09-17</span>
+  </div>
+
+</div>
+</body>
+</html>

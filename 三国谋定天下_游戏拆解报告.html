@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《三国：谋定天下》游戏拆解报告</title>
+<style>
+:root{
+  --ink:#1F1D1A; --ink2:#4A453E; --ink3:#7A7268;
+  --paper:#FBF9F5; --card:#FFFFFF; --line:#E5DFD4;
+  --red:#A83A2C; --red-l:#FAEDEA;
+  --green:#2F6B5A; --green-l:#EAF2EF;
+  --gold:#9C7A3C; --gold-l:#F7F1E3;
+  --blue:#2E5A82; --blue-l:#EAF0F6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  background:var(--paper); color:var(--ink);
+  line-height:1.8; font-size:15.5px; letter-spacing:.015em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:0 28px 100px}
+
+/* ---------- 封面 ---------- */
+.cover{padding:60px 0 40px;border-bottom:1px solid var(--line);margin-bottom:44px;position:relative}
+.cover::after{content:"";position:absolute;left:0;bottom:-1.5px;width:88px;height:3px;background:var(--red)}
+.eyebrow{font-size:12px;letter-spacing:.3em;color:var(--red);font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:1.5px;background:var(--red);display:inline-block}
+h1{font-size:44px;line-height:1.25;font-weight:700;letter-spacing:.03em;margin-bottom:12px}
+.sub{font-size:16px;color:var(--ink2);margin-bottom:32px;line-height:1.7}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(31,29,26,.06)}
+.metagrid div{background:var(--card);padding:15px 17px}
+.metagrid dt{font-size:11px;color:var(--ink3);margin-bottom:5px;letter-spacing:.1em}
+.metagrid dd{font-size:14px;font-weight:600;color:var(--ink)}
+
+/* ---------- 目录 ---------- */
+.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 30px;margin-bottom:48px;box-shadow:0 1px 4px rgba(31,29,26,.04)}
+.toc h3{font-size:12px;letter-spacing:.24em;color:var(--red);font-weight:700;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.toc ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:7px 26px;counter-reset:t}
+.toc li{counter-increment:t;font-size:14px;padding:2px 0}
+.toc li::before{content:counter(t,decimal-leading-zero);color:var(--gold);font-weight:700;margin-right:11px;font-size:12px;font-variant-numeric:tabular-nums}
+.toc a{color:var(--ink2);text-decoration:none;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+.toc a:hover{color:var(--red);border-bottom-color:var(--red)}
+
+/* ---------- 章节 ---------- */
+section{margin-bottom:50px;scroll-margin-top:20px}
+h2{font-size:24px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+h2 .num{font-size:13px;color:var(--red);font-weight:700;letter-spacing:.06em;flex-shrink:0;background:var(--red-l);padding:4px 10px;border-radius:6px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+h2 + .lead{color:var(--ink3);font-size:13.5px;margin-bottom:24px;font-style:italic}
+h3{font-size:16px;font-weight:700;margin:30px 0 13px;padding-left:12px;border-left:4px solid var(--red);line-height:1.4}
+h4{font-size:14.5px;font-weight:700;margin:22px 0 9px;color:var(--ink)}
+p{margin-bottom:14px;color:var(--ink2)}
+p strong,li strong{color:var(--ink);font-weight:600}
+ul,ol{margin:0 0 14px 20px;color:var(--ink2)}
+li{margin-bottom:7px}
+
+/* ---------- 组件 ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:18px;box-shadow:0 1px 2px rgba(31,29,26,.03)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:760px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+
+table{width:100%;border-collapse:collapse;background:var(--card);font-size:13.5px;margin-bottom:16px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+th{background:#F3EEE3;text-align:left;padding:12px 14px;font-weight:700;font-size:12.5px;color:var(--ink);border-bottom:1px solid var(--line);white-space:nowrap;letter-spacing:.05em}
+td{padding:12px 14px;border-bottom:1px solid #EFE9DC;color:var(--ink2);vertical-align:top;line-height:1.75}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:#FCFAF5}
+tbody tr:hover{background:#FAF6EC}
+
+.tag{display:inline-block;padding:3px 11px;border-radius:20px;font-size:12.5px;margin:0 6px 7px 0;font-weight:500}
+.t-red{background:var(--red-l);color:var(--red)}
+.t-green{background:var(--green-l);color:var(--green)}
+.t-gold{background:var(--gold-l);color:var(--gold)}
+.t-blue{background:var(--blue-l);color:var(--blue)}
+
+.callout{border-left:4px solid var(--red);background:var(--red-l);padding:15px 19px;border-radius:0 10px 10px 0;margin:18px 0;font-size:14px;color:#6E2A20}
+.callout.g{border-color:var(--green);background:var(--green-l);color:#20493D}
+.callout.y{border-color:var(--gold);background:var(--gold-l);color:#6B5223}
+.callout b{font-weight:700}
+
+.todo{background:#FFFDF6;border:1.5px dashed var(--gold);border-radius:8px;padding:12px 16px;font-size:13.5px;color:#8A6D2F;margin:14px 0}
+.todo::before{content:"待补充 · ";font-weight:700}
+
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.pros-cons{grid-template-columns:1fr}}
+.pc{border-radius:12px;padding:20px 22px;border:1px solid var(--line);background:var(--card)}
+.pc.good{border-top:4px solid var(--green)}
+.pc.bad{border-top:4px solid var(--red)}
+.pc h4{margin:0 0 14px;font-size:15px;display:flex;align-items:center;gap:8px}
+.pc.good h4{color:var(--green)}
+.pc.bad h4{color:var(--red)}
+.pc ol{margin-left:18px}
+.pc li{margin-bottom:14px;font-size:14px;line-height:1.75}
+.pc li b{display:block;color:var(--ink);margin-bottom:2px;font-size:14px}
+
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 14px;text-align:center}
+.stat .v{font-size:28px;font-weight:700;color:var(--red);line-height:1.2;font-variant-numeric:tabular-nums}
+.stat .l{font-size:11.5px;color:var(--ink3);margin-top:6px}
+
+/* 时间轴 */
+.tl{position:relative;padding-left:30px;margin:20px 0}
+.tl::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl-i{position:relative;margin-bottom:24px}
+.tl-i::before{content:"";position:absolute;left:-27px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid var(--paper);box-shadow:0 0 0 2px var(--red)}
+.tl-d{font-size:11px;color:var(--red);font-weight:700;letter-spacing:.06em;margin-bottom:7px;display:inline-block;background:var(--red-l);padding:3px 11px;border-radius:12px}
+.tl-t{font-size:15.5px;font-weight:700;margin-bottom:7px;color:var(--ink)}
+
+/* 脑图 */
+.mind{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;margin:18px 0}
+.mind-root{text-align:center;font-weight:700;font-size:16px;background:var(--ink);color:#fff;border-radius:8px;padding:10px;margin-bottom:18px;letter-spacing:.1em}
+.mind-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.mind-col{border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.mind-col > .h{padding:8px 12px;font-size:13.5px;font-weight:700;color:#fff}
+.mind-col ul{list-style:none;margin:0;padding:10px 12px}
+.mind-col li{font-size:12.5px;color:var(--ink2);margin-bottom:6px;line-height:1.55;padding-left:10px;border-left:2px solid var(--line)}
+.mind-col li:last-child{margin-bottom:0}
+
+.src{font-size:12px;color:var(--ink3);font-style:normal;margin-top:-8px;margin-bottom:16px}
+footer{border-top:1px solid var(--line);padding-top:22px;font-size:12.5px;color:var(--ink3)}
+@page{size:A4;margin:14mm 12mm 14mm}
+@media print{
+  body{background:#fff;font-size:11.5pt;line-height:1.72;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{max-width:none;padding:0}
+  .cover{padding-top:0;break-after:page}
+  nav.toc{break-after:page}
+  section{break-before:auto;margin-bottom:30px}
+  h2{break-after:avoid;break-inside:avoid;margin-top:26px}
+  h3,h4{break-after:avoid;break-inside:avoid}
+  h2 + .lead{break-after:avoid}
+  table{break-inside:auto}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  .stat,.tl-i,.mind-col,.grid2,.grid3,.grid4{break-inside:avoid}
+  .mind{break-inside:avoid}
+  .mind-row{grid-template-columns:repeat(3,1fr)}
+  .tl,.pros-cons{break-inside:auto}
+  li{break-inside:avoid}
+  .pros-cons{grid-template-columns:1fr;gap:14px}
+  a{color:inherit;text-decoration:none}
+  footer{break-before:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+  <div class="eyebrow">GAME TEARDOWN · 游戏拆解报告</div>
+  <h1>《三国：谋定天下》</h1>
+  <div class="sub">赛季制沙盘 SLG 的机制创新与减负实验 · 基于约 700 小时实机体验 / 7 个赛季满勤 / 霸业结算</div>
+  <dl class="metagrid">
+    <div><dt>游戏名称</dt><dd>三国：谋定天下（三谋）</dd></div>
+    <div><dt>品类</dt><dd>多职业战争策略 SLG</dd></div>
+    <div><dt>研发</dt><dd>华娱游戏 · 东风工作室</dd></div>
+    <div><dt>发行</dt><dd>哔哩哔哩游戏</dd></div>
+    <div><dt>公测时间</dt><dd>2024.06.13</dd></div>
+    <div><dt>平台</dt><dd>iOS / Android / PC</dd></div>
+    <div><dt>体验时长</dt><dd>约 700 小时（本人实机）</dd></div>
+    <div><dt>赛季参与</dt><dd>7 个 · 每赛季满勤</dd></div>
+    <div><dt>同盟定位</dt><dd>中坚力量</dd></div>
+    <div><dt>最高结算</dt><dd>霸业</dd></div>
+    <div><dt>拆解日期</dt><dd>2026.09.16</dd></div>
+  </dl>
+</header>
+
+<div class="callout y">
+  <b>数据口径说明（建议保留在作品集中，这是专业度的体现）</b><br>
+  ① 时长为本人实机累计，<b>约 700 小时</b>（第三方平台记录 361 小时，因多端登录与后台统计口径问题明显偏低，此处以本人估算为准）；② 赛季剧本机制来自官方公告、赛季专题页与玩家社区公开攻略整理，以正式服为准；③ 榜单与流水数据为第三方媒体口径，正式引用前建议用七麦数据 / 点点数据复核统计口径（iOS 单端 or 全平台、日流水 or 月流水）；④ 卡池概率等数值来自公开媒体报道，非本人实测，标注为"报道值"。
+</div>
+
+<nav class="toc">
+  <h3>目 录</h3>
+  <ol>
+    <li><a href="#s1">基础信息</a></li>
+    <li><a href="#s2">一句话定位</a></li>
+    <li><a href="#s3">标签 · 题材 · 美术</a></li>
+    <li><a href="#s4">核心玩法拆解</a></li>
+    <li><a href="#s5">游戏系统脑图</a></li>
+    <li><a href="#s6">核心玩法循环</a></li>
+    <li><a href="#s7">经济系统</a></li>
+    <li><a href="#s8">社交与同盟生态</a></li>
+    <li><a href="#s9">数值 · 付费 · 商业化</a></li>
+    <li><a href="#s10">赛季制设计（核心）</a></li>
+    <li><a href="#s11">目标用户</a></li>
+    <li><a href="#s12">优点与缺点</a></li>
+    <li><a href="#s13">设计缺陷的根因分析</a></li>
+    <li><a href="#s14">优化方案建议</a></li>
+    <li><a href="#s15">拆解总结</a></li>
+    <li><a href="#s16">拆解方法论</a></li>
+  </ol>
+</nav>
+
+<div class="card" style="border-left:4px solid var(--red);margin-bottom:48px">
+  <h3 style="margin:0 0 14px;padding:0;border:none;font-size:15px">写在前面</h3>
+  <p>玩了七个赛季，七百多小时。这份报告算是给自己的一次整理。</p>
+  <p>我大部分时间待在同盟的中坚位置。跟着打城、守关、铺路，不在指挥位上，也不是只种地的旁观者。这个位置看得见的东西有限，但离真实的游戏体验最近：机制手感对不对、执行层的负担有没有真的减轻、赛季更新带来的新鲜劲能撑多久——这些是我能给出判断的地方。同盟外交、跨盟调度这类发生在更高层面的事，我依赖公开战报和社区资料，文中都标了出处。</p>
+  <p style="margin-bottom:0">拆一款游戏有很多种写法，我选了比较费劲的一种：不只说它做了什么，还要追问它为什么只能这么做。"为什么只能"比"为什么"难回答得多，也更容易出错。如果你觉得哪处判断偏了，那多半是我的位置决定的，欢迎指出来。</p>
+</div>
+
+<!-- ============ 01 ============ -->
+<section id="s1">
+  <h2><span class="num">01</span>基础信息</h2>
+  <div class="lead">本章只列事实：主体、时间、平台、周期。后面所有判断都建立在这些信息之上。</div>
+  <table>
+    <tbody>
+      <tr><th style="width:130px">正式名称</th><td>《三国：谋定天下》（玩家简称"三谋"）</td></tr>
+      <tr><th>研发公司</th><td>浙江华娱网络科技有限公司（华娱游戏）</td></tr>
+      <tr><th>研发工作室</th><td>东风工作室（华娱游戏旗下）　·　<b>制作人：曾洋（聆风）</b></td></tr>
+      <tr><th>发行运营</th><td>哔哩哔哩游戏（上海幻电信息科技有限公司）</td></tr>
+      <tr><th>上线时间</th><td>2024 年 6 月 13 日全平台公测（客户端右下角带 B 站小电视图标为官方版本）</td></tr>
+      <tr><th>平台</th><td>iOS、Android，支持 PC 模拟器 / 云游戏，横竖屏可切换</td></tr>
+      <tr><th>品类定位</th><td>首款"多职业"战争策略手游；赛季制沙盘 SLG</td></tr>
+      <tr><th>内容分级</th><td>16+</td></tr>
+      <tr><th>赛季周期</th><td>约 30–45 天 / 赛季，头部三国 SLG 中最短；2026 年进一步压缩至约 7 周</td></tr>
+      <tr><th>核心卖点</th><td>六职业分工 · 不卖资源 · 无 VIP · 降肝减负 · 赛季剧本化更新</td></tr>
+      <tr><th>深度参与赛季</th><td><b style="color:var(--red)">S1 初始赛季 · S2 英雄觅处 · S3 风云再起 · W1/S4 九州鼎沸 · W2/S5 应天受命 · W4/S7 汉祚黄天 · W6/S9 业铸山河</b>（共 7 个，为本报告赛季拆解的第一手样本）</td></tr>
+    </tbody>
+  </table>
+  <h3>体验样本与视角说明</h3>
+  <table>
+    <thead><tr><th style="width:120px">维度</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td><b>总时长</b></td><td>约 <b>700 小时</b>。第三方平台记录为 361 小时，因多端登录与后台统计口径问题明显偏低，此处以本人实际估算为准</td></tr>
+      <tr><td><b>参与赛季</b></td><td>7 个，S1 初始赛季 · S2 英雄觅处 · S3 风云再起 · W1/S4 九州鼎沸 · W2/S5 应天受命 · W4/S7 汉祚黄天 · W6/S9 业铸山河</td></tr>
+      <tr><td><b>赛季投入</b></td><td><b>每赛季在线 30 天以上</b>，完整覆盖从开荒、资源州、中心州到结算的全周期，而非中途进出或只参与片段</td></tr>
+      <tr><td><b>同盟定位</b></td><td><b>中坚力量</b>，非指挥 / 管理层，但承担主要作战与执行任务</td></tr>
+      <tr><td><b>最高结算</b></td><td><b>霸业</b>（赛季第二档位，仅次于问鼎，高于逐鹿）</td></tr>
+    </tbody>
+  </table>
+  <div class="callout g"><b>视角说明（建议保留在作品集中）：</b>本报告的观察位置是"同盟中坚力量"。<strong>既能接触战术决策层的信息，又不在指挥位上俯瞰全局</strong>。这既定义了它的长处，也划定了它的边界：对机制的实际手感、执行层负担的逐赛季变化、赛季更新的体感差异，描述更贴近核心玩家的真实体验；而对同盟外交博弈、跨盟战略调度等高层的还原，则更多依赖公开战报与社区资料，已在文中对应处标注来源。<strong>把视角边界讲清楚本身，就是专业度。</strong></div>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="s2">
+  <h2><span class="num">02</span>游戏简介：一句话定位</h2>
+  <div class="lead">先用一句话概括这款游戏，再把这句拆成三层来看。</div>
+  <div class="card" style="border-left:4px solid var(--red)">
+    <p style="font-size:17px;color:var(--ink);font-weight:600;line-height:1.8;margin-bottom:0">
+      《三国：谋定天下》是一款<strong>以赛季制沙盘为舞台、以同盟协同为本体、以"不卖资源 / 无 VIP / 降肝减负"为差异化卖点</strong>的三国题材多职业战争策略手游。它卖的东西有点特别——用更少的肝和氪，换到不打折的策略博弈。至于"变强"，那是副产品。
+    </p>
+  </div>
+  <p>这句话可以拆成三层来读，每层对应一个产品决策：</p>
+  <div class="grid3">
+    <div class="card" style="border-top:3px solid var(--blue)">
+      <h4 style="margin-top:0;color:var(--blue)">品类层</h4>
+      <p style="font-size:13.5px;margin:0">赛季制沙盘 SLG。不追求单局长线滚服，而是用<strong>周期性重置</strong>把所有人拉回同一起跑线。</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--green)">
+      <h4 style="margin-top:0;color:var(--green)">体验层</h4>
+      <p style="font-size:13.5px;margin:0">多职业分工。把"谁的战力高谁说了算"改成<strong>"谁的职业组合更合理谁赢"</strong>，让平民有不可替代的位置。</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--red)">
+      <h4 style="margin-top:0;color:var(--red)">商业层</h4>
+      <p style="font-size:13.5px;margin:0">不卖资源、无 VIP。<strong>主动砍掉 SLG 最大的现金牛</strong>，换取口碑、用户规模与长线留存。<br><br>这里有一个容易被忽略的结构性前提：<strong>华娱游戏 · 东风工作室研发 + 哔哩哔哩游戏发行</strong>。B 站的年轻用户结构与内容社区基因，正是"年轻人的第一款 SLG"这一定位能成立的基础。也解释了它为何敢放弃资源付费：它要的是<strong>用户规模与内容生态</strong>，而非单用户高 ARPU。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="s3">
+  <h2><span class="num">03</span>游戏标签 · 题材 · 画风 · 美术表现</h2>
+  <div class="lead">标签、题材、画风、美术表现，以及这四者与玩法设计之间的关系。</div>
+  <h3>游戏标签</h3>
+  <div style="margin-bottom:16px">
+    <span class="tag t-red">三国题材</span><span class="tag t-red">SLG</span><span class="tag t-red">沙盘战略</span>
+    <span class="tag t-green">赛季制</span><span class="tag t-green">多职业</span><span class="tag t-green">公平竞技</span>
+    <span class="tag t-gold">同盟社交</span><span class="tag t-gold">降肝减负</span><span class="tag t-gold">不卖资源</span>
+    <span class="tag t-blue">PVEVP</span><span class="tag t-blue">非对称对抗</span><span class="tag t-blue">水战 / 地形战</span>
+  </div>
+  <h3>题材与叙事</h3>
+  <p>取材东汉末年至三国归晋的完整脉络，但历史在这里是被"剧本化"的，不是按顺序复述一遍：每个赛季选取一个历史切面作为舞台——汉祚黄天（黄巾之乱）、隆中对（三分天下之策）、赤壁惊涛（赤壁之战）、武侯遗志（北伐）、二士争功（钟会邓艾灭蜀）。历史在此的功能是提供对称/非对称对抗的合法性与代入感，而非剧情文本。</p>
+  <h3>画风与美术表现</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4 style="margin-top:0">整体基调</h4>
+      <p style="font-size:13.5px;margin:0">写实偏国风，低饱和大地色系。沙盘以 2.5D 俯视呈现，UI 走水墨—竹简质感，与"谋略"主题一致，避免了同品类常见的金碧辉煌堆砌。</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">武将立绘</h4>
+      <p style="font-size:13.5px;margin:0">偏写实向，知名武将辨识度高（诸葛亮、周瑜等有年轻化/神韬版本双线设计）。付费外观是重要的商业化承载。</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">沙盘表现</h4>
+      <p style="font-size:13.5px;margin:0">地形是玩法而非装饰：河流会结冰、河堤可蓄水决堤、复道飞阁阙门构成立体交通网、雾气会遮蔽视野并重置归属。<strong>美术资产直接服务于机制</strong>，这是它比同类更能"出新"的根因。</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">信息呈现</h4>
+      <p style="font-size:13.5px;margin:0">沙盘信息密度高（土地等级、城池户口、辎重、精铁、关口连通性），对新手不友好；但同盟管理视角的信息工具较完整。</p>
+    </div>
+  </div>
+  <div class="callout"><b>拆解观点：</b>三谋在美术上花的钱，指向的其实是可扩展性——把美术做成机制的容器。正因为沙盘支持地形/天气/建筑的差异化，赛季剧本才能每 7 周换一套玩法而不必重做底层。这是它能维持高频更新的隐性前提。</div>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="s4">
+  <h2><span class="num">04</span>核心玩法拆解</h2>
+  <div class="lead">战斗 / 成长 / 社交 / 交易，四条线分开看，再找它们的咬合点。</div>
+
+  <h3>4.1 战斗系统</h3>
+  <table>
+    <thead><tr><th style="width:120px">维度</th><th>设计</th><th style="width:270px">拆解要点</th></tr></thead>
+    <tbody>
+      <tr><td><b>部队构成</b></td><td>3 武将 / 队，兵种（骑、枪、弓等）与阵型（箕形、雁形等）组合</td><td>阵型决定前后排与增益分配，是配将的第一层博弈</td></tr>
+      <tr><td><b>战法 / 韬略</b></td><td>自带战法 + 两个可装配战法 + 韬略（被动） + 装备坐骑</td><td>战法重置、武将等级置换仅消耗免费铜币 → 试错成本极低，是"减负"的核心落点</td></tr>
+      <tr><td><b>战斗结算</b></td><td>自动回合制，速度 / 先攻决定出手序，属性克制 + 状态（技穷、妖术、灼烧等）决定走向</td><td>不可手动操作 → 战斗乐趣<strong>前移到配将与出场时机</strong>，符合移动端</td></tr>
+      <tr><td><b>六职业</b></td><td>奇佐（谋略）· 镇军（正面）· 神行（机动偷袭）· 青囊（治疗）· 司仓（屯田补给）· 天工（器械建造）</td><td>全作最关键的差异化设计：技能直接改造沙盘（放火、架桥、建塔、断粮），支持赛季转职</td></tr>
+      <tr><td><b>辎重 / 粮草</b></td><td>远征需规划运粮路线，可被敌方奇袭粮道</td><td>把"后勤"变成可攻击目标，制造以弱胜强的翻盘空间</td></tr>
+      <tr><td><b>地形 / 天气</b></td><td>河流结冰、季节涨水、迷雾、立体宫城（复道/飞阁/阙门）</td><td>赛季剧本的主要创新载体，提供非数值变量</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.2 玩家成长</h3>
+  <ul>
+    <li>武将线：等级 → 战法（解锁 + 升级）→ 韬略 → 装备 / 坐骑 → 觉醒 / 缘分 / 结缘信物。战法槽与韬略解锁只消耗铜币，不吃同名卡。这是对比传统卡牌 SLG 最激进的一刀。</li>
+    <li><strong>城建线：</strong>主城建筑升级解锁兵营、工坊、科技；练兵所支持自动升级，减少日常操作。</li>
+    <li>职业线：赛季内可选择与转换职业，职业等级随玩法行为成长。</li>
+    <li>赛季传承：赛季结算重置沙盘，<strong>仅保留武将</strong>。养成成果被压缩到"卡池"这一个维度。</li>
+  </ul>
+  <div class="callout g"><b>设计意图：</b>这是一套<strong>"高宽度、低深度"</strong>的养成结构——横向系统很多，但纵向深度被刻意削平（重置战法免费、置换等级免费、槽位铜币解锁）。目的很明确：<strong>让新玩家和回归玩家能在一个赛季内追上大部队</strong>，从而把竞争焦点从"谁养得深"转移到"谁打得聪明"。</div>
+
+  <h3>4.3 社交</h3>
+  <p>社交在本作里就是玩法本体，不是外挂上去的系统。沙盘争夺的最小有效单位是同盟，个人无法独立完成任何有意义的战略目标。详见第 08 节。</p>
+
+  <h3>4.4 交易</h3>
+  <p><strong>几乎没有自由交易系统。</strong>资源（粮草、铁矿、木材、石料）不可交易、不可购买；货币分铜币（游戏内免费产出，用于养成消耗）与黄金（付费 + 活动产出）两层。设计上通过关闭玩家间资源流通，从根源上杜绝了打金工作室与资源付费。这是"不卖资源"能成立的制度前提，而非单纯的商业道德。</p>
+
+  <h3>4.5 战斗结算与数值的深层结构</h3>
+  <p>玩法清单只是表层。真正决定"这个游戏为什么必须这样设计"的，是战斗结算的链路与数值的堆叠方式。</p>
+
+  <h4>战斗结算的完整链路</h4>
+  <div class="card">
+    <ol style="margin-bottom:0">
+      <li><b>布阵</b>——3 武将 + 兵种 + 阵型（箕形 / 雁形等）决定前后排站位与初始增益</li>
+      <li><b>属性结算</b>——武力 / 智力 / 统率 / 先攻 / 魅力五项，开战前所有被动型增益先行结算</li>
+      <li><b>出手序</b>——按先攻排序，<b>这是整个战斗的元变量</b></li>
+      <li><b>逐回合判定</b>——主动战法按发动率判定 → 普通攻击 → 追击战法判定 → 指挥 / 被动战法按条件触发</li>
+      <li><b>伤害结算</b>——兵刃 / 谋略两类，乘以增减伤系数后扣减兵力</li>
+      <li><b>状态叠加</b>——技穷 / 缴械 / 畏惧 / 妖术 / 灼烧等，影响后续回合的判定结果</li>
+    </ol>
+  </div>
+  <div class="callout"><b>关键洞察：先攻才是这个游戏的元属性。</b>先攻决定出手顺序，出手顺序决定"控制链"能否成立——技穷、缴械这类战法只要先手释放，等于直接废掉对方一回合的输出。<strong>在一个没有手动操作的战斗系统里，谁先动手就是最大的技术变量。</strong>所以配将时"抢速"的真正含义是争夺回合制博弈的先手权，这也解释了为什么速度相关的兵种特性（神射、游骑）与装备词条价值长期居高不下。</div>
+
+  <h4>为什么"自动战斗"反而让配将更深</h4>
+  <p>手动操作会把胜负的一部分归因于操作水平；自动战斗则把胜负 100% 归因于"开打前的决策"。这意味着配将（武将 + 战法 + 韬略 + 装备 + 坐骑 + 阵型 + 兵种 + 加点）成为唯一的技术出口。三谋把试错成本压到极低（战法重置、等级置换只耗铜币），等于在制度上鼓励玩家不断迭代配将。<strong>本作"策略乐趣"的主要来源就建立在这一层</strong>。代价同样明确：战斗过程退化为"看结果"，对偏爱操作参与感的玩家吸引力有限，这也是它与强调实时操作的 SLG 之间最根本的体验分野。</p>
+
+  <h4>数值的"多层乘法"结构</h4>
+  <p>把一个武将的强度拆开，它是由这些层叠加而成的：</p>
+  <table>
+    <thead><tr><th style="width:150px">层级</th><th>内容</th><th style="width:170px">性质</th></tr></thead>
+    <tbody>
+      <tr><td><b>武将等级 / 星级</b></td><td>基础属性成长</td><td>通用养成</td></tr>
+      <tr><td><b>自带战法红度</b></td><td>由星级与金印共同提升</td><td>绑定武将</td></tr>
+      <tr><td><b>装配战法 ×2</b></td><td>决定流派方向</td><td>可流通（铜币重置）</td></tr>
+      <tr><td><b>韬略 / 藏品韬略</b></td><td>被动增益，30 / 35 级逐步解锁</td><td>赛季产出</td></tr>
+      <tr><td><b>装备 / 坐骑</b></td><td>属性 + 特技 / 特效</td><td>赛季仓库传承</td></tr>
+      <tr><td><b>兵种特性</b></td><td>3 人同兵种触发（神射 / 游骑 / 枪锋 / 坚盾）</td><td>阵容约束</td></tr>
+      <tr><td><b>职业 / 阵营科技</b></td><td>全队增益</td><td>赛季角色</td></tr>
+      <tr><td><b>升品（金印）</b></td><td>+1% ~ +5% 增减伤，同时提升自带战法红度</td><td>付费深度</td></tr>
+    </tbody>
+  </table>
+  <p>这是一个多层乘法结构：每层独立加成，叠加后强度呈指数级放大。它有两个必然结果——第一，"满配"与"半配"的战力差距会非常大，这是乘法结构本身带来的结果，跟数值调不调没关系；第二，升品系统为什么能成为付费深度也一目了然：它在乘法结构的最上层又加了一层，而且这是唯一可以无限细分的一层（每个武将都有 5 个专属金印）。</p>
+
+  <h4>新系统的真实功能：在旧体系上再叠一层</h4>
+  <p>回看各赛季新增的内容——藏品韬略、衍义战法、封侯拜将的能力、演义事件、砥兵砺伍——会发现一个共同点：它们绝大多数是<strong>在既有的多层结构上再叠一层</strong>，而不是替换掉原有的层。每叠一层，老武将的强度就被重新定义一次，这既是 meta 更替的机制基础，也是新卡池能持续产生付费意愿的原因。但代价同样清晰：层数越多，新手追赶越难，数值平衡的难度呈指数上升。这为后文第 13 章"复杂度膨胀"提供了机制层面的解释。</p>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="s5">
+  <h2><span class="num">05</span>游戏系统脑图</h2>
+  <div class="lead">系统全貌：六条主干，全部汇流到"赛季沙盘争夺"这一个终点。</div>
+  <div class="mind">
+    <div class="mind-root">三国：谋定天下 · 系统总览</div>
+    <div class="mind-row">
+      <div class="mind-col"><div class="h" style="background:#A83A2C">战斗</div><ul>
+        <li>部队（3 武将 + 兵种 + 阵型）</li><li>战法 / 韬略 / 装备坐骑</li><li>自动回合结算</li><li>兵种与属性克制</li><li>PVE 土地守军 / 剧情关</li></ul></div>
+      <div class="mind-col"><div class="h" style="background:#2F6B5A">养成</div><ul>
+        <li>武将等级 / 置换</li><li>战法解锁与重置（铜币）</li><li>韬略 / 藏品韬略 / 衍义战法</li><li>装备 · 坐骑 · 缘分 · 信物</li><li>自创武将（逐鹿风华）</li></ul></div>
+      <div class="mind-col"><div class="h" style="background:#2E5A82">城建</div><ul>
+        <li>主城内城 / 外城</li><li>兵营 · 工坊 · 科技</li><li>练兵所（自动升级）</li><li>主城保底资源地</li><li>方略（务农/富国/机动/戎机）</li></ul></div>
+      <div class="mind-col"><div class="h" style="background:#9C7A3C">职业</div><ul>
+        <li>奇佐 · 镇军 · 神行</li><li>青囊 · 司仓 · 天工</li><li>职业等级与赛季转职</li><li>职业专属计策与建筑</li><li>同盟职业配比</li></ul></div>
+      <div class="mind-col"><div class="h" style="background:#7A5C9E">社交</div><ul>
+        <li>同盟 / 官员 / 外交（友盟）</li><li>指挥体系与集结</li><li>预约攻城 · 委托</li><li>赛季频道 · 战报</li><li>跨服问鼎 / 全民赛事</li></ul></div>
+      <div class="mind-col"><div class="h" style="background:#5F5E5A">赛季</div><ul>
+        <li>剧本（每赛季换新）</li><li>阵营划分与选州</li><li>阶段结算与重置</li><li>霸业 / 问鼎名额</li><li>赛季商店 · 传承</li></ul></div>
+    </div>
+  </div>
+  <p class="src">注：系统随赛季迭代持续增删（如衍义战法、天下谋弈、砥兵砺伍、治国安民等为后期赛季新增），脑图列出的是稳定主干。</p>
+
+  <h3>5.1 六条主干不是并列关系，而是一条依赖链</h3>
+  <p>这张脑图容易被误读成"六个平行的功能模块"。实际上它们存在明确的单向依赖：</p>
+  <div class="callout"><b>赛季</b>决定剧本 → <b>剧本</b>决定地图与规则 → <b>规则</b>决定哪些职业有价值 → <b>职业</b>决定同盟内部分工 → <b>分工</b>决定每个人的养成优先级 → <b>养成</b>最终回流到<b>战斗</b>，成为下一轮博弈的筹码。</div>
+  <p>这条链的解释力很强，它说明了三件事：</p>
+  <ul>
+    <li><b>为什么赛季更新能"牵一发而动全身"</b>——改动地图规则（链条第二环），会沿链条逐级传导，最终改变玩家的养成目标与配将思路。这也是"每个赛季像在玩新游戏"的机制来源。</li>
+    <li><b>为什么职业系统是设计支点</b>。它处在链条中段，向上承接剧本规则，向下决定社交分工。职业价值一旦变化，整条链的资源配置都会重排，这就是第 4.2 节所说的"职业配比即组织变革"。</li>
+    <li><b>为什么减负必须做在链条末端</b>——操作负担集中在"战斗"与"养成"两环，所以自动铺路、预约攻城、铜币重置这类改动能立竿见影；而如果只改前端（比如简化界面），玩家的实际负担并不会下降。</li>
+  </ul>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="s6">
+  <h2><span class="num">06</span>核心玩法循环</h2>
+  <div class="lead">循环要分四层看：分钟、小时、日、赛季。不同时间尺度驱动的东西并不一样。</div>
+
+  <h3>6.1 四层循环结构</h3>
+  <table>
+    <thead><tr><th style="width:90px">尺度</th><th style="width:200px">玩家在做什么</th><th>驱动情绪</th></tr></thead>
+    <tbody>
+      <tr><td><b>分钟级</b></td><td>选目标地 → 系统自动铺路 → 出征 → 看战报 → 补兵 / 补给</td><td>即时反馈。自动铺路把这一步从"操作"压缩成"决策"</td></tr>
+      <tr><td><b>小时级</b></td><td>开荒打地、升城建、调兵遣将、参与攻城、布置职业建筑</td><td>成长感与规划感。单次有效游玩约 30–45 分钟</td></tr>
+      <tr><td><b>日级</b></td><td>日常任务、练兵、辎重运输、响应同盟集结、职业协同、外交沟通</td><td>归属感与责任压力。<strong>预约攻城让"打卡"变成"报名"</strong></td></tr>
+      <tr><td><b>赛季级</b><br>（30–45 天）</td><td>开荒发育 → 夺资源州 → 进中心州 → 阶段结算 → 霸业 / 问鼎 → 结算重置</td><td>史诗感与周期性重生。重置机制让"落后"不再等于"出局"</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.2 赛季主循环</h3>
+  <div class="card" style="padding:26px">
+  <svg viewBox="0 0 900 300" width="100%" role="img" style="display:block">
+    <title>赛季主循环</title>
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <g font-family="PingFang SC,Microsoft YaHei,sans-serif">
+      <rect x="20" y="100" width="150" height="62" rx="9" fill="#EAF2EF" stroke="#2F6B5A" stroke-width="1"/>
+      <text x="95" y="123" text-anchor="middle" font-size="14" font-weight="700" fill="#20493D">开荒发育</text>
+      <text x="95" y="143" text-anchor="middle" font-size="11.5" fill="#2F6B5A">打地 · 城建 · 配将</text>
+
+      <rect x="205" y="100" width="150" height="62" rx="9" fill="#EAF0F6" stroke="#2E5A82" stroke-width="1"/>
+      <text x="280" y="123" text-anchor="middle" font-size="14" font-weight="700" fill="#1C3D5A">资源州争夺</text>
+      <text x="280" y="143" text-anchor="middle" font-size="11.5" fill="#2E5A82">同盟扩张 · 外交</text>
+
+      <rect x="390" y="100" width="150" height="62" rx="9" fill="#FAEDEA" stroke="#A83A2C" stroke-width="1"/>
+      <text x="465" y="123" text-anchor="middle" font-size="14" font-weight="700" fill="#7A2A1F">中心州会战</text>
+      <text x="465" y="143" text-anchor="middle" font-size="11.5" fill="#A83A2C">职业协同 · 攻城</text>
+
+      <rect x="575" y="100" width="150" height="62" rx="9" fill="#F7F1E3" stroke="#9C7A3C" stroke-width="1"/>
+      <text x="650" y="123" text-anchor="middle" font-size="14" font-weight="700" fill="#6B5223">阶段结算</text>
+      <text x="650" y="143" text-anchor="middle" font-size="11.5" fill="#9C7A3C">积分 · 名额分配</text>
+
+      <rect x="760" y="100" width="120" height="62" rx="9" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="1"/>
+      <text x="820" y="123" text-anchor="middle" font-size="14" font-weight="700" fill="#2C2C2A">赛季重置</text>
+      <text x="820" y="143" text-anchor="middle" font-size="11.5" fill="#5F5E5A">仅保留武将</text>
+
+      <path d="M172 131 H203" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M357 131 H388" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M542 131 H573" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M727 131 H758" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+      <path d="M820 164 V210 Q820 232 800 232 H100 Q80 232 80 210 V164" fill="none" stroke="#A83A2C" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+      <text x="450" y="252" text-anchor="middle" font-size="12.5" font-weight="700" fill="#A83A2C">新赛季 · 新剧本 · 所有人回到同一起跑线</text>
+
+      <text x="450" y="40" text-anchor="middle" font-size="12" fill="#7A7268">每阶段通常伴随：目标切换 · 战场重置 · 名额重分配</text>
+      <line x1="80" y1="55" x2="820" y2="55" stroke="#E5DFD4" stroke-width="1" stroke-dasharray="3 3"/>
+    </g>
+  </svg>
+  </div>
+
+  <h3>6.3 单局内的微循环（战斗—补给）</h3>
+  <p>出征 → 消耗辎重/兵力 → 战损 → 回城或前线补给 → 再出征。辎重线是关键：远征距离越远补给成本越高，敌方奇袭粮道可直接掐断进攻节奏。这让"打不打得下"之外多了一层"撑不撑得住"，是三谋区别于纯兵力对撞 SLG 的核心战术变量。</p>
+  <div class="callout"><b>拆解观点：</b>三谋循环设计的精髓在于。<strong>它砍掉了循环中的"操作耗时"，但保留了"决策密度"</strong>。自动铺路省掉的是点击，没省掉"往哪打"；预约攻城省掉的是蹲点，没省掉"投不投、投多少兵"。这是"减负不减趣"的成立条件。</div>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="s7">
+  <h2><span class="num">07</span>游戏经济系统</h2>
+  <div class="lead">不卖资源的 SLG，经济系统反而更值得看：少了一条泄洪道，闭环得自己转起来。</div>
+  <table>
+    <thead><tr><th style="width:110px">资源</th><th style="width:170px">产出途径</th><th style="width:170px">消耗途径</th><th>设计作用</th></tr></thead>
+    <tbody>
+      <tr><td><b>粮草 / 木材 / 铁矿 / 石料</b></td><td>占领土地（主城自带保底地）、城建产出、屯田、活动</td><td>城建升级、科技研究、征兵</td><td>基础循环。主城保底资源地确保前期不被抢地卡死，从源头减少抢地纠纷</td></tr>
+      <tr><td><b>辎重</b></td><td>城池存储、运输、职业（司仓）补给</td><td>部队远征消耗</td><td>战术级资源。决定进攻半径与持续作战能力</td></tr>
+      <tr><td><b>精铁</b></td><td>铁矿厂、霸业阶段解锁</td><td>建造攻城大营、宣战攻城</td><td><strong>同盟级稀缺资源</strong>。设上限（如弈定江淮前期 3000 上限）→ 强制同盟做战略取舍，是节奏控制器</td></tr>
+      <tr><td><b>铜币</b></td><td>游戏内免费产出（任务、活动、主线）</td><td>战法重置、武将置换、槽位解锁、韬略重修</td><td>本作经济的枢纽。把养成纠错成本从"付费/同名卡"改为"免费铜币"，是"降氪"的核心杠杆</td></tr>
+      <tr><td><b>黄金</b></td><td>付费 + 少量活动赠送</td><td>求贤令（抽卡）、外观、部分便利道具</td><td>唯一硬通货，且不流向战力资源</td></tr>
+      <tr><td><b>荣誉点 / 赛季积分</b></td><td>赛季行为、同盟贡献</td><td>赛季商店兑换、霸业名额判定</td><td>把"参与"转化为可兑现回报，稳定中腰部玩家</td></tr>
+    </tbody>
+  </table>
+  <h3>经济闭环特征</h3>
+  <div class="grid3">
+    <div class="card"><h4 style="margin-top:0;color:var(--green)">单向阀设计</h4><p style="font-size:13.5px;margin:0">资源只进不出、不可交易、不可购买。杜绝了工作室与资源通胀，代价是<strong>放弃了资源付费这条高 ARPU 路径</strong>。</p></div>
+    <div class="card"><h4 style="margin-top:0;color:var(--blue)">赛季性通缩</h4><p style="font-size:13.5px;margin:0">赛季重置清空土地、建筑、资源，只留武将。<strong>用周期性归零解决长线 SLG 的通货膨胀难题</strong>。</p></div>
+    <div class="card"><h4 style="margin-top:0;color:var(--gold)">稀缺性外置</h4><p style="font-size:13.5px;margin:0">个人层面不缺资源，稀缺被转移到<strong>同盟层面（精铁、户口、名额）</strong>，从而把竞争焦点推向组织协作。</p></div>
+  </div>
+</section>
+
+<!-- ============ 08 ============ -->
+<section id="s8">
+  <h2><span class="num">08</span>社交与同盟生态</h2>
+  <div class="lead">SLG 的留存不在系统里，在同盟群里。</div>
+  <h3>8.1 组织结构</h3>
+  <p>同盟（数十至数百人）→ 官员层（盟主 / 副盟主 / 指挥 / 管理）→ 战队 / 小队 → 个人。同盟是<strong>唯一的战力放大器</strong>：攻城需要集结、霸业名额按同盟分配、中心州争夺以同盟为单位推进。</p>
+  <h3>8.2 职业配比带来的组织变革</h3>
+  <div class="callout g"><b>关键洞察：</b>六职业设计真正要解决的是 SLG 的老大难——"付费深度决定同盟地位"，跟"玩法多样性"关系不大。当一个盟需要天工造器械、司仓保补给、青囊做治疗、神行偷粮道时，纯战力玩家的不可替代性就被稀释了，中低氪玩家获得明确的功能性位置。这是三谋社交生态健康度的重要来源。</div>
+  <h3>8.3 社交压力的来源与缓释</h3>
+  <table>
+    <thead><tr><th style="width:180px">压力点</th><th>本作的缓释设计</th></tr></thead>
+    <tbody>
+      <tr><td>攻城必须按时上线打卡</td><td>一键预约攻城：提前报名，到点自动参与，无需蹲守</td></tr>
+      <tr><td>抢地内卷、同盟内部纠纷</td><td><strong>主城自带不可被占领的资源地</strong>，前期资源有保障</td></tr>
+      <tr><td>练兵升级需反复刷本</td><td>练兵所自动升级，慢节奏也不会被甩开</td></tr>
+      <tr><td>配将试错成本高</td><td>武将等级可无损置换、战法重置仅耗铜币</td></tr>
+      <tr><td>劣势方长期无望（雪球效应）</td><td>赛季/阶段战场重置机制（阶段结算后清空归属与建筑、攻防身份轮替、中心区重置）</td></tr>
+      <tr><td>盟主管理负担重</td><td>自动铺路连地、委托托管、下线委托</td></tr>
+    </tbody>
+  </table>
+  <h3>8.4 生态风险</h3>
+  <ul>
+    <li>强绑定的双刃剑：社交是留存核心，也是流失核心——指挥离职、同盟解散、盟内矛盾会直接导致成片玩家弃坑。</li>
+    <li><strong>管理者的隐性工作量：</strong>减负主要减的是"执行层"，同盟指挥的"决策层"负担（路线规划、精铁分配、阶段战略选择、同盟合议决策）反而在随赛季机制复杂度上升。</li>
+    <li>种田玩家的边缘化：赛季节奏加快后，纯发育型玩家的参与感和话语权会被进一步压缩。</li>
+  </ul>
+</section>
+
+<!-- ============ 09 ============ -->
+<section id="s9">
+  <h2><span class="num">09</span>数值 · 付费 · 商业化</h2>
+  <div class="lead">一款主动放弃资源付费的 SLG，靠什么赚钱？</div>
+  <div class="grid4" style="margin-bottom:20px">
+    <div class="stat"><div class="v">0</div><div class="l">VIP 系统</div></div>
+    <div class="stat"><div class="v">不售卖</div><div class="l">资源 / 加速道具</div></div>
+    <div class="stat"><div class="v">20 抽</div><div class="l">橙卡保底（报道值）</div></div>
+    <div class="stat"><div class="v">8%</div><div class="l">橙卡出率（报道值）</div></div>
+  </div>
+  <p class="src">出率与保底为公开媒体报道口径，非本人实测，正式引用前建议以游戏内公示概率为准。</p>
+
+  <h3>9.1 付费点结构</h3>
+  <table>
+    <thead><tr><th style="width:130px">付费点</th><th style="width:90px">类型</th><th>说明与设计意图</th></tr></thead>
+    <tbody>
+      <tr><td><b>求贤令（抽卡）</b></td><td>核心收入</td><td>获取武将与战法。<strong>无锁卡机制</strong>、保底次数低、每日免费/半价各一次，以低单价 + 高获取感维持抽卡意愿，而非靠稀缺性逼氪</td></tr>
+      <tr><td><b>赛季战令 / 手册</b></td><td>稳定收入</td><td>付费解锁进阶奖励，绑定单赛季活跃，天然适配赛季制</td></tr>
+      <tr><td><b>外观 / 皮肤</b></td><td>高毛利</td><td>武将外观、头像框、纪念道具。不涉战力，口碑友好</td></tr>
+      <tr><td><b>月卡 / 礼包</b></td><td>留存型</td><td>低门槛持续付费，提升留存而非拉开战力</td></tr>
+      <tr><td><b>赛事 / 联动</b></td><td>品牌向</td><td>全民赛事、跨界联动（如体育联名服），承担拉新与品牌曝光</td></tr>
+    </tbody>
+  </table>
+
+  <h3>9.2 商业化逻辑：一次主动的取舍</h3>
+  <div class="card" style="border-left:4px solid var(--red)">
+    <p style="margin-bottom:10px">传统三国 SLG 的收入支柱是<strong>资源加速与养成深度</strong>（卖粮草、卖加速、卖 VIP 等级）。三谋把这条支柱拆了，换来的是：</p>
+    <ul style="margin-bottom:0">
+      <li>获客端："不肝不氪"成为最强的传播素材，在 B 站生态内形成自传播，获客成本显著低于同品类。</li>
+      <li><strong>留存端：</strong>平民与中氪玩家的赛季存活率提升，同盟生态不易因头部流失而崩塌。</li>
+      <li>收入端：改为"低 ARPU × 大基数 + 赛季脉冲"模型，靠赛季首日的集中付费冲榜（新赛季新卡池 + 战令 + 开荒需求叠加）。</li>
+    </ul>
+  </div>
+  <h3>9.3 这套模型的代价</h3>
+  <ul>
+    <li>ARPU 天花板受限：砍掉资源付费 = 砍掉了 SLG 最大的深氪空间，收入高度依赖用户规模。</li>
+    <li><strong>付费深度不足 → 头部玩家成就感缺口：</strong>大 R 缺少"碾压式"的付费出口，长线可能转向外观与收藏。</li>
+    <li>收入脉冲化：流水高度集中在赛季更新节点，非更新期容易滑落，对赛季内容产能形成刚性依赖。</li>
+  </ul>
+</section>
+
+<!-- ============ 10 ============ -->
+<section id="s10">
+  <h2><span class="num">10</span>赛季制设计（本作核心）</h2>
+  <div class="lead">本作最值得拆的部分。赛季在这里不只是运营节奏，它就是产品形态本身。</div>
+
+  <h3>10.1 赛季体系：三段式结构演进</h3>
+  <p>每 30–45 天为一个赛季，沙盘、土地、城池、建筑全部重置，仅传承武将；同时更换一个全新剧本（新的历史背景、新的地图结构、新的核心机制、新的结算规则）。玩家在赛季初重新选州、选阵营、加入同盟，从零开始争夺霸业 / 问鼎名额。</p>
+  <p>而三谋的赛季体系本身也经历了三个阶段，这个演进过程比单个剧本更值得拆：</p>
+  <table>
+    <thead><tr><th style="width:150px">阶段</th><th style="width:170px">范围</th><th>设计意图</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 固定线性赛季</b></td><td>S1 – S3</td><td>所有玩家进入同一剧本，规则稳定、坡度平缓。作用是建立统一的认知基线——把开荒、攻城、同盟、霸业这套基础语言教给所有人。</td></tr>
+      <tr><td><b>② 问鼎赛季（W 剧本）</b></td><td>W1 / S4 起至今</td><td>每个剧本 = 一个历史舞台 + 一套规则级新机制。赛季从"运营节奏"升级为"内容产品"，每次上线都是一次小型资料片发布。</td></tr>
+      <tr><td><b>③ 自选剧本</b></td><td>后期开放</td><td>玩家可自由选择进入哪个剧本。<strong>这是被严重低估的一步</strong>：它把赛季内容从"一次性消耗品"变成了"可复用资产库"——老剧本不再随着新赛季上线而作废，玩家的偏好差异被制度性容纳。</td></tr>
+    </tbody>
+  </table>
+  <div class="callout g"><b>拆解观点：</b>自选剧本解决的是赛季制 SLG 最隐蔽的一个矛盾。<strong>高频创新必然带来高失败率</strong>。当所有玩家被迫进入同一个新剧本时，一个机制设计失误就是全服级别的口碑事故；而开放自选后，新剧本变成了"多一个选项"，风险被摊薄，老剧本继续承接保守型玩家。<strong>这是用产品结构对冲创新风险，而非常规的内容运营思维。</strong></div>
+
+  <h3>10.2 全部赛季剧本一览</h3>
+  <table>
+    <thead><tr><th style="width:100px">编号</th><th style="width:150px">剧本名</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td colspan="3" style="background:#F5F1E9;font-weight:700;color:var(--ink);font-size:13px">前置固定赛季（线性，无独立剧本名机制）</td></tr>
+      <tr><td><b>S1</b></td><td>初始赛季</td><td>无单独剧本名。基础教学与认知建立</td></tr>
+      <tr><td><b>S2</b></td><td>英雄觅处</td><td>延续基础框架</td></tr>
+      <tr><td><b>S3</b></td><td>风云再起</td><td>前置赛季收尾，此后进入问鼎赛季体系</td></tr>
+      <tr><td colspan="3" style="background:#F5F1E9;font-weight:700;color:var(--ink);font-size:13px">问鼎赛季剧本（W 剧本，按上线顺序）</td></tr>
+      <tr><td><b>W1 / S4</b></td><td><b style="color:var(--red)">九州鼎沸</b></td><td><b style="color:var(--red)">◆ 深度参与</b>　2024 年度剧本。沙盘地图全面革新，引入险要之地与九州议事，见 10.4</td></tr>
+      <tr><td><b>W2 / S5</b></td><td><b style="color:var(--red)">应天受命</b></td><td><b style="color:var(--red)">◆ 深度参与</b>　观星八卦 + 锦囊妙计，奇策打破职业界限，见 10.4</td></tr>
+      <tr><td><b>W3 / S6</b></td><td>群雄争锋</td><td>—</td></tr>
+      <tr><td><b>W4 / S7</b></td><td><b style="color:var(--red)">汉祚黄天</b></td><td><b style="color:var(--red)">◆ 深度参与</b>　首个非对称阵营对抗（汉室 vs 黄巾），首引 AI 精锐大营，见 10.4</td></tr>
+      <tr><td><b>W5 / S8</b></td><td>隆中对</td><td>蜀汉 vs 曹魏 4V4 对称地图；水攻系统（河堤蓄水、决水溃堤）；自创武将"逐鹿风华"；结缘信物</td></tr>
+      <tr><td><b>W6 / S9</b></td><td><b style="color:var(--red)">业铸山河</b></td><td><b style="color:var(--red)">◆ 深度参与</b>　南北对抗 + 旧京"德昭万民"；六大职业焕新；演义玩法，见 10.4</td></tr>
+      <tr><td><b>W7 / S10</b></td><td>南郡烽起</td><td>亦称"南郡风起"</td></tr>
+      <tr><td><b>W8 / S11</b></td><td>四海归心</td><td>—</td></tr>
+      <tr><td><b>W9</b></td><td><b style="color:var(--red)">弈定江淮</b></td><td>2026.01.10 上线。曹魏 vs 孙吴 3V3；<b>庐江弈战三轮制</b>——每轮结算后「雾气将至」清空战场归属与建筑、主城退回出生州；三轮地图连通性逐轮放开；中转郡盲选；天下谋弈战略卡（按积分从低到高，落后方优先选）；锁钥之城与从城</td></tr>
+      <tr><td><b>W10</b></td><td>兴汉讨逆</td><td>2026.02.28 上线。PVEVP 双阶段：先全服共讨董卓 NPC，再阵营京畿决战；火焚京城 5 天倒计时；立体宫城（复道 / 飞阁 / 阙门）</td></tr>
+      <tr><td><b>W11</b></td><td>赤壁惊涛</td><td>赤壁题材，完整水战沙盘体系</td></tr>
+      <tr><td><b>W12</b></td><td>陈仓之围</td><td>—</td></tr>
+      <tr><td><b>W13</b></td><td>武侯遗志</td><td>诸葛亮北伐题材</td></tr>
+      <tr><td><b>W14</b></td><td>二士争功</td><td>当前最新赛季。攻防身份轮换（剑阁争锋两轮互换 → 成都逐鹿终局）</td></tr>
+    </tbody>
+  </table>
+  <p class="src">赛季编号与剧本名以官方口径为准；W9 之后 W 与 S 编号的对应关系建议以官方公告复核。<b style="color:var(--red)">◆</b> 为本拆解者深度参与的赛季，共 7 个（含 S1–S3 前置赛季），问鼎赛季每赛季在线 30 天以上。弈定江淮经本人确认为独立赛季，列于 W9（四海归心之后、兴汉讨逆之前），其后剧本编号依次后移一位。</p>
+  <div class="callout g"><b>排序已确认：</b>弈定江淮列于 W9，兴汉讨逆顺延为 W10。这与公开报道的日期也完全自洽——W9 弈定江淮 2026.01.10 上线，W10 兴汉讨逆 2026.02.28 上线，<b>相隔恰好一个赛季周期</b>。此前关于"该剧本不在 W 主序列"的疑问至此消除。</div>
+
+  <h3>10.3 首赛季（S1）上线表现与流水</h3>
+  <p>2024 年 6 月 13 日公测。首赛季是本作"降肝减氪"定位的第一次市场验证，也是理解它后续为何把赛季制做成核心引擎的起点。</p>
+  <div class="grid4">
+    <div class="stat"><div class="v">第 3</div><div class="l">公测当日 iOS 游戏畅销榜</div></div>
+    <div class="stat"><div class="v">3.15 亿</div><div class="l">首月 iOS 端流水（媒体口径）</div></div>
+    <div class="stat"><div class="v">7.2 亿</div><div class="l">首月双端流水（Sensor Tower 预测）</div></div>
+    <div class="stat"><div class="v">100 万+</div><div class="l">首周下载量</div></div>
+  </div>
+  <table>
+    <thead><tr><th style="width:170px">口径</th><th style="width:180px">数据</th><th>来源与说明</th></tr></thead>
+    <tbody>
+      <tr><td>首周（6/13–6/19）</td><td>iOS + Android 双端约 <b>2.4 亿元</b></td><td>Sensor Tower 预测，招商证券行业研报引用</td></tr>
+      <tr><td>首月（6/13–7/13）</td><td>iOS + Android 双端约 <b>7.2 亿元</b></td><td>同上</td></tr>
+      <tr><td>首月</td><td>iOS 单端约 <b>3.15 亿元</b></td><td>媒体口径。与上方双端口径不冲突（iOS 单端约 3.15 亿，安卓端贡献其余部分）</td></tr>
+      <tr><td>首月</td><td>"或达 8 亿元"</td><td><span style="color:var(--red)">全平台估算口径，与上述两个数字差异较大，引用需谨慎，建议以七麦 / Sensor Tower 原始数据复核</span></td></tr>
+      <tr><td>榜单表现</td><td>公测当日空降 iOS 游戏畅销榜第 3，此后连续约一个月保持前十</td><td>七麦数据；B 站董事长陈睿亦公开提及"上线初期登上前三，此后一个月保持前十"</td></tr>
+      <tr><td>中期留存</td><td>截至 2024/10/31，畅销榜基本保持 <b>25 名以内</b></td><td>七麦数据</td></tr>
+      <tr><td>品类地位</td><td>2024 年 7 月力压《三国志·战略版》，成为国内收入最高的三国 SLG</td><td>Sensor Tower</td></tr>
+      <tr><td>公司层面</td><td>B 站游戏运营史上最快达成十亿流水的游戏；带动 B 站股价一周内涨约 18%</td><td>B 站财报与公开报道</td></tr>
+    </tbody>
+  </table>
+  <div class="callout y"><b>数据使用提醒：</b>首月流水存在 3.15 亿（iOS 单端）、7.2 亿（双端）、8 亿（全平台估算）三种口径。放进作品集时建议<b>只引用一种并注明来源与统计范围</b>，多口径并列反而显得没核实清楚。</div>
+  <p>怎么读这组数据：公测爆发（当日第 3、首月双端 7.2 亿）证明了"降肝减氪"是真实存在的需求，不是营销话术；而四个月后仍稳定在畅销榜 25 名以内，则说明它留住的是用户而非只赚到了首波热度。但也要看到。<strong>首月的高基数同时意味着后续增长压力，这恰恰是三谋后来把赛季更新做成固定流水脉冲的现实动因</strong>：每 6–7 周一个新剧本，本质是在不断重造一次小型的"开服首月"。</p>
+
+  <h3>10.4 四个深度参与赛季的改革拆解</h3>
+  <p>以下四个赛季为本拆解者深度参与（每赛季在线 30 天以上，同盟中坚力量位），机制梳理结合官方公告、赛季专题页与玩家社区攻略；"设计意图"与"代价"两栏为本人分析，非官方表述。</p>
+  <table>
+    <thead><tr><th style="width:120px">赛季</th><th style="width:90px">上线</th><th>一句话概括这次改革</th></tr></thead>
+    <tbody>
+      <tr><td><b>W1 / S4</b><br>九州鼎沸</td><td>2024.11</td><td>沙盘地图全面革新，用「险要之地」破解 SLG 的推推乐难题</td></tr>
+      <tr><td><b>W2 / S5</b><br>应天受命</td><td>2024 年末</td><td>观星八卦 + 锦囊妙计，给个人一条赛季内成长线，奇策打破职业壁垒</td></tr>
+      <tr><td><b>W4 / S7</b><br>汉祚黄天</td><td>2025.04</td><td>首个非对称阵营对抗（汉室 vs 黄巾），首次引入 AI 精锐大营与战意平衡器</td></tr>
+      <tr><td><b>W6 / S9</b><br>业铸山河</td><td>2025.07</td><td>旧京「德昭万民」重构核心目标价值；六大职业焕新；演义玩法</td></tr>
+    </tbody>
+  </table>
+
+  <h4>① W1 / S4 九州鼎沸 —— 让地形从背景板变成战术工具</h4>
+  <p>做了什么：① 全新沙盘地图，资源州整体连通，郡内新增「村庄」（占领一段时间后为郡府所在县提供战斗增益，易主后增益消失）与「险要之地 & 堡垒」（从内向外单向通行，其上可建堡垒，部队从堡垒出发获得增益）；②「九州议事」——赛季第 7 日开启、每 7 日一轮，各国按霸业积分 / 繁荣度 / 武勋决定选择顺序，处于劣势的国家优先选择战略卡，指挥官员决策、成员投票；③「赛季国策」可对争夺目标城池释放；④ 个人「政令台」，每周一、四刷新，从三个群策提案中采纳其一，提供养成 / 战斗 / 战场选择三类增益。</p>
+  <div class="callout g"><b>设计意图（制作组公开信原意，这是难得的完整推导链）：</b>传统 SLG 中"同盟的推进路线即为战场转移路线"，即玩家俗称的推推乐；防守方缺乏反击机会，导致战场战略纵深低。但<strong>若强行拉长纵深，又会造成局部僵持——双方打不到人、无法推进</strong>。制作组的解法是提出「险要之地」概念：<strong>用地缘远近、兵力调度、时间差去创造"动态的战略纵深"</strong>，既给防守方反打机会，又让进攻方能打出围点打援、声东击西。<br>这是一种很见功力的思路。它不靠加数值、不靠拉长地图，而是用规则制造纵深。</div>
+  <p><strong>代价：</strong>理解成本陡增。"险要之地 / 堡垒 / 村庄"三个新概念，叠加九州议事与政令台两套决策系统，同盟指挥需要重建一整套认知框架；九州议事按劣势优先选卡的规则，也让部分领先方产生了"赢了反而吃亏"的体感争议。</p>
+
+  <h4>② W2 / S5 应天受命 —— 给个人一条赛季内成长线，并给职业系统松绑</h4>
+  <p>做了什么：①「观星八卦」——卦象（问卜获取、可自定义装配，拓展队伍战斗维度）+ 合卦（随赛季进程逐步融合并增强卦象之力，属赛季内养成）；②「锦囊妙计」三件套——锦囊（每日发牌，覆盖资源 / 进攻 / 防守 / 行军四个维度，打出即生效，可调整）、妙计（个人计策增益）、奇策（可学习并使用其他职业的技能，消耗次数择时施展）；③ 新增武将姜维、步练师、荀攸。</p>
+  <p><strong>设计意图：</strong>① 赛季重置只保留武将，个人在赛季内的"变强感"长期偏弱，卦象与合卦补上了这条赛季内成长曲线；② 奇策是对六职业系统的一次自我修正——职业分工带来了战术依赖，但也带来"选错职业等于一个赛季都别扭"的焦虑，奇策允许有限度跨职业取用技能，保留差异的同时给出容错；③ 锦囊每日发牌，给日常决策注入变量，避免赛季中段的日活退化成纯机械操作。</p>
+  <p>代价：卦象、锦囊、奇策三层随机叠加，单赛季理解负担进一步加重；问卜与发牌带来的随机性，也让硬核玩家对"可控性"产生质疑——策略游戏引入随机，永远是一场赌博。</p>
+
+  <h4>③ W4 / S7 汉祚黄天 —— 非对称对抗，本作到目前为止最有野心的一次</h4>
+  <p><strong>做了什么：</strong>① 首个非对称阵营对抗：黄巾（资源弱势方）拥有机动游斗、黄天纸马（修建后可传送兵力，最多集结 120 队）、避实击虚（无视连城机制）、玄术指令，建城迁城条件有优待；汉室（地理优势方）拥有烽火连营、千里驰援、扶危定倾，主城连通州郡，每日获朝廷免费资源补给，城防科技固守 / 强攻齐全，烽火台可集结 400 队；②「封侯拜将」——积累功名 / 威望晋升个人官职，解锁举荐专属名将、训练援军部队、逆转战法属性（智武互换）等能力；③「友盟协作」——同阵营同盟自发结盟，驰援无阻；④ 首次引入 AI 机制——180 人以上、20 级同盟激战时累计战意值，消耗战意建造 AI 精锐大营（黄巾义士 / 汉室精锐），可对其下达攻防指令，AI 依战场局势动态支援；⑤ 多线霸业结局——黄巾大胜为"霸业积分领先下攻破洛阳"，汉室大胜为"霸业积分领先下镇压各方黄巾"；⑥ 预选州即锁定阵营。</p>
+  <div class="callout g"><b>设计意图：</b>① <strong>非对称解决的是"对称但无聊"</strong>——势均力敌的镜像地图极易打成拉锯消耗战，把双方做成完全不同的两套玩法，让"赢的方式"本身不同，对抗才有张力；② <strong>战意 + AI 大营是双层战场平衡器</strong>，项目组的自我表述非常精准：友盟协同是"空间维度上的攻守易形"，战意系统是"时间维度上的攻守易形"。这比简单的数值补偿高明得多。它给劣势方的是工具，不是属性；③ 封侯拜将把"个人在赛季中的晋升"显性化，用官职体系承接个人成就感，补上了 SLG 长期缺失的个人荣誉表达。</div>
+  <p>代价：非对称平衡是 SLG 设计中最难的一类——双方机制差异越大，数值与节奏调平的难度呈指数上升，"哪边更强"的社区争论几乎必然出现；AI 大营的介入也在一定程度上稀释了玩家个人操作的权重。</p>
+
+  <h4>④ W6 / S9 业铸山河 —— 把核心目标从"据点"改造成"积分引擎"</h4>
+  <p><strong>做了什么：</strong>① 南北阵营对抗，三大中心州（关中、中原、淮南）横贯东西，分割两大资源州（河朔、江汉），选州即定阵营；② 「旧京」+「德昭万民」——三个中心州州府为旧京，持续处于功能受限状态：无法迁城调兵委托、无法生产与存储辎重、城门耐久上限降低约 70%、城池共建失效，但宣战与建造攻城大营时间降至 5 分钟；占领中心州与资源州州府即获得德昭万民：「颂德」（占领期间归属同盟每隔一段时间永久增加霸业积分）与「隆运」（全阵营立国同盟累计绝世装备 / 坐骑拍卖掉落进度）；③ 新沙盘建筑——同盟关隘（仅友方可通过，成员在关隘战斗受伤降低）、山道（建造期双方不可通行，建成后仅己方可通行，用于翻山）、中立城寨（可调兵征兵，有固定辎重产量，打下后 30 分钟免战），配套同盟科技「神工鬼斧」；④ 「传檄而定」——打下出生州关卡后，资源州城池会在一段时间后自动出现攻城大营，无需玩家自行铺路建要塞；⑤ 六大职业焕新——每职业 1 项初始技能 + 6 项可选技能，玩家依战局自由选 4 项启用，赛季提供两次转职机会；⑥「演义玩法」——随霸业进程经历「洛阳焚毁 → 鼎盛新时」十个事件，关键节点二选一改变武将自带战法与兵种（袁绍、公孙瓒、张辽、甘宁、关羽、曹仁），高阶兵种（神射 / 游骑 / 枪锋 / 坚盾）随兵符回归；⑦ 霸业名额回归同盟积分而非个人积分。</p>
+  <div class="callout g"><b>设计意图：</b><strong>旧京是这四个赛季里最精妙的一处设计。</strong>它把核心目标从"战略据点"改造成了"积分引擎"。因为无法迁城调兵、无法存辎重，占住旧京并不能直接转化为推进优势，只能持续产出霸业积分。这一手干净地解决了传统 SLG 的"抢下中枢城池即锁定胜局"痼疾，让核心争夺点保持持续易手。其余几项也各有所指：传檄而定延续减负（砍掉铺路建要塞的重复劳动）；职业焕新 + 两次转职把职业从"赛季初一次性选择"变成"赛季内动态调整"；演义玩法用叙事化二选一承接个人情感投入；霸业名额回归同盟积分，则继续把竞争单位从个人拉回同盟。</div>
+  <p>代价："核心城池是负资产"这一反直觉设计，是否能被大众玩家普遍理解存疑，社区曾出现"打下来有什么用"的疑问；职业可选技能扩展到 6 选 4 后，Build 深度与理解门槛同步上升。</p>
+
+  <h3>10.5 四个赛季的改革主线：五条清晰的演进脉络</h3>
+  <p>把这四个赛季横着看，会发现改革并非随机发散，而是沿着五条主线持续推进：</p>
+  <table>
+    <thead><tr><th style="width:150px">主线</th><th style="width:130px">W1 九州鼎沸</th><th style="width:130px">W2 应天受命</th><th style="width:130px">W4 汉祚黄天</th><th>W6 业铸山河</th></tr></thead>
+    <tbody>
+      <tr><td><b>沙盘地形战术化</b></td><td>险要之地 / 堡垒 / 村庄</td><td>—</td><td>非对称地图</td><td>关隘 / 山道 / 城寨 / 旧京</td></tr>
+      <tr><td><b>平衡机制结构化</b></td><td>九州议事（劣势优先选卡）</td><td>—</td><td>战意系统 + AI 精锐大营</td><td>德昭万民（核心点非决胜点）</td></tr>
+      <tr><td><b>职业系统弹性化</b></td><td>—</td><td>奇策跨职业取技能</td><td>阵营科技完全分化</td><td>职业焕新 + 两次转职</td></tr>
+      <tr><td><b>个人成长线</b></td><td>政令台</td><td>观星八卦（合卦养成）</td><td>封侯拜将</td><td>演义（武将二选一）</td></tr>
+      <tr><td><b>操作减负</b></td><td>—</td><td>—</td><td>—</td><td>传檄而定，自动建攻城大营</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><b>核心判断：</b>三谋的赛季迭代有一条可复用的方法论。<strong>每个赛季至少引入一个"规则级"新机制，且这些机制高度集中在同一组问题上：降低雪球效应、提高翻盘可能、减少重复劳动、补足个人成长感</strong>。它做的其实是<strong>持续修补 SLG 的结构性缺陷</strong>，而不是堆内容量。这也解释了为什么它敢把"不卖资源"写进卖点——当竞争焦点被成功转移到策略与组织上时，资源的商业价值本来就在下降。</div>
+  <p>再补一个对照案例：本人未深度参与的「弈定江淮」（W9）也落在同一条主线上。它的「雾气将至」在每轮弈战结算后<strong>清空战场归属与全部建筑，主城退回出生州重新开始</strong>，优势方无法把这一轮的战果带进下一轮。这与九州议事（劣势优先选卡）、战意系统（劣势加速）、德昭万民（核心点非决胜点）属于同一套思路：给劣势方的是"重新开始"的机会，而不是数值补偿。把这几个赛季串起来看，三谋在平衡性上的方法论就很清楚了。它的做法是持续削弱"前期优势的可继承性"，而不是让双方一样强。</p>
+  <p class="src">各剧本机制整理自官方公告、赛季专题页与玩家社区攻略，具体数值与开放时间以正式服为准。</p>
+
+  <h3>10.6 赛季机制演进的内在逻辑</h3>
+  <div class="tl">
+    <div class="tl-i">
+      <div class="tl-d">S1 – S3 · 固定赛季期</div>
+      <div class="tl-t">建立共识：先把基础玩法教给所有人</div>
+      <p style="font-size:13.5px">无差异化剧本，规则稳定、坡度平缓。<strong>这一步的价值常被忽略。它为后续所有高频机制创新准备了可被复用的认知底盘。</strong>没有它，剧本化更新会直接把新玩家劝退。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">W1 · 问鼎赛季开端</div>
+      <div class="tl-t">从"换皮"转向"换规则"</div>
+      <p style="font-size:13.5px">九州鼎沸作为 2024 年度剧本，一次性带来新沙盘、险要之地、九州议事、政令台、赛季国策五套系统，<strong>确立了此后每个赛季的操作范式：一个历史舞台 + 一组规则级新机制</strong>。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">W1 – W2 · 机制创新期</div>
+      <div class="tl-t">引入改变战场规则的新变量</div>
+      <p style="font-size:13.5px">九州鼎沸的险要之地、九州议事、政令台；应天受命的观星八卦、锦囊妙计、奇策。<strong>每赛季至少一个"规则级"新机制</strong>，而不只是内容增量。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">W4 – W6 · 对抗结构重构期</div>
+      <div class="tl-t">改变"谁和谁打、怎么算赢"</div>
+      <p style="font-size:13.5px">汉祚黄天的非对称阵营 + AI 精锐大营 + 战意平衡器；业铸山河的旧京把核心目标从据点改造成积分引擎。<strong>竞技结构本身成为变量</strong>，公平性与翻盘空间被制度性保障。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">W9 – W14 · 当前阶段</div>
+      <div class="tl-t">赛季周期压缩至约 6–7 周，机制密度持续上升</div>
+      <p style="font-size:13.5px">从 W9 弈定江淮到 W14 二士争功，约 8 个月内推出 6 个剧本。<strong>更新频率换来了稳定的流水脉冲，也带来了内容产能与玩家学习成本的双重压力</strong>——每 6 周就要重新理解一套新规则，回归玩家的重入门槛被显著抬高。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">并行演进 · 自选剧本</div>
+      <div class="tl-t">从"逼所有人进新剧本"到"让玩家自己选"</div>
+      <p style="font-size:13.5px"><strong>结构层面的对冲。</strong>高频创新必然伴随高失败率，自选剧本让单个新机制的设计失误不再等同于全服事故，同时把历史剧本沉淀为长期可玩资产。</p>
+    </div>
+  </div>
+
+  <div class="callout"><b>核心判断：</b>把首赛季数据与后续赛季放在一起看，逻辑就非常清楚了：<strong>首赛季靠"品类差异化定位"一次性拿到双端约 7.2 亿首月流水，此后则靠赛季更新反复重造小型的"开服首月"</strong>——公开报道显示兴汉讨逆（W10）上线当日即冲进 iOS 畅销榜第 4 位。赛季制在三谋这里已不只是"重置进度"的运营手段，而是<strong>把新内容发布本身产品化</strong>：每个新赛季 = 一次小型资料片上线 = 一次流水脉冲。</div>
+
+  <h3>10.7 赛季制的三重价值</h3>
+  <div class="grid3">
+    <div class="card"><h4 style="margin-top:0;color:var(--red)">对玩家</h4><p style="font-size:13.5px;margin:0">周期性重生 → 新人/回归者可追上；失败被限定在一个赛季内，<strong>沉没成本可控</strong>，降低弃坑心理门槛。</p></div>
+    <div class="card"><h4 style="margin-top:0;color:var(--green)">对厂商</h4><p style="font-size:13.5px;margin:0">天然的<strong>版本节奏与收入脉冲</strong>；可用作实验场——新机制在单赛季内验证，不合适的下赛季就换掉。</p></div>
+    <div class="card"><h4 style="margin-top:0;color:var(--blue)">对生态</h4><p style="font-size:13.5px;margin:0">重置机制缓解滚服与战力固化，<strong>让"策略"而非"积累"重新成为胜负变量</strong>。</p></div>
+  </div>
+</section>
+
+<!-- ============ 11 ============ -->
+<section id="s11">
+  <h2><span class="num">11</span>目标用户</h2>
+  <div class="lead">上一章讲的是它不卖什么，这一章讲它选的是谁。</div>
+  <div class="grid2">
+    <div class="card" style="border-top:3px solid var(--red)">
+      <h4 style="margin-top:0">① 同盟指挥 / 管理型玩家</h4>
+      <p style="font-size:13.5px;margin-bottom:8px"><strong>占比小，影响力最大。</strong>享受路线规划、外交博弈、资源调度、成员管理。他们是同盟的骨架，也是留存枢纽。</p>
+      <p style="font-size:13px;color:var(--ink3);margin:0">需求：信息工具、指挥权限、决策空间。风险：负担过重。</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--green)">
+      <h4 style="margin-top:0">② 中重度策略玩家</h4>
+      <p style="font-size:13.5px;margin-bottom:8px"><strong>核心付费与内容消费群体。</strong>研究配将、战法组合、职业搭配、克制链，追求"以弱胜强"的技术成就感。</p>
+      <p style="font-size:13px;color:var(--ink3);margin:0">需求：meta 多样性、低试错成本。三谋用铜币重置精准命中此点。</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--gold)">
+      <h4 style="margin-top:0">③ 休闲 / 种田 / 社交玩家</h4>
+      <p style="font-size:13.5px;margin-bottom:8px"><strong>三谋重点争取的增量人群。</strong>被传统 SLG 的爆肝逼氪劝退，愿意为"轻松的三国体验"和同盟社交留下。</p>
+      <p style="font-size:13px;color:var(--ink3);margin:0">需求：不打卡、不被歧视、有功能性位置（司仓/青囊职业即为此设计）。</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--blue)">
+      <h4 style="margin-top:0">④ 三国文化情怀用户</h4>
+      <p style="font-size:13.5px;margin-bottom:8px">被题材、历史人物、经典战役吸引。三谋通过赛季剧本化（隆中对、二士争功）与经典影视演员联动持续承接这部分情感需求。</p>
+      <p style="font-size:13px;color:var(--ink3);margin:0">需求：历史还原度、名将收集、文化认同。</p>
+    </div>
+  </div>
+  <div class="callout g"><b>用户结构判断：</b>三谋做的最聪明的一步，是<strong>把 SLG 从"服务头部付费用户"转向"服务组织中腰部"</strong>。传统 SLG 的金字塔依赖塔尖，三谋则通过职业分工与减负，让塔身（②③类玩家）成为同盟运转的必需。这既是商业取舍，也是生态护城河。</div>
+
+  <h3>11.2 用户生命周期与流失节点</h3>
+  <p>把用户画像展开到时间轴上，才能看清他们是在哪里、因为什么离开的。</p>
+
+  <h4>新玩家的四个流失窗口</h4>
+  <table>
+    <thead><tr><th style="width:100px">时点</th><th style="width:160px">场景</th><th>流失原因</th></tr></thead>
+    <tbody>
+      <tr><td><b>D1</b></td><td>首日信息过载</td><td>开服第一天就要同时面对城建、打地、选职业、配将、找同盟五件事，新手引导难以覆盖全部 → 直接劝退</td></tr>
+      <tr><td><b>D3–D4</b></td><td>资源瓶颈期</td><td>城建升级的资源需求陡增，打地效率跟不上，出现"上线之后没事干"的空窗</td></tr>
+      <tr><td><b>D7</b></td><td>首次参与攻城</td><td>第一次集体作战。若所在同盟组织不力或指挥缺位，体验极差 → 对"同盟玩法"形成负面印象</td></tr>
+      <tr><td><b>D14–D21</b></td><td>首批中心州争夺</td><td>遭遇实力碾压（匹配失衡）。这是新玩家第一次真正感到"打不过"，也是最集中的流失窗口</td></tr>
+    </tbody>
+  </table>
+
+  <h4>赛季内的情绪曲线 —— 三谋最独特的地方</h4>
+  <div class="tl">
+    <div class="tl-i">
+      <div class="tl-d">开荒期 · D1–D7</div>
+      <div class="tl-t">高强度 + 高成就感</div>
+      <p style="font-size:13.5px">每天都在明显变强，进度是肉眼可见的。这是整个赛季情绪最高的阶段，也是拉新的最佳窗口。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">扩张期 · D8–D20</div>
+      <div class="tl-t">协作密集，疲劳开始累积</div>
+      <p style="font-size:13.5px">同盟协作最密集的阶段：铺路、打城、守关、外交。冲突开始增多，中腰部玩家的日程被同盟任务填满。<strong>这是"肝"的体感最强的阶段，尽管系统已经做足了减负</strong>。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">决战期 · D21–D30</div>
+      <div class="tl-t">情绪高峰，也是压力峰值</div>
+      <p style="font-size:13.5px">中心州争夺与霸业结算。赢的一方情绪拉满，输的一方开始出现"这个赛季没戏了"的摆烂心态。</p>
+    </div>
+    <div class="tl-i">
+      <div class="tl-d">结算后 · 3–7 天</div>
+      <div class="tl-t">空虚期：整个周期里最危险的窗口</div>
+      <p style="font-size:13.5px">沙盘重置、同盟暂时解散、所有积累归零。玩家突然失去目标，且此时<strong>竞品的新服/新赛季正好是抢量的最佳时机</strong>。三谋的应对方式是压缩赛季周期（约 6–7 周），把这段空虚期缩到最短。<strong>高频赛季更新不只是内容策略，更是一道留存防线</strong>。</p>
+    </div>
+  </div>
+  <div class="callout"><b>关键洞察：</b>赛季制的本质，是<strong>用周期性的"重新开始"替代了传统 SLG 的"进度停滞"</strong>。它解决的是"后期无事可做"，代价是把"无事可做"变成了每个周期规律性出现的固定产物——只是被压缩到了一个很短的窗口里。</div>
+
+  <h4>同盟生命周期的四阶段（用户流失的主通道）</h4>
+  <table>
+    <thead><tr><th style="width:150px">阶段</th><th style="width:130px">时间</th><th>特征</th></tr></thead>
+    <tbody>
+      <tr><td><b>组建期</b></td><td>开服前 – D3</td><td>招募、定职业配比、选州落位。指挥的核心工作是"排兵布阵"</td></tr>
+      <tr><td><b>鼎盛期</b></td><td>D4 – D20</td><td>人员齐整、指挥有效、战果稳定。同盟运转效率最高</td></tr>
+      <tr><td><b>衰退期</b></td><td>D20 – 结算</td><td>活跃度下滑，部分成员转躺平或旅游；管理成本上升、内部矛盾增多</td></tr>
+      <tr><td><b>解散 / 重组期</b></td><td>结算后</td><td>核心成员跟着指挥迁移，边缘成员流失。<b>这是用户流失最主要的通道</b></td></tr>
+    </tbody>
+  </table>
+  <p class="src">本条为本人基于 7 个赛季同盟经历的观察与归纳，非官方数据。</p>
+
+  <h4>三类玩家的流失原因差异</h4>
+  <div class="grid3">
+    <div class="card"><h4 style="margin-top:0;color:var(--red)">指挥 / 管理型</h4><p style="font-size:13.5px;margin:0"><b>累退。</b>不是被劝退，是自己撑不住——规划、调度、协调的决策负担逐赛季上升，而减负设计主要减的是执行层。这类人一走，带走的是一个同盟。</p></div>
+    <div class="card"><h4 style="margin-top:0;color:var(--green)">中坚力量型</h4><p style="font-size:13.5px;margin:0"><b>挫败退。</b>卡将、数值差距、匹配失衡三条同时作用。他们是最愿意投入的群体，也最容易因为"努力了还是打不过"而离开。</p></div>
+    <div class="card"><h4 style="margin-top:0;color:var(--gold)">休闲 / 种田型</h4><p style="font-size:13.5px;margin:0"><b>无聊退。</b>参与感被边缘化，缺乏存在感与话语权。赛季节奏越快，这类玩家越难找到自己的位置。</p></div>
+  </div>
+</section>
+
+<!-- ============ 12 ============ -->
+<section id="s12">
+  <h2><span class="num">12</span>优点与缺点</h2>
+  <div class="lead">评判标准：是否解决了品类的真实痛点，以及为此付出了什么代价。</div>
+  <div class="pros-cons">
+    <div class="pc good">
+      <h4>✓ 做得好的地方</h4>
+      <ol>
+        <li><b>把"降肝"做成产品级卖点，而不是功能补丁</b>自动铺路、预约攻城、练兵所自动升级、主城保底资源地、武将置换、战法重置。这些优化背后是同一条原则："砍操作、留决策"。它们是一整套重构，不是零散补丁，所以能被用户清晰感知并口耳相传。</li>
+        <li><b>赛季剧本化 = 把版本更新做成产品引擎</b>每赛季一个历史舞台 + 一个规则级新机制，上线即冲榜。<strong>把内容更新从成本项变成了增长项</strong>，这是本作最重要的商业创新。</li>
+        <li><b>职业系统拆解了"战力即地位"</b>六职业分工让治疗、屯田、器械、偷袭成为刚需，中低氪玩家获得不可替代性，从结构上改善了同盟生态与平民留存。</li>
+        <li><b>用制度保障公平，而非口头承诺</b>无锁卡、低保底、养成不吃同名卡、不卖资源无 VIP、战场阶段重置、战略卡向弱势方倾斜——公平性被写进了每一个系统，因此可信。</li>
+        <li><b>美术资产服务于机制可扩展性</b>地形、天气、立体建筑不只是好看，而是赛季创新的容器，让高频更新在技术上可持续。</li>
+        <li><b>赛季传承机制把"重置"的痛苦压到了最低</b>赛季重置听起来残酷，但三谋用一组配套设计做了缓冲：赛季仓库可将装备与坐骑带入新赛季（拓印背包，可通过云游四海活动扩容至各 4 件）、战法影本与兵符可传承、武将等级可无损置换。它执行的是一套清晰的取舍——保留"可迁移的资产"，清空"会引发滚雪球的积累"（土地、城池、资源、赛季积分）。重置的公平性与玩家的投入感因此得以兼顾，这是"敢重置"的底气所在。</li>
+        <li><b>叙事情怀的运营超出了游戏本身</b>赛季剧本与历史事件严格对应（隆中对、二士争功、赤壁惊涛各有史实蓝本）；2025 年"隆中对"赛季请回 94 版《三国演义》中诸葛亮与刘备的扮演者唐国强、孙彦军同框代言；还主办了"三国少年说"高校辩论赛，让复旦与华师大的学生围绕"诸葛亮北伐是否延缓了蜀汉灭亡"正面交锋。<strong>它把三国题材从"皮"做成了"可讨论的文化议题"</strong>。这类投入不直接产生流水，却是它区别于同题材竞品的气质来源，也是延长 IP 生命周期的关键动作。</li>
+      </ol>
+    </div>
+    <div class="pc bad">
+      <h4>✗ 问题与风险</h4>
+      <ol>
+        <li><b>武将"获取容易"不等于"阵容不卡"，三缺一依然存在</b>8% 橙率、20 抽保底、无锁卡、养成不吃同名卡。这些设计确实把"拥有武将"的门槛压到了品类最低。但它们解决的是"有没有将"，解决不了"有没有那一个将"：主流阵容往往绑定特定武将的战法联动或缘分，缺一个核心件，整队强度断崖式下跌。这与《率土之滨》《三国志·战略版》的"三缺一"是同一个结构性问题，只是被更低的抽卡成本推迟了暴露时间，而非消除。更棘手的是，赛季制每赛季稳定投放新武将并推动 meta 更替，玩家的卡将焦虑会被周期性重新激活；而"降肝减氪"的定位把付费预期压得很低，一旦卡将，心理落差反而比传统 SLG 更大。真正缓解它的是另一套设计——战法重置与武将等级置换只需铜币，让"用手头的将凑出一队"的试错成本极低，这比竞品体面得多，但本质上仍是缓解而非根治。</li>
+        <li><b>升品系统：在"满红"之上重新打开了付费天花板</b>S6 赛季起实装的升品系统，机制是分解信物得金印积分 → 金印寻访抽取武将专属金印 → 每升一品增加 1% 增减伤并提升一级自带战法红度，最多五品。它并不全是坏事：紫卡蓝卡可分解换积分、历史信物积分 1:1 返还、金印池不掺紫卡，平民靠积累也能升。但<strong>关键在于它在"满红"之外新增了一条直接挂钩战斗数值的养成维度</strong>——原本满红即到顶的玩家重新有了追求目标，付费深度被再次打开。据本人实际体验，满红叠满品的总造价已不低于市面其他竞品。把它放回商业逻辑里看会更清楚：当"不卖资源"主动砍掉了传统 SLG 最大的付费深度，长线收入压力迟早需要一个出口，升品就是那个出口。这暴露了"减氪"模式的结构性困境——前期用口碑换规模，后期仍要把 ARPU 提上来，否则增长故事讲不下去。代价是它与"不逼氪"的原始叙事形成直接冲突，是最容易消耗老玩家信任的一类更新。</li>
+        <li><b>匹配机制不完善，强盟撞弱盟让双方同时失去体验</b>赛季匹配按战队活跃度、繁荣度、武勋等综合指标进行，但实际对局中实力悬殊的情况并不少见。后果是双向的：强盟一路碾压，赛季中途就没有目标了；弱盟开局就知道打不过，连挣扎的动机都没有——两边一起流失。这个问题难解有三层原因：其一，SLG 的匹配单位是同盟而非个人，而同盟实力是动态的（成员活跃、指挥水平、氪度分布），静态指标很难测准；其二，赛季只有 6–7 周，来不及做动态平衡调整；其三，战队组队机制让高水平玩家抱团报名，进一步放大差距。而最致命的是。<strong>三谋把大量设计资源投在了"局内平衡"上（非对称阵营、战意系统、九州议事、德昭万民），但所有这些精巧机制的前提都是双方实力不能差太远。匹配一旦失衡，局内平衡做得再好也全部失效</strong>。这是目前投入最少、问题最明显的一环。</li>
+        <li><b>"降肝减氪"正从差异化卖点退化为品类入场券</b>2025–2026 年间，主要竞品几乎集体转向，且措施与三谋高度同构——免铺路、建筑加速、抽卡让利、养成简化、赛季重置：<br>
+        ① <b>《率土之滨》青春服</b>（2025.03.27）：铜钱即可抽卡、<b>每发必出五星</b>、首次获得默认觉醒，移除内政 / 宝物 / 天气系统，赛季武将全部清零，直接把"不花钱抽卡"写进卖点；上线后苹果畅销榜一度冲至第 18，服务器破 200+。<br>
+        ② <b>《三国志·战略版》七周年畅享 S0 服</b>（2026.09.19）：免费千抽、主城 7 格内免铺路直攻、30 分钟以下建筑免金铢秒完、屯田与行军时间缩减、S1 将星齐聚<b>不重复卡包</b>、AI 智慧军师预约指令、霸业名额增至 1200，充值还按 1 元 : 12.8 玉璧双服返还。<br>
+        ③ <b>《三国志·王道天下》</b>（光荣正版 IP）：零 VIP、不卖资源加速、不重复卡包、抽战法不拆武将、日常控制在 45 分钟、自动铺路 + 开垦兜底，更关键的是<b>「拜师系统」——未抽到的武将也能学其核心战法，直接瞄准了三谋至今仍在的"三缺一"痛点</b>。<br>
+        拆解判断：三谋的"不肝不氪"能成为获客素材，靠的是反差——当竞品都在讲同一句话，反差消失，传播力会断崖式衰减。更严峻的是，在部分维度上竞品已比三谋更激进：率土青春服铜钱抽卡必出五星 vs 三谋仍需付费抽卡；三王不重复卡包 + 拜师系统 vs 三谋仍会卡将。三谋不再是这条赛道上最极端的那个。<br>
+        而最特殊的一点是：《三国志·王道天下》同样由哔哩哔哩独家发行。三谋的崛起高度依赖 B 站生态的内容自传播与流量倾斜，同门新品意味着这部分资源必然被分流。这不是外部竞争，是同门竞争。三谋剩下的护城河主要是三条：赛季剧本化的机制创新能力（每 6–7 周一个规则级新机制，属产能与经验壁垒，短期最难复制）、六职业分工沉淀的组织深度、以及已形成的同盟社交关系链（迁移成本最高）。但第一条依赖持续研发投人，后两条会被竞品的减负措施逐步稀释；而三谋自己又背上了升品系统的付费深度包袱（见第 2 条），在与"零氪友好"新品正面竞争时，这个包袱会被进一步放大。</li>
+        <li><b>机制复杂度失控，认知门槛持续抬高</b>险要之地、村庄、九州议事、政令台（W1）→ 卦象、合卦、锦囊、妙计、奇策（W2）→ 战意、AI 精锐大营、封侯拜将、友盟协作（W4）→ 旧京、德昭万民、关隘、山道、中立城寨、演义（W6）……<strong>仅本人深度参与的四个赛季，就累计引入了近二十个新概念</strong>。每赛季叠加的新名词正在变成新玩家与回归玩家的墙——减负减的是操作，加负加的却是理解成本。</li>
+        <li><b>赛季周期压缩至 7 周，双重压力凸显</b>对研发是内容产能压力，对玩家是学习疲劳——刚摸透上赛季机制就要重新学一套。长期看可能抬高回归门槛。</li>
+        <li><b>减负的另一面：核心玩家的存在感被稀释</b>自动铺路、预约攻城削弱了"我一直在线"的价值；养成深度被削平后，大 R 缺少付费带来的差异化体验，可能损伤头部用户的优越感与长期付费意愿。</li>
+        <li><b>战场重置削弱了"占地成果感"</b>雾气将至清空归属、攻防轮替重置中心区——公平性提升的同时，<strong>传统 SLG 最爽的"版图扩张积累"体验被周期性剥夺</strong>，对成就驱动型玩家可能是减分项。</li>
+        <li><b>ARPU 天花板与收入脉冲化</b>主动放弃资源付费 = 放弃深氪空间（升品系统正是对这一约束的回应，见第 2 条）；流水高度依赖赛季节点，一旦某个剧本口碑失利，收入回撤风险大。</li>
+        <li><b>强社交绑定的脆弱性</b>同盟是指挥官个人魅力的产物，指挥流失或盟内矛盾会造成成片流失；而减负设计在降低执行负担的同时，也削弱了日常互动频次这一社交粘合剂。</li>
+      </ol>
+    </div>
+  </div>
+  <div class="callout"><b>三条合起来看：</b>它们指向同一个深层张力。<strong>三谋以"降肝减氪"立身，但长线运营始终需要两样东西：持续的付费深度，与稳定的对抗质量</strong>。升品系统与卡池扩张解决的是前者，代价是与原始叙事的冲突；匹配机制属于后者，且是目前投入最少、问题最明显的一环。<strong>"不逼氪"是一个可以靠前期设计兑现的承诺，但要撑起五年生命周期，它迟早要正面回答"钱从哪来"和"跟谁打"这两个问题。</strong></div>
+</section>
+
+<!-- ============ 13 ============ -->
+<section id="s13">
+  <h2><span class="num">13</span>设计缺陷的根因分析</h2>
+  <div class="lead">前面列了 10 条问题。罗列现象只是第一步，接下来要回答：哪些是设计失误，哪些是结构性的必然？</div>
+  <p>这 10 条问题里，有 6 条可以追溯到四个根源；其余几条性质不同，需要单独说明："降肝减氪退化为入场券"属于外部竞争环境的变化，不是产品自身的缺陷；"核心玩家存在感被稀释"与"战场重置削弱成果感"是减负与重置策略的直接代价，可视为根源三的延伸；"ARPU 天花板"则与其他多条互为因果。它既是因，也是果。</p>
+
+  <h3>13.1 四条根源</h3>
+
+  <div class="card" style="border-left:4px solid var(--red);margin-bottom:16px">
+    <h4 style="margin-top:0;color:var(--red);font-size:15.5px">根源一 · 卡牌商业模式的宿命<span style="font-weight:400;color:var(--ink3);font-size:13px">（对应缺点 1 卡将、2 升品）</span></h4>
+    <p style="margin-bottom:10px">三谋的收入依赖"武将作为商品"。只要武将需要被<strong>获取</strong>，就必然存在"想要但没有"的状态。这跟抽卡概率调得好不好没关系，是商品逻辑的必然：如果每个玩家都能轻易拿到想要的武将，武将本身就不再值钱了。</p>
+    <p style="margin-bottom:10px">所以"三缺一"不是漏洞，是设计上的必然结果。降肝减氪只能降低它发生的频率，无法消除它。升品系统同理：当"武将获取"这条付费线被压平，就必须在"<strong>武将强度</strong>"上重新开一条。因为总得有一个地方承接付费深度。</p>
+    <p style="margin:0"><b>性质判定：结构性矛盾。</b>所有缓解手段（降低试错成本、增加自选、不重复卡包）都只能治标。除非改变"武将作为商品"这一前提，否则这个问题永远存在。</p>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--red);margin-bottom:16px">
+    <h4 style="margin-top:0;color:var(--red);font-size:15.5px">根源二 · 同盟制 SLG 的匹配悖论<span style="font-weight:400;color:var(--ink3);font-size:13px">（对应缺点 3 匹配失衡）</span></h4>
+    <p style="margin-bottom:10px">匹配的基本单位是同盟，而同盟有三个难以量化的特性：实力由成员构成（<strong>动态变化</strong>）、存在组织能力与指挥水平的差异（<strong>软实力</strong>）、可以自由组队报名（<strong>自选择</strong>）。任何静态指标——活跃度、繁荣度、武勋——都无法准确刻画同盟的真实战力，因为"指挥水平"这类东西根本无法量化。</p>
+    <p style="margin-bottom:10px">更根本的一层是：<strong>SLG 玩家会主动追求实力集中（抱团抱大腿），而匹配需要的是实力分散，两者方向完全相反。</strong>玩家会本能地对抗匹配机制的意图。</p>
+    <p style="margin:0"><b>性质判定：品类级难题，可能不存在完美解。</b>改进方向只能是"降低失衡造成的伤害"（分段补偿、让分机制），而不是"消除失衡"——后者在数学上就做不到。</p>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--red);margin-bottom:16px">
+    <h4 style="margin-top:0;color:var(--red);font-size:15.5px">根源三 · 内容供给压力的传导<span style="font-weight:400;color:var(--ink3);font-size:13px">（对应缺点 4 机制复杂度、5 赛季周期）</span></h4>
+    <p style="margin-bottom:10px">赛季制要求每 6–7 周产出一个"规则级新机制"，这是极高的内容供给压力。当真正的规则创新跟不上节奏时，最省力的替代方案就是<strong>用"叠加"代替"创新"</strong>——再出一层养成、再加一个系统、再补一个玩法。</p>
+    <p style="margin-bottom:10px">而第 4.5 节已经揭示了后果：叠加会同时推高三件事——认知门槛、数值层数、平衡难度。<strong>它们不是三件事，是同一件事的三个表现。</strong></p>
+    <p style="margin:0"><b>性质判定：商业模型倒逼出的问题。</b>赛季周期越短、更新频率越高，这个问题就越严重。且它与根源四相互作用：周期越短 → 空虚期越短 → 留存越稳 → 越有动力继续压缩周期 → 复杂度继续上升。</p>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--red);margin-bottom:16px">
+    <h4 style="margin-top:0;color:var(--red);font-size:15.5px">根源四 · 强社交绑定的双刃剑<span style="font-weight:400;color:var(--ink3);font-size:13px">（对应缺点 9 社交脆弱性）</span></h4>
+    <p style="margin-bottom:10px">三谋的留存核心是同盟关系，但同盟是"人治"组织。<strong>它的寿命比一个赛季更短</strong>。越是把留存押在社交上，就越容易被社交问题击穿：指挥离职、盟内矛盾、同盟解散，任何一个都会带走一批人。</p>
+    <p style="margin:0"><b>性质判定：这是设计选择的结果，不是缺陷。</b>选择强社交就等于接受它的脆弱性——强社交带来的留存红利，和它的脆弱性，本来就是同一个硬币的两面。</p>
+  </div>
+
+  <h3>13.2 判断框架：区分"设计失误"与"设计取舍"</h3>
+  <div class="callout"><b>真正的"设计失误"只有一类：本可解决、却没有解决的执行问题。</b>典型如新手引导的信息承载不足、机制说明的清晰度不够、UI 信息密度过高。这些是能力与投入问题，改得动。<br><br>而其余的问题，本质上都是<strong>结构性矛盾的代价</strong>。评判它们的标准要从"能不能解决"换成"付出的代价是否值得"：<br>
+  · 用"武将作为商品"换取收入 → 接受卡将<br>
+  · 用"同盟作为单位"换取组织深度 → 接受匹配失衡<br>
+  · 用"高频赛季"换取流水脉冲 → 接受复杂度膨胀<br>
+  · 用"强社交"换取高留存 → 接受社交脆弱</div>
+  <div class="callout g"><b>这一区分为什么重要：</b>批评一款产品时，能否分辨"设计失误"和"设计取舍"，是专业与否的分水岭。把结构性代价当成低级错误来批判，会显得缺乏对商业现实的理解；反过来，把执行问题都归因于"战略选择"，则是在替产品找借口。<strong>三谋的问题里，真正属于"失误"的其实不多。它的大多数缺点，是它选择的那条路的过路费。</strong></div>
+</section>
+
+<!-- ============ 14 ============ -->
+<section id="s14">
+  <h2><span class="num">14</span>优化方案建议</h2>
+  <div class="lead">以下方案针对第 13 章的四条根因，每条都标注了代价。没有代价的方案不值得写。</div>
+
+  <h3>14.1 战法传习（针对"三缺一"）</h3>
+  <div class="card">
+    <p><b style="color:var(--red)">设计：</b>奇佐职业新增战场技能「传习」——可将本盟一名盟友部队中的<b>一个装配战法</b>拓印给自身使用，限 1 个、赛季末失效，每赛季限用一次。</p>
+    <p><b style="color:var(--green)">逻辑：</b>"三缺一"最难受的地方在于那个<strong>关键战法</strong>——武将本人反倒不是最要紧的。而三谋的武将战法体系本就可分离（战法可重置、可装配到其他队伍），也就是说：战法在技术上是可流通的，只是没有被设计成可流通。传习只是把这个既有事实提供了一条受控的通道。</p>
+    <p><b style="color:var(--blue)">收益：</b>直接命中玩家最痛的卡将问题；同时强化奇佐职业的功能价值（呼应六职业设计），让职业选择更有战略意味。</p>
+    <p><b style="color:var(--gold)">代价与风险：</b>削弱抽卡动力，可能影响短期收入；需要严格限定次数与范围，避免奇佐被当作"免费战法渠道"，进而伤害其他职业的价值。</p>
+    <p style="margin-bottom:0"><b>验证方式：</b>观察奇佐职业选取率变化、卡将相关社区负面反馈占比、以及当季抽卡付费数据是否出现异常波动。</p>
+  </div>
+
+  <h3>14.2 匹配的分段补偿（针对匹配失衡）</h3>
+  <div class="card">
+    <p><b style="color:var(--red)">设计：</b>赛季匹配引入"实力分档 + 让分机制"——按上赛季霸业排名把同盟分为三档，同档匹配；弱档同盟获得补偿性资源（成员上限 +10%、或前期资源加成 5%）。</p>
+    <p><b style="color:var(--green)">逻辑：</b>既然无法消除实力差（见 13.1 根源二），那就补偿实力差带来的体验差。这和局内的九州议事、战意系统是同一个思路——把"给属性"换成"给机会"，只不过这次是赛季层面的让分。</p>
+    <p><b style="color:var(--blue)">收益：</b>降低弱盟的开局绝望感，减少 D14–D21 这个最集中的流失窗口。</p>
+    <p><b style="color:var(--gold)">代价与风险：</b>可能被强盟刻意降档套利（需要设计防刷机制）；增加匹配复杂度与赛季准备期的工作量。</p>
+    <p style="margin-bottom:0"><b>验证方式：</b>对比实施前后"赛季第 3 周活跃度下降幅度"，以及弱档同盟的成员留存率。</p>
+  </div>
+
+  <h3>14.3 机制轮换制（针对复杂度膨胀）</h3>
+  <div class="card">
+    <p><b style="color:var(--red)">设计：</b>建立<strong>机制池</strong>，每赛季从池中激活 3–4 个机制，其余休眠。休眠机制在界面中保留入口但标注"本剧本未启用"。</p>
+    <p><b style="color:var(--green)">逻辑：</b>回归玩家面对的将是"3 个熟悉的 + 1 个全新的"，而不是"全部新东西"。这既保住了赛季更新带来的新鲜感，又把认知负担控制在一个可承受的区间内。关键是它把"机制"从一次性消耗品变成了可复用资产——与自选剧本是同一思路，可以互相支撑。</p>
+    <p><b style="color:var(--blue)">收益：</b>显著降低回归门槛，同时延长既有机制的生命周期，缓解内容供给压力。</p>
+    <p><b style="color:var(--gold)">代价与风险：</b>削弱"每赛季全新"这个传播点，可能降低开季热度；需要重新设计赛季宣传口径。</p>
+    <p style="margin-bottom:0"><b>验证方式：</b>回归玩家 30 日留存率、赛季首周的新增/回流占比。</p>
+  </div>
+
+  <h3>14.4 付费深度的叙事一致化（针对升品与"减氪"承诺的冲突）</h3>
+  <div class="card">
+    <p><b style="color:var(--red)">设计（二选一）：</b>　<b>A 方案</b>——升品收益从"数值"改为"表现"：提升武将外观特效、专属称谓与战报动画，数值加成保持不变。　<b>B 方案</b>——升品材料的主要来源从付费改为赛季行为（完成霸业阶段目标、赛季积分达标等），付费仅做加速。</p>
+    <p><b style="color:var(--green)">逻辑：</b>真正的矛盾在于：付费深度会不会破坏公平叙事。至于要不要有付费深度，反倒不是重点。把深度转移到外观或活跃行为上，既保住了收入通道，也保住了"不逼氪"这块最有价值的品牌资产。</p>
+    <p><b style="color:var(--blue)">收益：</b>维护品牌叙事的可信度，减少老玩家的信任流失。这直接关系到长线留存的底盘。</p>
+    <p><b style="color:var(--gold)">代价与风险：</b>直接牺牲短期收入，需要公司层面的决心；若玩家的实际反对点只是"想变强"而非"想公平"，方案会失效。</p>
+    <p style="margin-bottom:0"><b>验证方式：</b>对比方案前后付费玩家 ARPU 变化与新增/回流玩家数量的变化，看总盘子是否更优。</p>
+  </div>
+
+  <h3>14.5 指挥人才体系（针对社交脆弱性）</h3>
+  <div class="card">
+    <p><b style="color:var(--red)">设计：</b>建立官方的指挥培养与认证体系——提供指挥工具（路线规划器、战报复盘、实时调度面板）、战术课程，并给予认证指挥荣誉标识与物资补贴。</p>
+    <p><b style="color:var(--green)">逻辑：</b>把"指挥"从个人英雄主义变成<strong>可复制的组织能力</strong>，降低同盟对单一指挥的依赖。指挥体系越成熟，同盟的平均寿命越长。</p>
+    <p><b style="color:var(--blue)">收益：</b>延长同盟寿命 → 降低结算期流失 → 间接提升用户 LTV。</p>
+    <p><b style="color:var(--gold)">代价与风险：</b>运营成本高、回报难以量化，且短期看不到流水效果，容易被排在优先级之后。</p>
+    <p style="margin-bottom:0"><b>验证方式：</b>统计同盟的跨赛季存续率，以及获得认证指挥的同盟其成员留存表现。</p>
+  </div>
+
+  <div class="callout"><b>如果只能改一件事，我选方案一（战法传习）。</b>理由是三条：<strong>痛点最痛</strong>（卡将是玩家最高频的负面情绪来源）、<strong>成本最低</strong>（不新增养成层，只增加一个受控通道）、<strong>与现有系统最贴合</strong>（奇佐本就是"谋略"定位的职业，传习在叙事上完全不违和）。它不解决结构性问题，但它精准地削掉了结构性成本里最扎人的那根刺。<br><br>而方案四虽然影响最深远，却直接触及收入。它需要的不是设计能力，是战略决心。</div>
+</section>
+
+<!-- ============ 15 ============ -->
+<section id="s15">
+  <h2><span class="num">15</span>拆解总结</h2>
+  <div class="lead">如果这份拆解只能留下三句话，那就是下面这三句。</div>
+
+  <div class="card" style="border-left:4px solid var(--red);margin-bottom:16px">
+    <h4 style="margin-top:0;color:var(--red);font-size:16px">结论一 · 赛季制 SLG 的竞争单位，已经从"内容量"变成"机制创新能力"</h4>
+    <p style="margin:0">三谋证明了：在成熟品类里，<strong>比拼谁的内容多是没有尽头的军备竞赛，而比拼谁能持续产出"规则级新机制"才是可防守的差异点</strong>。水攻、迷雾重置、PVEVP、攻防轮替——每一条都是可复用的设计语汇，而不是一次性内容。对策划的启示：做赛季制产品时，<strong>应把研发资源优先投给"规则创新"而非"内容堆量"</strong>。</p>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--green);margin-bottom:16px">
+    <h4 style="margin-top:0;color:var(--green);font-size:16px">结论二 · "减负"的正确姿势是砍操作成本，而不是砍决策密度</h4>
+    <p style="margin:0">三谋所有减负设计都遵循同一条判据：<strong>机械重复的交给系统，需要判断的留给人</strong>。自动铺路省掉点击但保留"往哪打"，预约攻城省掉蹲点但保留"投不投"，铜币重置省掉成本但保留"怎么配"。<strong>反过来说，任何削弱玩家决策权的"便利化"都是在透支乐趣</strong>。这条判据可以直接拿去做其他产品的设计评审标准。</p>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--gold);margin-bottom:16px">
+    <h4 style="margin-top:0;color:var(--gold);font-size:16px">结论三 · 公平性不是道德选择，是可计算的获客与留存杠杆</h4>
+    <p style="margin:0">"不卖资源、无 VIP、无锁卡"表面是让利，实际是<strong>用短期的 ARPU 损失换取更低的获客成本、更高的中腰部留存与更健康的同盟生态</strong>。它的前提是：产品必须能靠规模与赛季脉冲把收入赚回来。<strong>这套账不是所有游戏都算得平</strong>。它成立的前提是足够大的用户基数和足够强的内容产能。<br><br>而升品系统的出现，恰恰说明这套账在长线里并不轻松：当规模红利见顶，付费深度终究会以某种形式被重新打开。<strong>这让"减氪"从一种产品理念，回落为一项阶段性的获客策略</strong>。它不是假的，但它有保质期。理解这一点，比单纯赞美或质疑"不逼氪"都更有价值。</p>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--blue);margin-bottom:16px">
+    <h4 style="margin-top:0;color:var(--blue);font-size:16px">结论四 · 它的大多数"缺点"，不是失误，而是那条路的过路费</h4>
+    <p style="margin:0">卡将、匹配失衡、机制复杂度、社交脆弱。这四个最被诟病的问题，往上追一层都指向同一个东西：三谋所选路径的结构性代价。用"武将作为商品"换收入，用"同盟作为单位"换组织深度，用"高频赛季"换流水脉冲，用"强社交"换高留存。它们改不掉，只能给出价换。这也意味着评判这类产品的正确姿势要换一换：不问"能不能解决"，而问"这个代价换来的东西是否值得"。三谋迄今给出的答案，是肯定的。</p>
+  </div>
+
+  <h3>一句话评测</h3>
+  <div class="callout" style="font-size:15px">
+    《三国：谋定天下》是一款<strong>把"让 SLG 回归策略本身"这件事做到了产品级一致性</strong>的作品。它在战斗、养成、经济、社交、商业化五个层面做出的是同一个选择，而赛季制剧本化更新则让它把这种一致性转化成了可持续的商业节奏。它目前最大的挑战，是<strong>在机制创新的加速度与玩家的认知承受力之间找到新的平衡点</strong>。
+  </div>
+
+  <h3>可继续深挖的方向</h3>
+  <ul>
+    <li><strong>竞品五维对照表（推荐，可立即动手）：</strong>横向比较三谋、率土青春服、三战 S0 服、王道天下在"抽卡成本 / 日常时长 / 自动化程度 / 赛季重置规则 / 付费天花板"五个维度上的实际差距。前三条的公开信息已经齐备（见第 12 章），可直接成表。重点观察三王上线后的表现——同为 B 站发行、同打降肝减氪，它与三谋是互补还是直接分流，这将直接影响三谋未来两年的用户基本盘。</li>
+    <li>数据验证：用七麦/点点数据拉取近 12 个月流水曲线，与赛季上线节点做对照，量化"赛季脉冲"模型的实际效果。</li>
+    <li><strong>用户侧验证：</strong>收集 TapTap / 好游快爆 / B 站评论区的高赞负面反馈，按"机制复杂度 / 平衡性 / 社交压力 / 付费"四类归因。</li>
+    <li>单系统深拆：选一个点做穿透式分析（建议：六职业系统，或赛季重置机制对长线留存的影响）。</li>
+    <li>机制存活率研究（推荐）：把 W1 至今每个剧本的创新点做成一张表，标注<strong>哪些机制被后续赛季继承、哪些被悄悄淘汰</strong>——例如"险要之地"从 W1 沿用至今并演化出关隘 / 山道，而赛季内养成线则先后以政令台、观星八卦、封侯拜将、演义四种形态出现过。开放自选剧本后，各剧本的常驻人气就是玩家用脚投票的结果，这份谱系能直接反推出"什么样的机制创新才是真需求"。</li>
+    <li>制作人设计意图梳理（高价值）：制作人曾洋（聆风）署名的赛季公开信是极稀有的第一手设计意图来源——九州鼎沸那封信里完整还原了"推推乐 → 战略纵深不足 → 险要之地"的推导过程。建议系统梳理其历次公开信与访谈，还原三谋的机制决策史，这比拆解成品更能体现对设计的理解深度。</li>
+  </ul>
+</section>
+
+<!-- ============ 16 ============ -->
+<section id="s16">
+  <h2><span class="num">16</span>拆解方法论与信息可信度分级</h2>
+  <div class="lead">这一章说明本报告的分析方法、信息来源，以及它做不到的地方。</div>
+
+  <h3>16.1 分析框架：三层追问法</h3>
+  <p>本报告对每一个设计都追问三层。这构成了全篇的分析骨架：</p>
+  <table>
+    <thead><tr><th style="width:110px">层次</th><th style="width:170px">追问</th><th>以"自动铺路"为例</th></tr></thead>
+    <tbody>
+      <tr><td><b>现象层</b></td><td>它是什么？</td><td>三谋用系统自动铺路，取代了传统 SLG 的手动逐格铺路</td></tr>
+      <tr><td><b>意图层</b></td><td>为什么这么做？</td><td>把玩家的"点击"压缩成"决策"，降低操作负担，但不降低判断密度</td></tr>
+      <tr><td><b>结构层</b></td><td>为什么只能这么做？</td><td>因为它的竞争策略是夺回被"爆肝"劝退的中腰部用户，而不是服务头部付费玩家。这决定了它必须在操作层做减法，才能容纳这批人</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><b>大部分拆解停在意图层。</b>能拉开差距的是结构层。它回答的是<strong>"这个设计是聪明，还是无奈"</strong>。意图层能说出"它想解决什么"，结构层才能说出"它为什么没得选"。</div>
+
+  <h3>16.2 信息可信度分级</h3>
+  <table>
+    <thead><tr><th style="width:80px">等级</th><th style="width:240px">来源</th><th>在本报告中的使用范围</th></tr></thead>
+    <tbody>
+      <tr><td><b>A 级</b></td><td>本人一手实测（约 700 小时 / 7 个赛季满勤 / 最高霸业结算）</td><td>体验层判断、赛季机制体感、用户流失节点、同盟生态观察</td></tr>
+      <tr><td><b>B 级</b></td><td>官方公告、赛季专题页、制作人公开信</td><td>赛季机制、数值规则、设计意图原意（如九州鼎沸的"动态战略纵深"推导）</td></tr>
+      <tr><td><b>C 级</b></td><td>权威媒体与第三方数据（招商证券研报、Sensor Tower、七麦数据）</td><td>首赛季流水、榜单表现、竞品动态</td></tr>
+      <tr><td><b>D 级</b></td><td>玩家社区攻略（同盟太学、攻略组投稿）</td><td>机制细节补充与交叉验证</td></tr>
+      <tr><td><b>E 级</b></td><td>自媒体信息与本文推断</td><td>所有"拆解判断""关键洞察""根因分析"类段落。<b>属于判断，不是事实</b></td></tr>
+    </tbody>
+  </table>
+  <p class="src">使用原则：结论尽量建立在 A / B 级之上；引用 C 级时注意统计口径（如首赛季流水的三种口径）；E 级内容必须可识别——本报告中以「拆解判断」「关键洞察」「核心判断」等标记区分。</p>
+
+  <h3>16.3 本次拆解的三条自律</h3>
+  <ol>
+    <li><b>每条设计都追问"解决什么痛点 + 付出什么代价"</b>——只讲优点的拆解没有价值，只讲缺点的批评没有建设性。</li>
+    <li><b>不编造数据</b>——无法核实的内容标注来源与口径，宁可留白也不填假数字。本报告中"体感估算""报道值""待核"等标注均出于此。</li>
+    <li><b>区分"设计失误"与"设计取舍"</b>——前者应当批评，后者应当理解（见第 13 章）。</li>
+  </ol>
+
+  <h3>16.4 本报告的局限</h3>
+  <ul>
+    <li><b>视角局限：</b>观察位置是同盟中坚力量，缺少指挥位与顶级付费玩家的视角。同盟外交、跨盟战略调度等内容依赖公开战报与社区资料。</li>
+    <li><b>数据局限：</b>未做客户端拆包，所有数值结论来自公开信息或体感估算；未做玩家访谈与问卷，用户画像基于个人观察与社区样本。</li>
+    <li><b>时效局限：</b>本作赛季迭代极快（约 6–7 周一个剧本），本报告结论对应 2026 年 9 月的版本状态，机制细节可能随版本变动。</li>
+  </ul>
+  <div class="callout g"><b>把局限写清楚，不是示弱。</b>它让读者知道哪些结论可信、哪些需要进一步验证——一份不交代边界的报告，反而让人无法判断该信多少。</div>
+</section>
+
+<footer>
+  <p style="margin-bottom:6px"><strong>《三国：谋定天下》游戏拆解报告</strong> · 基于约 700 小时实机体验（7 个赛季满勤，同盟中坚力量位，最高霸业结算）+ 公开资料整理</p>
+  <p style="margin:0">机制与数值整理自官方公告、玩家社区攻略及公开媒体报道，具体以游戏正式服为准；榜单与流水数据引用前建议复核统计口径。<b>信息可信度分级与分析框架见第 16 章。</b></p>
+</footer>
+
+</div>
+</body>
+</html>

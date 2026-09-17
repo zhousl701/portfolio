@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>《三国：谋定天下》数据看板</title>
+<style>
+:root{
+  --ink:#1B1F1E; --ink2:#434A48; --ink3:#747C79;
+  --paper:#F7F4F3; --card:#FFFFFF; --line:#E5DEDC;
+  --pri:#8C3A2B; --pri-l:#F7EDEA; --pri2:#C98A78; --pri3:#B5533F;
+  --gold:#9C7A3C; --gold-l:#F7F1E3;
+  --jade:#3F7A5E; --jade-l:#EBF3EE;
+  --red:#A83A2C; --red-l:#FAEDEA;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;background:var(--paper);color:var(--ink);padding:28px;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+.board{width:1180px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--pri);padding-bottom:14px;margin-bottom:20px}
+.top h1{font-size:26px;font-weight:700}
+.top h1 span{font-size:15px;font-weight:400;color:var(--ink3);margin-left:12px}
+.top .tag{font-size:12px;color:var(--pri);background:var(--pri-l);padding:4px 12px;border-radius:14px;font-weight:600}
+.grid{display:grid;gap:14px}
+.kpi{grid-template-columns:repeat(4,1fr)}
+.kpi .k{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi .k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pri)}
+.kpi .k.up::before{background:var(--jade)}
+.kpi .k.dn::before{background:var(--red)}
+.kpi .lb{font-size:11.5px;color:var(--ink3);margin-bottom:8px;letter-spacing:.06em}
+.kpi .vl{font-size:32px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--pri)}
+.kpi .k.up .vl{color:var(--jade)}
+.kpi .k.dn .vl{color:var(--red)}
+.kpi .vl em{font-size:15px;font-style:normal;font-weight:600;margin-left:3px}
+.kpi .nt{font-size:11.5px;color:var(--ink3);margin-top:7px}
+.row2{grid-template-columns:1.3fr 1fr;margin-top:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.panel h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.panel .sub{font-size:11.5px;color:var(--ink3);margin-bottom:16px}
+.bars{display:flex;align-items:flex-end;gap:18px;height:180px;padding:0 4px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.bcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bval{font-size:12.5px;font-weight:700;margin-bottom:5px;font-variant-numeric:tabular-nums}
+.bbar{width:100%;border-radius:5px 5px 0 0;background:var(--pri2)}
+.bbar.hi{background:var(--pri)}
+.bbl{font-size:11px;color:var(--ink3);margin-top:7px;font-variant-numeric:tabular-nums}
+.mark{font-size:10px;font-weight:700;padding:1px 5px;border-radius:8px;background:var(--jade-l);color:var(--jade);margin-top:4px}
+.hbar{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.hbar .n{width:96px;font-size:12px;color:var(--ink3);text-align:right;flex-shrink:0}
+.hbar .t{flex:1;height:20px;background:#F2ECEA;border-radius:4px;overflow:hidden}
+.hbar .f{height:100%;border-radius:4px;background:var(--pri)}
+.hbar .f.gd{background:var(--pri2)}
+.hbar .v{width:112px;font-size:12px;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums}
+.tl{position:relative;padding-left:20px;margin-top:6px}
+.tl::before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tli{position:relative;margin-bottom:12px}
+.tli:last-child{margin-bottom:0}
+.tli::before{content:"";position:absolute;left:-20px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--pri);border:2px solid #fff;box-shadow:0 0 0 1.5px var(--pri)}
+.tli .d{font-size:11px;color:var(--pri);font-weight:700;letter-spacing:.04em}
+.tli .c{font-size:12.5px;color:var(--ink2);line-height:1.5}
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px}
+.cmp th{text-align:left;padding:8px 10px;background:#F5F0EE;font-size:11.5px;color:var(--ink);border-bottom:1px solid var(--line);font-weight:700}
+.cmp td{padding:9px 10px;border-bottom:1px solid #F1EDEC;color:var(--ink2);vertical-align:top}
+.cmp tr:last-child td{border-bottom:none}
+.cmp td b{color:var(--ink)}
+.ok{color:var(--jade);font-weight:700}
+.warn{color:var(--red);font-weight:700}
+.model{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px}
+.mcard{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.mcard.pulse{border-top:3px solid var(--jade)}
+.mcard.base{border-top:3px solid var(--red)}
+.mcard h4{font-size:13px;margin-bottom:7px}
+.mcard.pulse h4{color:var(--jade)}
+.mcard.base h4{color:var(--red)}
+.mcard p{font-size:12.5px;color:var(--ink2);line-height:1.65}
+.mcard .big{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;margin-bottom:3px}
+.mcard.pulse .big{color:var(--jade)}
+.mcard.base .big{color:var(--red)}
+.note{margin-top:14px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:14px 18px;font-size:12.5px;color:var(--ink2);line-height:1.7}
+.note b{color:var(--ink)}
+.foot{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;color:var(--ink3);display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="top">
+    <h1>《三国：谋定天下》数据看板<span>2024.06 公测 — 2026.08 数据</span></h1>
+    <div class="tag">华娱游戏研发 · 哔哩哔哩游戏发行 · 赛季制 SLG</div>
+  </div>
+
+  <div class="grid kpi">
+    <div class="k up">
+      <div class="lb">上市两年累计收入</div>
+      <div class="vl">3<em>亿美元+</em></div>
+      <div class="nt">第三方估算，截至 2026-06</div>
+    </div>
+    <div class="k up">
+      <div class="lb">畅销榜最高位</div>
+      <div class="vl">第 2<em>名</em></div>
+      <div class="nt">2025 与 2026 各达成一次</div>
+    </div>
+    <div class="k up">
+      <div class="lb">2025 年进入 TOP5 次数</div>
+      <div class="vl">7<em>次</em></div>
+      <div class="nt">全年榜单爆发力</div>
+    </div>
+    <div class="k dn">
+      <div class="lb">平台游戏收入变化</div>
+      <div class="vl">−23.6<em>%</em></div>
+      <div class="nt">八个季度累计（板块口径）</div>
+    </div>
+  </div>
+
+  <div class="grid row2">
+    <div class="panel">
+      <h3>B站移动游戏单季收入（亿元）</h3>
+      <div class="sub">板块整体口径，含其他产品，仅反映趋势方向</div>
+      <div class="bars">
+        <div class="bcol">
+          <div class="bval">18.2</div>
+          <div class="bbar hi" style="height:100%"></div>
+          <div class="bbl">24Q3</div>
+          <div class="mark">起点</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">17.9</div>
+          <div class="bbar" style="height:98.4%"></div>
+          <div class="bbl">24Q4</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">17.3</div>
+          <div class="bbar" style="height:95.1%"></div>
+          <div class="bbl">25Q1</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">16.1</div>
+          <div class="bbar" style="height:88.5%"></div>
+          <div class="bbl">25Q2</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">15.1</div>
+          <div class="bbar" style="height:83.0%"></div>
+          <div class="bbl">25Q3</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">15.4</div>
+          <div class="bbar hi" style="height:84.6%"></div>
+          <div class="bbl">25Q4</div>
+          <div class="mark">唯一回升</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">15.2</div>
+          <div class="bbar" style="height:83.5%"></div>
+          <div class="bbl">26Q1</div>
+        </div>
+        <div class="bcol">
+          <div class="bval">13.9</div>
+          <div class="bbar" style="height:76.4%"></div>
+          <div class="bbl">26Q2</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.65">
+        缓慢下行，非断崖式下滑。八个季度平均每季约 −3.7%，中间只在 2025 Q4 出现过一次环比回升。
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>脉冲模型</h3>
+      <div class="sub">本次分析的核心结构</div>
+      <div class="model">
+        <div class="mcard pulse">
+          <h4>脉冲端</h4>
+          <div class="big">仍在创新高</div>
+          <p>2026-06 赤壁惊涛：单日流水 <b>+509%</b>，畅销榜第 2，为 2025 年初以来最高</p>
+          <p style="margin-top:6px">2026-07 武侯遗志：单日排名 <b>+94 位</b>，流水约为日均 3 倍</p>
+        </div>
+        <div class="mcard base">
+          <h4>基线端</h4>
+          <div class="big">缓慢下移</div>
+          <p>平台游戏收入八个季度累计 <b>−23.6%</b></p>
+          <p style="margin-top:6px">2026 Q2 环比 <b>−8.6%</b>、同比 <b>−14%</b></p>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.7;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)">
+        <b style="color:var(--ink)">两端方向相反，问题定位在基线。</b>不是"赛季更新不管用了"，而是"每次拉起来之后，留下来的比上一次少"。
+      </div>
+    </div>
+  </div>
+
+  <div class="grid row2" style="grid-template-columns:1fr 1.3fr">
+    <div class="panel">
+      <h3>赛季节点与榜单表现</h3>
+      <div class="sub">更新带来的即时拉动</div>
+      <div class="hbar"><div class="n">2025 全年</div><div class="t"><div class="f gd" style="width:100%"></div></div><div class="v">7 次进 TOP5</div></div>
+      <div class="hbar"><div class="n">2025.05 隆中对</div><div class="t"><div class="f" style="width:100%"></div></div><div class="v">畅销榜第 2</div></div>
+      <div class="hbar"><div class="n">2026.06 赤壁惊涛</div><div class="t"><div class="f" style="width:100%"></div></div><div class="v">畅销榜第 2</div></div>
+      <div class="hbar"><div class="n">2026.07 武侯遗志</div><div class="t"><div class="f gd" style="width:8%"></div></div><div class="v">畅销总榜第 8</div></div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.65;margin-top:10px">
+        常规剧本（武侯遗志）不依赖庆典，仍能把单日排名推升 94 位，<b style="color:var(--ink)">说明内容本身仍有拉动能力</b>。
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>关键节点</h3>
+      <div class="sub">产品动作与数据表现的对应</div>
+      <div class="tl">
+        <div class="tli"><div class="d">2024.06.13</div><div class="c">公测 · 带动发行方游戏业务显著改善，Q3 板块收入 18.2 亿元</div></div>
+        <div class="tli"><div class="d">2025.05</div><div class="c">隆中对版本 · 冲进畅销榜第 2 名</div></div>
+        <div class="tli"><div class="d">2025 全年</div><div class="c">七次进入 iOS 畅销榜 TOP5</div></div>
+        <div class="tli"><div class="d">2025 Q4</div><div class="c">板块收入环比 +2.0%，为全区间唯一回升</div></div>
+        <div class="tli"><div class="d">2026.06.06</div><div class="c">2 周年 + 赤壁惊涛 · 畅销榜第 2，单日流水 +509%</div></div>
+        <div class="tli"><div class="d">2026.07.25</div><div class="c">武侯遗志 · 畅销总榜第 8，单日上升 94 位</div></div>
+        <div class="tli"><div class="d">2026 至今</div><div class="c">多数时间位于畅销榜 TOP20 之内</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>一句话读板：</b>脉冲端两年后仍能冲进畅销榜前三、单日流水增长五倍以上，<b>拉动能力没有失效</b>；而平台侧八个季度的收入在缓慢下移。<b>两端方向相反，说明问题在"两次更新之间的水位"上，而不在赛季内容本身。</b>对一个成熟期产品来说，决定年收入的是台阶之间的滑落幅度，不是台阶有多高。
+  </div>
+
+  <div class="foot">
+    <span>数据来源：哔哩哔哩历期财报（A 级）、官方公告（B 级）、第三方监测与财经媒体（C 级）</span>
+    <span>平台口径含其他产品，仅反映趋势方向 · 2026-09-17</span>
+  </div>
+
+</div>
+</body>
+</html>
