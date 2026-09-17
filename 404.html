@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>页面不存在 · 周士量的作品集</title>
+<style>
+:root{
+  --ink:#1B1F1E; --ink2:#434A48; --ink3:#747C79;
+  --paper:#F9FAF8; --card:#FFFFFF; --line:#DEE5E1;
+  --pri:#2F5D5B; --pri-l:#EAF2F0;
+  --gold:#9C7A3C; --gold-l:#F7F1E3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15.5px;letter-spacing:.015em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 26px 80px}
+header.cover{padding:56px 0 36px;border-bottom:1px solid var(--line);margin-bottom:38px;position:relative}
+header.cover::after{content:"";position:absolute;left:0;bottom:-1.5px;width:88px;height:3px;background:var(--pri)}
+.eyebrow{font-size:12px;letter-spacing:.3em;color:var(--pri);font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:1.5px;background:var(--pri);display:inline-block}
+h1{font-size:42px;line-height:1.24;font-weight:700;letter-spacing:.02em;margin-bottom:12px}
+.sub{font-size:16px;color:var(--ink2)}
+.intro{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--pri);border-radius:0 12px 12px 0;padding:20px 24px;margin-bottom:34px}
+.intro p{margin-bottom:10px;color:var(--ink2);font-size:15px}
+.intro p:last-child{margin-bottom:0}
+.intro b{color:var(--ink)}
+h2{font-size:19px;font-weight:700;margin:0 0 16px;display:flex;align-items:center;gap:13px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:42px}
+.lk{display:block;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:13px 15px;transition:all .15s;background:#FDFEFD}
+.lk:hover{border-color:var(--pri);background:var(--pri-l)}
+.lk .t{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.lk .d{font-size:11.5px;color:var(--ink3)}
+.lk.home{background:var(--pri);border-color:var(--pri)}
+.lk.home .t{color:#fff}
+.lk.home .d{color:rgba(255,255,255,.78)}
+.lk.home:hover{background:#244A48}
+.tip{background:var(--gold-l);border:1px solid #E8DCC0;border-radius:10px;padding:16px 20px;font-size:13.5px;color:#6E5527;line-height:1.9}
+.tip b{color:#4A391A}
+.tip code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:#fff;border:1px solid #E8DCC0;border-radius:5px;padding:1px 6px;color:#4A391A}
+footer{border-top:1px solid var(--line);padding-top:22px;font-size:12.5px;color:var(--ink3);line-height:1.9;margin-top:34px}
+@media(max-width:640px){
+  h1{font-size:32px}
+  .links{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+  <div class="eyebrow">404 · PAGE NOT FOUND</div>
+  <h1>这个页面不存在</h1>
+  <div class="sub">链接可能已经失效，或者网址在复制时被截断了</div>
+</header>
+
+<div class="intro">
+  <p>作品集本身还在，只是你点的这个地址找不到对应文件。</p>
+  <p>如果你是从 <b>简历、邮件或聊天窗口</b> 点进来的，多半是长链接里的中文部分被截掉了——报告的文件名含有中文，某些软件转发时会在第一个中文处断开。</p>
+</div>
+
+<h2>先从这些入口进去</h2>
+<div class="links">
+  <a class="lk home" href="/portfolio/"><div class="t">作品集首页</div><div class="d">三款产品的全部材料</div></a>
+  <a class="lk" href="/portfolio/三国谋定天下_游戏拆解报告.html"><div class="t">三国谋定天下</div><div class="d">拆解报告 · 38 页</div></a>
+  <a class="lk" href="/portfolio/问剑长生_游戏拆解报告.html"><div class="t">问剑长生</div><div class="d">拆解报告 · 34 页</div></a>
+  <a class="lk" href="/portfolio/杖剑传说_游戏拆解报告.html"><div class="t">杖剑传说</div><div class="d">拆解报告 · 28 页</div></a>
+  <a class="lk" href="/portfolio/休闲游戏板块总结.html"><div class="t">休闲游戏板块</div><div class="d">横向对照 · 13 页</div></a>
+</div>
+
+<div class="tip">
+  <b>正确的作品集入口：</b>
+  <code>zhousl701.github.io/portfolio/</code><br>
+  直接把这个地址粘贴到浏览器，就能进到完整的作品集首页。
+</div>
+
+<footer>
+  <b>周士量</b> · 游戏运营 / 运营策划 · 26 届计算机本科应届生<br>
+  本作品集所有内容为作者独立完成的竞品拆解与数据分析，引用请注明出处。
+</footer>
+
+</div>
+</body>
+</html>
